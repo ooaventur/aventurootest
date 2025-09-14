@@ -1,5 +1,11 @@
 <?php
-error_reporting(0); // uncomment this line for production
+// error_reporting(0); // disable in production
+if (getenv('APP_ENV') === 'production') {
+    error_reporting(0);
+} else {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+}
 //Import PHPMailer classes into the global namespace
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
