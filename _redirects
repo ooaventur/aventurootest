@@ -1,10 +1,39 @@
-/news/:sub                 /news/index.html?sub=:sub                 200
-/business-finance/:sub     /business-finance/index.html?sub=:sub     200
-/crypto/:sub               /crypto/index.html?sub=:sub               200
-/tech-ai/:sub              /tech-ai/index.html?sub=:sub              200
-/entertainment/:sub        /entertainment/index.html?sub=:sub        200
-/lifestyle/:sub            /lifestyle/index.html?sub=:sub            200
-/food-drink/:sub           /food-drink/index.html?sub=:sub           200
-/travel/:sub               /travel/index.html?sub=:sub               200
-/culture-arts/:sub         /culture-arts/index.html?sub=:sub         200
-/shopping/:sub             /shopping/index.html?sub=:sub             200
+/news/:sub                 /category.html?cat=news&sub=:sub                 200
+/news                      /category.html?cat=news                          200
+/news/                     /category.html?cat=news                          200
+
+/business-finance/:sub     /category.html?cat=business-finance&sub=:sub     200
+/business-finance          /category.html?cat=business-finance              200
+/business-finance/         /category.html?cat=business-finance              200
+
+/crypto/:sub               /category.html?cat=crypto&sub=:sub               200
+/crypto                    /category.html?cat=crypto                        200
+/crypto/                   /category.html?cat=crypto                        200
+
+/tech-ai/:sub              /category.html?cat=tech-ai&sub=:sub              200
+/tech-ai                   /category.html?cat=tech-ai                       200
+/tech-ai/                  /category.html?cat=tech-ai                       200
+
+/entertainment/:sub        /category.html?cat=entertainment&sub=:sub        200
+/entertainment             /category.html?cat=entertainment                 200
+/entertainment/            /category.html?cat=entertainment                 200
+
+/lifestyle/:sub            /category.html?cat=lifestyle&sub=:sub            200
+/lifestyle                 /category.html?cat=lifestyle                     200
+/lifestyle/                /category.html?cat=lifestyle                     200
+
+/food-drink/:sub           /category.html?cat=food-drink&sub=:sub           200
+/food-drink                /category.html?cat=food-drink                    200
+/food-drink/               /category.html?cat=food-drink                    200
+
+/travel/:sub               /category.html?cat=travel&sub=:sub               200
+/travel                    /category.html?cat=travel                        200
+/travel/                   /category.html?cat=travel                        200
+
+/culture-arts/:sub         /category.html?cat=culture-arts&sub=:sub         200
+/culture-arts              /category.html?cat=culture-arts                  200
+/culture-arts/             /category.html?cat=culture-arts                  200
+
+/shopping/:sub             /category.html?cat=shopping&sub=:sub             200
+/shopping                  /category.html?cat=shopping                      200
+/shopping/                 /category.html?cat=shopping                      200
