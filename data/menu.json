@@ -1,0 +1,45 @@
+{
+  "tabletHeader": {
+    "show": true,
+    "loginHref": "login.html",
+    "registerHref": "register.html",
+    "title": "Menu"
+  },
+  "items": [
+    { "title": "Standard", "href": "category.html" },
+
+    { "title": "Pages", "href": "category.html", "children": [
+      { "title": "Home", "href": "index.html" },
+      { "title": "Login", "href": "login.html" },
+      { "title": "Register", "href": "register.html" },
+      { "title": "Search", "href": "search.html" },
+      { "title": "Contact", "href": "contact.html" }
+    ]},
+
+    { "title": "Destinations", "megaColumns": [
+      { "title": "Europe", "links": [
+        { "title": "Italy", "href": "#" },
+        { "title": "France", "href": "#" },
+        { "title": "Spain", "href": "#" }
+      ]},
+      { "title": "USA", "links": [
+        { "title": "New York", "href": "#" },
+        { "title": "California", "href": "#" }
+      ]},
+      { "title": "Asia", "links": [
+        { "title": "Japan", "href": "#" },
+        { "title": "Thailand", "href": "#" }
+      ]},
+      { "title": "See All", "links": [
+        { "title": "All Destinations", "href": "category.html?c=destinations" }
+      ]}
+    ]},
+
+    { "title": "Dropdown Icons", "children": [
+      { "title": "My Account", "href": "#", "icon": "ion-person" },
+      { "title": "Settings",   "href": "#", "icon": "ion-settings" },
+      { "divider": true },
+      { "title": "Logout",     "href": "#", "icon": "ion-log-out" }
+    ]}
+  ]
+}
