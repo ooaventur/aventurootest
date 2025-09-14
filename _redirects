@@ -1,0 +1,10 @@
+/news/:sub                 /news/index.html?sub=:sub                 200
+/business-finance/:sub     /business-finance/index.html?sub=:sub     200
+/crypto/:sub               /crypto/index.html?sub=:sub               200
+/tech-ai/:sub              /tech-ai/index.html?sub=:sub              200
+/entertainment/:sub        /entertainment/index.html?sub=:sub        200
+/lifestyle/:sub            /lifestyle/index.html?sub=:sub            200
+/food-drink/:sub           /food-drink/index.html?sub=:sub           200
+/travel/:sub               /travel/index.html?sub=:sub               200
+/culture-arts/:sub         /culture-arts/index.html?sub=:sub         200
+/shopping/:sub             /shopping/index.html?sub=:sub             200
