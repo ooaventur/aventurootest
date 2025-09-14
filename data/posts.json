@@ -1,3 +1,26 @@
 [
-{}
+{}  {
+    "slug": "test-politics-000001",
+    "title": "Test Politics Article",
+    "category": "News",
+    "subcategory": "politics",
+    "date": "2025-01-01T12:00:00+00:00",
+    "excerpt": "Short summary for testing.",
+    "cover": "/images/news/img01.jpg",
+    "source": "https://example.com/test-politics",
+    "author": "AventurOO",
+    "body": ""
+  }
+    {
+    "slug": "test-politics-000001",
+    "title": "Test Politics Article",
+    "category": "News",
+    "subcategory": "politics",
+    "date": "2025-01-01T12:00:00+00:00",
+    "excerpt": "Short summary for testing.",
+    "cover": "/images/news/img01.jpg",
+    "source": "https://example.com/test-politics",
+    "author": "AventurOO",
+    "body": ""
+  }
 ]
