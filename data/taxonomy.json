@@ -1,0 +1,111 @@
+{
+  "categories": [
+    {
+      "slug": "news",
+      "title": "News",
+      "subs": [
+        { "slug": "top-stories", "title": "Top Stories" },
+        { "slug": "politics",    "title": "Politics" },
+        { "slug": "economy",     "title": "Economy" }
+      ]
+    },
+    {
+      "slug": "business-finance",
+      "title": "Business & Finance",
+      "subs": [
+        { "slug": "markets-economy",     "title": "Markets & Economy" },
+        { "slug": "companies-startups",  "title": "Companies & Startups" },
+        { "slug": "personal-finance",    "title": "Personal Finance" }
+      ]
+    },
+    {
+      "slug": "crypto",
+      "title": "Crypto",
+      "subs": [
+        { "slug": "bitcoin-majors",      "title": "Bitcoin & Majors" },
+        { "slug": "altcoins-web3",       "title": "Altcoins & Web3" },
+        { "slug": "regulation-security", "title": "Regulation & Security" },
+        { "slug": "guides",              "title": "Guides" }
+      ]
+    },
+    {
+      "slug": "tech-ai",
+      "title": "Tech & AI",
+      "subs": [
+        { "slug": "ai-news",            "title": "AI News" },
+        { "slug": "big-tech",           "title": "Big Tech" },
+        { "slug": "security-privacy",   "title": "Security & Privacy" },
+        { "slug": "internet-platforms", "title": "Internet & Platforms" },
+        { "slug": "innovation-gadgets", "title": "Innovation & Gadgets" },
+        { "slug": "gaming-tech",        "title": "Gaming Tech / AI Gaming" },
+        { "slug": "audio-creator",      "title": "Audio & Creator Tools" }
+      ]
+    },
+    {
+      "slug": "entertainment",
+      "title": "Entertainment",
+      "subs": [
+        { "slug": "movies",          "title": "Movies" },
+        { "slug": "tv-streaming",    "title": "TV & Streaming" },
+        { "slug": "trailers",        "title": "Trailers (Latest)" },
+        { "slug": "cinematography",  "title": "Cinematography" },
+        { "slug": "history-essays",  "title": "History & Essays" }
+      ]
+    },
+    {
+      "slug": "lifestyle",
+      "title": "Lifestyle",
+      "subs": [
+        { "slug": "health",         "title": "Health" },
+        { "slug": "beauty-style",   "title": "Beauty & Style" },
+        { "slug": "home-design",    "title": "Home & Design" },
+        { "slug": "inspiration",    "title": "Inspiration" },
+        { "slug": "outdoor",        "title": "Outdoor" }
+      ]
+    },
+    {
+      "slug": "food-drink",
+      "title": "Food & Drink",
+      "subs": [
+        { "slug": "food",   "title": "Food" },
+        { "slug": "drink",  "title": "Drink" },
+        { "slug": "guides", "title": "Guides" }
+      ]
+    },
+    {
+      "slug": "travel",
+      "title": "Travel",
+      "subs": [
+        { "slug": "trip-ideas",    "title": "Trip Ideas" },
+        { "slug": "destinations",  "title": "Destinations" },
+        { "slug": "tips-planning", "title": "Tips & Planning" },
+        { "slug": "stays-hotels",  "title": "Stays (Hotels)" },
+        { "slug": "experiences",   "title": "Experiences" },
+        { "slug": "transport",     "title": "Transport" },
+        { "slug": "things-to-do",  "title": "Things To Do" }
+      ]
+    },
+    {
+      "slug": "culture-arts",
+      "title": "Culture & Arts",
+      "subs": [
+        { "slug": "culture",        "title": "Culture" },
+        { "slug": "arts",           "title": "Arts" },
+        { "slug": "history",        "title": "History" },
+        { "slug": "columns-essays", "title": "Columns / Essays" }
+      ]
+    },
+    {
+      "slug": "shopping",
+      "title": "Shopping",
+      "subs": [
+        { "slug": "tech-deals",     "title": "Tech Deals" },
+        { "slug": "subscriptions",  "title": "Subscriptions (SaaS)" },
+        { "slug": "travel-deals",   "title": "Travel Deals" },
+        { "slug": "vpn-security",   "title": "VPN & Security" },
+        { "slug": "marketplaces",   "title": "Marketplaces" },
+        { "slug": "multi-merchant", "title": "Multi-merchant Networks" }
+      ]
+    }
+  ]
+}
