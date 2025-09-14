@@ -1,3 +1,4 @@
+/news/index.html           /news/index.html                                 200
 /news/:sub                 /category.html?cat=news&sub=:sub                 200
 /news                      /category.html?cat=news                          200
 /news/                     /category.html?cat=news                          200
@@ -37,3 +38,4 @@
 /shopping/:sub             /category.html?cat=shopping&sub=:sub             200
 /shopping                  /category.html?cat=shopping                      200
 /shopping/                 /category.html?cat=shopping                      200
+
