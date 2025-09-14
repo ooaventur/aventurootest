@@ -6,40 +6,103 @@
     "title": "Menu"
   },
   "items": [
-    { "title": "Standard", "href": "category.html" },
+    { "title": "Home", "href": "index.html" },
 
-    { "title": "Pages", "href": "category.html", "children": [
-      { "title": "Home", "href": "index.html" },
-      { "title": "Login", "href": "login.html" },
-      { "title": "Register", "href": "register.html" },
-      { "title": "Search", "href": "search.html" },
-      { "title": "Contact", "href": "contact.html" }
+    { "title": "News", "children": [
+      { "title": "Top Stories", "href": "/news/top-stories" },
+      { "title": "Politics",    "href": "/news/politics" },
+      { "title": "Economy",     "href": "/news/economy" }
     ]},
 
-    { "title": "Destinations", "megaColumns": [
-      { "title": "Europe", "links": [
-        { "title": "Italy", "href": "#" },
-        { "title": "France", "href": "#" },
-        { "title": "Spain", "href": "#" }
+    { "title": "Business & Finance", "children": [
+      { "title": "Markets & Economy",   "href": "/business-finance/markets-economy" },
+      { "title": "Companies & Startups","href": "/business-finance/companies-startups" },
+      { "title": "Personal Finance",    "href": "/business-finance/personal-finance" }
+    ]},
+
+    { "title": "Crypto", "children": [
+      { "title": "Bitcoin & Majors",     "href": "/crypto/bitcoin-majors" },
+      { "title": "Altcoins & Web3",      "href": "/crypto/altcoins-web3" },
+      { "title": "Regulation & Security","href": "/crypto/regulation-security" },
+      { "title": "Guides",               "href": "/crypto/guides" }
+    ]},
+
+    { "title": "Tech & AI", "megaColumns": [
+      { "title": "AI & Big Tech", "links": [
+        { "title": "AI News",   "href": "/tech-ai/ai-news" },
+        { "title": "Big Tech",  "href": "/tech-ai/big-tech" }
       ]},
-      { "title": "USA", "links": [
-        { "title": "New York", "href": "#" },
-        { "title": "California", "href": "#" }
+      { "title": "Security & Internet", "links": [
+        { "title": "Security & Privacy",   "href": "/tech-ai/security-privacy" },
+        { "title": "Internet & Platforms", "href": "/tech-ai/internet-platforms" }
       ]},
-      { "title": "Asia", "links": [
-        { "title": "Japan", "href": "#" },
-        { "title": "Thailand", "href": "#" }
+      { "title": "Innovation", "links": [
+        { "title": "Innovation & Gadgets", "href": "/tech-ai/innovation-gadgets" },
+        { "title": "Gaming Tech / AI Gaming", "href": "/tech-ai/gaming-tech" }
       ]},
-      { "title": "See All", "links": [
-        { "title": "All Destinations", "href": "category.html?c=destinations" }
+      { "title": "Creator", "links": [
+        { "title": "Audio & Creator Tools", "href": "/tech-ai/audio-creator" },
+        { "title": "All Tech & AI",         "href": "/tech-ai/" }
       ]}
     ]},
 
-    { "title": "Dropdown Icons", "children": [
-      { "title": "My Account", "href": "#", "icon": "ion-person" },
-      { "title": "Settings",   "href": "#", "icon": "ion-settings" },
-      { "divider": true },
-      { "title": "Logout",     "href": "#", "icon": "ion-log-out" }
-    ]}
+    { "title": "Entertainment", "children": [
+      { "title": "Movies",             "href": "/entertainment/movies" },
+      { "title": "TV & Streaming",     "href": "/entertainment/tv-streaming" },
+      { "title": "Trailers (Latest)",  "href": "/entertainment/trailers" },
+      { "title": "Cinematography",     "href": "/entertainment/cinematography" },
+      { "title": "History & Essays",   "href": "/entertainment/history-essays" }
+    ]},
+
+    { "title": "Lifestyle", "children": [
+      { "title": "Health",        "href": "/lifestyle/health" },
+      { "title": "Beauty & Style","href": "/lifestyle/beauty-style" },
+      { "title": "Home & Design", "href": "/lifestyle/home-design" },
+      { "title": "Inspiration",   "href": "/lifestyle/inspiration" },
+      { "title": "Outdoor",       "href": "/lifestyle/outdoor" }
+    ]},
+
+    { "title": "Food & Drink", "children": [
+      { "title": "Food",   "href": "/food-drink/food" },
+      { "title": "Drink",  "href": "/food-drink/drink" },
+      { "title": "Guides", "href": "/food-drink/guides" }
+    ]},
+
+    { "title": "Travel", "megaColumns": [
+      { "title": "Trip Ideas", "links": [
+        { "title": "Trip Ideas (All)", "href": "/travel/trip-ideas" }
+      ]},
+      { "title": "Destinations", "links": [
+        { "title": "Destinations (All)", "href": "/travel/destinations" }
+      ]},
+      { "title": "Tips & Planning", "links": [
+        { "title": "Tips & Planning", "href": "/travel/tips-planning" },
+        { "title": "Transport",       "href": "/travel/transport" }
+      ]},
+      { "title": "Stays & Do", "links": [
+        { "title": "Hotels",          "href": "/travel/stays-hotels" },
+        { "title": "Things To Do",    "href": "/travel/things-to-do" },
+        { "title": "Experiences",     "href": "/travel/experiences" }
+      ]}
+    ]},
+
+    { "title": "Culture & Arts", "children": [
+      { "title": "Culture",        "href": "/culture-arts/culture" },
+      { "title": "Arts",           "href": "/culture-arts/arts" },
+      { "title": "History",        "href": "/culture-arts/history" },
+      { "title": "Columns / Essays","href": "/culture-arts/columns-essays" }
+    ]},
+
+    { "title": "Shopping", "children": [
+      { "title": "Tech Deals",          "href": "/shopping/tech-deals" },
+      { "title": "Subscriptions (SaaS)","href": "/shopping/subscriptions" },
+      { "title": "Travel Deals",        "href": "/shopping/travel-deals" },
+      { "title": "VPN & Security",      "href": "/shopping/vpn-security" },
+      { "title": "Marketplaces",        "href": "/shopping/marketplaces" },
+      { "title": "Multi-merchant",      "href": "/shopping/multi-merchant" }
+    ]},
+
+    { "title": "About",   "href": "page.html" },
+    { "title": "Contact", "href": "contact.html" }
   ]
 }
