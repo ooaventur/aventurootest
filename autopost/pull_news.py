@@ -25,7 +25,7 @@ DATA_DIR = ROOT / "data"
 POSTS_JSON = DATA_DIR / "posts.json"
 FEEDS = ROOT / "autopost" / "data" / "feeds.txt"
 
-CATEGORY = "News"
+CATEGORY = ""
 SEEN_DB = ROOT / "autopost" / f"seen_{CATEGORY.lower()}.json"
 
 MAX_PER_CAT = int(os.getenv("MAX_PER_CAT", "15"))
@@ -348,12 +348,23 @@ def main():
         parts = [p.strip() for p in raw.split("|") if p.strip()]
         if len(parts) < 2:
             continue
-        cat_str = parts[0]
-        feed_url = parts[-1]
-        category_part, sub_part = (cat_str.split('/', 1) + [''])[:2]
-        category = (category_part or "").strip().title()
-        sub = (sub_part.strip().title() if sub_part.strip() else current_sub)
-        if category != CATEGORY or not feed_url:
+        
+        if len(parts) == 3:
+            # Format i plotë: category|subcategory|url
+            category = parts[0].title()
+            sub = parts[1].title()
+            feed_url = parts[2]
+        else:
+            # Format i vjetër: cat|url ose cat/sub|url
+            cat_str = parts[0]
+            feed_url = parts[1]
+            category_part, sub_part = (cat_str.split('/', 1) + [''])[:2]
+            category = (category_part or "").strip().title()
+            sub = (sub_part.strip().title() if sub_part.strip() else current_sub)
+
+        if CATEGORY and category != CATEGORY:
+            continue
+        if not feed_url:
             continue
 
         if MAX_TOTAL > 0 and added_total >= MAX_TOTAL:
@@ -368,8 +379,12 @@ def main():
         for it in parse_feed(xml):
             if MAX_TOTAL > 0 and added_total >= MAX_TOTAL:
                 break
-            if per_cat.get(category, 0) >= MAX_PER_CAT:
-                continue
+        key = f"{category}/{sub or '_'}"
+        if per_cat.get(key, 0) >= MAX_PER_CAT:
+            continue
+        ...
+        per_cat[key] = per_cat.get(key, 0) + 1
+
 
             title = (it.get("title") or "").strip()
             link  = (it.get("link") or "").strip()
