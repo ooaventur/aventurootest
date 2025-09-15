@@ -1,27 +1,26 @@
 # cat|sub|source|url
 
 # === NEWS / TOP STORIES ===
-news|BBC|https://feeds.bbci.co.uk/news/rss.xml
-news|http://rss.cnn.com/rss/edition.rss
-news|https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml
-news|https://feeds.npr.org/1001/rss.xml
-news|https://www.theguardian.com/world/rss
-news|https://www.aljazeera.com/xml/rss/all.xml
+news|top_stories|https://feeds.bbci.co.uk/news/rss.xml
+news|top_stories|http://rss.cnn.com/rss/edition.rss
+news|top_stories|https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml
+news|top_stories|https://feeds.npr.org/1001/rss.xml
+news|top_stories|https://www.theguardian.com/world/rss
+news|top_stories|https://www.aljazeera.com/xml/rss/all.xml
 
 # === NEWS / POLITICS ===
-news||https://feeds.bbci.co.uk/news/politics/rss.xml
-news|http://rss.cnn.com/rss/cnn_allpolitics.rss
-news|https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml
-news|https://feeds.npr.org/1014/rss.xml
-news|https://www.theguardian.com/politics/rss
-news|https://thehill.com/homenews/feed/
-news|https://www.politico.com/rss/politics-news.xml
+news|politics|https://feeds.bbci.co.uk/news/politics/rss.xml
+news|politics|http://rss.cnn.com/rss/cnn_allpolitics.rss
+news|politics|https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml
+news|politics|https://feeds.npr.org/1014/rss.xml
+news|politics|https://www.theguardian.com/politics/rss
+news|politics|https://thehill.com/homenews/feed/
+news|politics|https://www.politico.com/rss/politics-news.xml
 
 # === NEWS / ECONOMY ===
-news|https://www.theguardian.com/business/economics/rss
-news|ehttps://rss.nytimes.com/services/xml/rss/nyt/Economy.xml
-news|https://feeds.npr.org/1032/rss.xml
-news|https://www.marketwatch.com/feeds/topstories
-news|https://www.economist.com/finance-and-economics/rss.xml
-# (opsionale) FT:
-# news|economy|FT|https://www.ft.com/economy?format=rss
+news|economy|https://www.theguardian.com/business/economics/rss
+news|economy|https://rss.nytimes.com/services/xml/rss/nyt/Economy.xml
+news|economy|https://feeds.npr.org/1032/rss.xml
+news|economy|https://www.marketwatch.com/feeds/topstories
+news|economy|https://www.economist.com/finance-and-economics/rss.xml
+news|economy|https://www.ft.com/economy?format=rss
