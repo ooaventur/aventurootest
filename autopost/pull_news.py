@@ -54,7 +54,7 @@ HTTP_TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "18"))
 UA = os.getenv("AP_USER_AGENT", "Mozilla/5.0 (AventurOO Autoposter)")
 FALLBACK_COVER = os.getenv("FALLBACK_COVER", "assets/img/cover-fallback.jpg")
 DEFAULT_AUTHOR = os.getenv("DEFAULT_AUTHOR", "AventurOO Editorial")
-T
+
 
 TRACKING_PARAM_PREFIXES = ("utm_",)
 TRACKING_PARAM_NAMES = {
@@ -743,8 +743,8 @@ def main():
                 host_fallback = (urlparse(link).hostname or "").lower().replace("www.", "")
                 pretty_site = host_fallback.split(".")[0].replace("-", " ").title() if host_fallback else ""
                 author = pretty_site or DEFAULT_AUTHOR
-
-           date = parse_item_date(it_elem)
+        
+            date = parse_item_date(it_elem)
             slug = slugify(title)[:70]
             host = (urlparse(link).hostname or "").lower().replace("www.", "")
             source_name = host.split(".")[0].replace("-", " ").title() if host else ""
