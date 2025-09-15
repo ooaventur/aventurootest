@@ -558,21 +558,22 @@ def parse_item_date(it_elem) -> str:
         return today_iso()
 
     candidates = []
+    def _append_candidate(value):
+        if isinstance(value, str):
+            stripped = value.strip()
+            if stripped:
+                candidates.append(stripped)
+
     for tag in ("pubDate", "published", "updated"):
-        text = it_elem.findtext(tag)
-        if text and text.strip():
-            candidates.append(text.strip())
+        _append_candidate(it_elem.findtext(tag))
 
     ns_atom = {"atom": "http://www.w3.org/2005/Atom"}
     for tag in ("published", "updated"):
-        text = it_elem.findtext(f"atom:{tag}", ns_atom)
-        if text and text.strip():
-            candidates.append(text.strip())
+        _append_candidate(it_elem.findtext(f"atom:{tag}", default="", namespaces=ns_atom))
 
     ns_dc = {"dc": "http://purl.org/dc/elements/1.1/"}
-    text = it_elem.findtext("dc:date", ns_dc)
-    if text and text.strip():
-        candidates.append(text.strip())
+    _append_candidate(it_elem.findtext("dc:date", default="", namespaces=ns_dc))
+
 
     for candidate in candidates:
         normalized = _normalize_date_string(candidate)
