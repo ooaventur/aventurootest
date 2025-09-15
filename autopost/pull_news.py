@@ -16,8 +16,13 @@ AventurOO – Autopost (News)
 import os, re, json, hashlib, datetime, pathlib, urllib.request, urllib.error, socket
 from html import unescape
 from urllib.parse import urlparse
-
+host = (urlparse(link).hostname or "").lower().replace("www.", "")
+pretty_site = (host.split(".")[0].replace("-", " ").title() if host else "")
 # ...
+if not author:
+    author = pretty_site or DEFAULT_AUTHOR
+
+
 host = (urlparse(link).hostname or "").lower().replace("www.", "")
 pretty = host.split(".")[0].replace("-", " ").title() if host else ""
 
@@ -38,6 +43,7 @@ entry = {
 }
 
 from xml.etree import ElementTree as ET
+
 
 
 # ------------------ Konfigurime ------------------
@@ -445,6 +451,8 @@ def main():
                 or FALLBACK_COVER
             )
             cover = sanitize_img_url(cover)
+            if not cover or not cover.startswith(("http://", "https://")):
+                cover = FALLBACK_COVER
 
             # 5) Excerpt
             first_p = re.search(r"(?is)<p[^>]*>(.*?)</p>", body_html or "")
