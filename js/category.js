@@ -30,6 +30,8 @@
       .join(' ');
   }
 
+ const url = new URL(window.location.href);
+
   function getCatSub() {
     var cat = slugify(url.searchParams.get('cat'));
     var sub = slugify(url.searchParams.get('sub'));
