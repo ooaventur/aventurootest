@@ -51,14 +51,19 @@
       }
     }
 
-    const authorEl = document.querySelector('.main-article .details .author');
-    if (authorEl) {
-      if (post.author) {
-        authorEl.textContent = `By ${post.author}`;
-      } else {
-        authorEl.remove();
-      }
-    }
+const authorEl = document.querySelector('.main-article .details .author');
+if (authorEl) {
+  let authorTxt = post.author;
+  if (!authorTxt) {
+    try {
+      const host = new URL(post.source).hostname.replace(/^www\./,'');
+      authorTxt = host ? host.split('.')[0].replace(/-/g,' ').replace(/\b\w/g, c=>c.toUpperCase()) : '';
+    } catch(e) {}
+  }
+  if (authorTxt) authorEl.textContent = `By ${authorTxt}`;
+  else authorEl.remove();
+}
+
 
     const coverImg = document.querySelector('.main-article .featured img');
 if (coverImg) {
@@ -87,13 +92,17 @@ if (coverImg) {
       }
     }
 
-    const rightsEl = document.querySelector('.main-article .rights');
-    if (rightsEl) {
-      if (post.rights) {
-        rightsEl.textContent = `All rights belong to ${post.rights}. This site cites the original article.`;
-      } else {
-        rightsEl.remove();
-      }
+const rightsEl = document.querySelector('.main-article .rights');
+if (rightsEl) {
+  const host = (()=>{ try { return new URL(post.source).hostname.replace(/^www\./,''); } catch(e){ return ''; } })();
+  const owner = post.rights && post.rights !== 'Unknown' ? post.rights : (post.source_name || host || 'the original publisher');
+  rightsEl.innerHTML =
+    `Ky publikim citon përmbajtje të pjesshme nga <strong>${owner}</strong>. ` +
+    `Materiali është pronë e autorit dhe faqes origjinale; nuk kryejmë përpunim redaksional ` +
+    `dhe nuk publikojmë përmbajtjen e plotë. Për të lexuar artikullin e plotë, vizito ` +
+    `<a href="${post.source}" target="_blank" rel="nofollow noopener noreferrer">faqen origjinale</a>.`;
+}
+
     }
   }
 
