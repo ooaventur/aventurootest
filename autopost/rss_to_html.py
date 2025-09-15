@@ -20,6 +20,43 @@ from autopost.common import (
     find_cover_from_item,
     trafilatura,
     HTTP_TIMEOUT,
+    limit_words_html,
+)
+from autopost import SEEN_DB_FILENAME
+
+# ---- Paths ----
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+DATA_DIR = ROOT / "data"
+POSTS_JSON = DATA_DIR / "posts.json"
+SEEN_DB = ROOT / "autopost" / SEEN_DB_FILENAME
+FEEDS = ROOT / "autopost" / "data" / "feeds.txt"
+
+# ---- Env / Defaults ----
+MAX_PER_CAT = int(os.getenv("MAX_PER_CAT", "6"))
+MAX_TOTAL = int(os.getenv("MAX_TOTAL", "0"))          # 0 = pa limit total / run
+TARGET_WORDS = int(os.getenv("TARGET_WORDS", "1500"))
+SUMMARY_WORDS = int(os.getenv("SUMMARY_WORDS", str(TARGET_WORDS)))#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# RSS → data/posts.json (AventurOO)
+# - përdor trafilatura për të nxjerrë trupin real të artikullit (jo nav/footer/skripte)
+# - heq çdo "code/script" nga teksti; filtron paragrafët e shkurtër/jo-kuptimplotë
+# - shkruan: title, category, date, author, cover, source, excerpt (~450 fjalë), content (tekst i pastër me \n\n)
+
+import os, re, json, hashlib, pathlib, sys
+
+if __package__ in (None, ""):
+    sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
+
+from autopost.common import (
+    fetch_bytes,
+    http_get,
+    parse_feed,
+    strip_text,
+    slugify,
+    today_iso,
+    find_cover_from_item,
+    trafilatura,
+    HTTP_TIMEOUT,
 )
 from autopost import SEEN_DB_FILENAME
 
@@ -166,7 +203,7 @@ def main():
         for p in posts_idx
         if isinstance(p, dict) and p.get("slug")
     }
-
+    content_text = limit_words_html(content_text, TARGET_WORDS)
     if not FEEDS.exists():
         print("ERROR: feeds.txt not found:", FEEDS)
         return
