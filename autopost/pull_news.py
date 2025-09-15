@@ -386,6 +386,8 @@ def main():
             category_part, sub_part = (cat_str.split('/', 1) + [''])[:2]
             category = (category_part or "").strip().title()
             sub = (sub_part.strip().title() if sub_part.strip() else current_sub)
+            
+            sub = slugify(sub) if sub else ""
 
         # Optional filter by env CATEGORY (leave empty to accept all)
         if CATEGORY and category != CATEGORY:
