@@ -61,13 +61,17 @@
     }
 
     const coverImg = document.querySelector('.main-article .featured img');
-    if (coverImg) {
-      if (post.cover) {
-        coverImg.src = post.cover;
-      } else {
-        coverImg.remove();
-      }
-    }
+if (coverImg) {
+  if (post.cover) {
+    coverImg.src = post.cover;
+    coverImg.loading = 'lazy';
+    coverImg.decoding = 'async';
+    coverImg.referrerPolicy = 'no-referrer-when-downgrade';
+    coverImg.alt = (post.title || 'Cover') + (post.source_name ? (' — ' + post.source_name) : '');
+  } else {
+    coverImg.remove();
+  }
+}
 
     const bodyEl = document.querySelector('.main-article .main');
     if (bodyEl) {
