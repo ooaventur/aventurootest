@@ -1,3 +1,7 @@
+(function () {
+  const params = new URLSearchParams(location.search);
+  const slug = params.get('slug') || '';
+
   async function load() {
     if (!slug) {
       showError('Post not specified.');
