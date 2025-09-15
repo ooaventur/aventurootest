@@ -8,7 +8,7 @@ Reads feeds in the form:
 (also supports legacy cat|url or cat/sub|url)
 
 • Extracts and sanitizes article HTML (trafilatura → readability → fallback text).
-• Keeps the first N full paragraph/heading/blockquote/list blocks (not mid-sentence cuts).
+• Keeps roughly TARGET_WORDS words by whole paragraph/heading/blockquote/list blocks.
 • Strips ads/widgets (scripts, iframes, common ad/related/newsletter blocks).
 • Picks a clear cover image (largest media/proper https/proxy/fallback).
 • Writes data/posts.json items with:
@@ -19,7 +19,7 @@ Run:
   python3 "autopost/pull_news.py"
 Env knobs (optional):
   MAX_PER_CAT, MAX_TOTAL, MAX_POSTS_PERSIST, HTTP_TIMEOUT, FALLBACK_COVER, DEFAULT_AUTHOR,
-  IMG_TARGET_WIDTH, IMG_PROXY, FORCE_PROXY, MAX_PARAGRAPHS
+  IMG_TARGET_WIDTH, IMG_PROXY, FORCE_PROXY, TARGET_WORDS
 """
 
 import os, re, json, hashlib, datetime, pathlib, urllib.request, urllib.error, socket, sys
@@ -31,6 +31,7 @@ if __package__ in (None, ""):
     sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
 
 from autopost import SEEN_DB_FILENAME
+from autopost.common import limit_words_html
 
 # ------------------ Config ------------------
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -52,7 +53,7 @@ HTTP_TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "18"))
 UA = os.getenv("AP_USER_AGENT", "Mozilla/5.0 (AventurOO Autoposter)")
 FALLBACK_COVER = os.getenv("FALLBACK_COVER", "assets/img/cover-fallback.jpg")
 DEFAULT_AUTHOR = os.getenv("DEFAULT_AUTHOR", "AventurOO Editorial")
-MAX_PARAGRAPHS = int(os.getenv("MAX_PARAGRAPHS", "4"))  # keep first N full blocks
+T
 
 TRACKING_PARAM_PREFIXES = ("utm_",)
 TRACKING_PARAM_NAMES = {
@@ -190,36 +191,6 @@ def sanitize_article_html(html: str) -> str:
     html = re.sub(rf'(?is)<(div|section)[^>]*(id|data-)[^>]*{BAD}[^>]*>.*?</\1>', "", html)
     return html.strip()
 
-def limit_words_html(html: str, max_words: int) -> str:
-    text = strip_text(html)
-    words = text.split()
-    if len(words) <= max_words:
-        return html
-    parts = re.findall(r"(?is)<p[^>]*>.*?</p>|<h2[^>]*>.*?</h2>|<h3[^>]*>.*?</h3>|<ul[^>]*>.*?</ul>|<ol[^>]*>.*?</ol>|<blockquote[^>]*>.*?</blockquote>", html)
-    out, count = [], 0
-    for block in parts:
-        t = strip_text(block)
-        w = len(t.split())
-        if count + w > max_words:
-            break
-        out.append(block)
-        count += w
-    if not out:
-        trimmed = " ".join(words[:max_words]) + "…"
-        return f"<p>{trimmed}</p>"
-    return "\n".join(out)
-
-def limit_paragraphs_html(html: str, max_paras: int) -> str:
-    """Keep the first N full blocks (<p>, <h2/3>, lists, blockquotes), then add ellipsis."""
-    parts = re.findall(
-        r"(?is)<p[^>]*>.*?</p>|<h2[^>]*>.*?</h2>|<h3[^>]*>.*?</h3>|"
-        r"<ul[^>]*>.*?</ul>|<ol[^>]*>.*?</ol>|<blockquote[^>]*>.*?</blockquote>",
-        html or ""
-    )
-    if not parts or len(parts) <= max_paras:
-        return html
-    kept = parts[:max_paras]
-    return "\n".join(kept) + '\n<p><em>…</em></p>'
 # ---- Link normalization helpers ----
 
 def is_tracking_param(name: str) -> bool:
@@ -631,8 +602,8 @@ def main():
             body_html = absolutize(body_html, base)
             body_html = sanitize_article_html(body_html)
 
-            # 3) Keep first N full blocks
-            body_html = limit_paragraphs_html(body_html, MAX_PARAGRAPHS)
+            # 3) Trim to target word count while keeping whole blocks when possible
+            body_html = limit_words_html(body_html, TARGET_WORDS)
 
             # 4) Cover image (cover only; images inside body removed)
             cover = (
