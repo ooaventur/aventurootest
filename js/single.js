@@ -15,24 +15,57 @@
     });
   }
 
+  function slugify(value) {
+    return (value || '')
+      .toString()
+      .trim()
+      .toLowerCase()
+      .replace(/\.html?$/i, '')
+      .replace(/&/g, 'and')
+      .replace(/[_\W]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  function parseDateValue(value) {
+    if (!value) return 0;
+    const time = Date.parse(value);
+    return Number.isNaN(time) ? 0 : time;
+  }
+
+  function formatDate(value) {
+    if (!value) return '';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return String(value);
+    return date.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
+
   async function load() {
     if (!slug) {
       showError('Post not specified.');
+      renderRelated([], null);
       return;
     }
     try {
       const res = await fetchSequential(POSTS_SOURCES);
       if (!res.ok) throw new Error('Network response was not ok');
-      const posts = await res.json();
-      const post = posts.find(p => p.slug === slug);
+      const data = await res.json();
+      const posts = Array.isArray(data) ? data : [];
+      const post = posts.find(p => p && p.slug === slug);
       if (!post) {
         showError('Post not found.');
+        renderRelated(posts, null);
         return;
       }
       renderPost(post);
+      renderRelated(posts, post);
     } catch (err) {
       console.error(err);
       showError('Failed to load post.');
+      renderRelated([], null);
     }
   }
 
@@ -125,6 +158,149 @@
         `To read the complete piece, please visit the ` +
         `<a href="${escapeHtml(post.source || '')}" target="_blank" rel="nofollow noopener noreferrer">original page</a>.`;
     }
+  }
+
+  function renderRelated(allPosts, currentPost) {
+    const container = document.getElementById('related-posts');
+    if (!container) return;
+
+    function showMessage(text) {
+      container.innerHTML = '';
+      const empty = document.createElement('p');
+      empty.className = 'col-xs-12 text-muted';
+      empty.textContent = text;
+      container.appendChild(empty);
+    }
+
+    if (!currentPost) {
+      showMessage('Related posts not available.');
+      return;
+    }
+
+    const list = Array.isArray(allPosts) ? allPosts : [];
+    if (!list.length) {
+      showMessage('No related posts yet.');
+      return;
+    }
+
+    const currentSlug = currentPost.slug;
+    const currentCat = slugify(currentPost.category);
+    const currentSub = slugify(currentPost.subcategory || currentPost.sub || '');
+
+    const candidates = [];
+
+    function pushCandidates(items) {
+      items.forEach(post => {
+        if (!post || !post.slug || !post.title) return;
+        if (post.slug === currentSlug) return;
+        if (candidates.some(existing => existing.slug === post.slug)) return;
+        candidates.push(post);
+      });
+    }
+
+    if (currentCat && currentSub) {
+      pushCandidates(list.filter(post =>
+        slugify(post.category) === currentCat &&
+        slugify(post.subcategory || post.sub || '') === currentSub
+      ));
+    }
+
+    if (currentCat) {
+      pushCandidates(list.filter(post => slugify(post.category) === currentCat));
+    }
+
+    pushCandidates(list);
+
+    const selected = candidates
+      .sort((a, b) => parseDateValue(b.date) - parseDateValue(a.date))
+      .slice(0, 2);
+
+    if (!selected.length) {
+      showMessage('No related posts yet.');
+      return;
+    }
+
+    container.innerHTML = '';
+    selected.forEach(post => container.appendChild(createRelatedCard(post)));
+  }
+
+  function createRelatedCard(post) {
+    const article = document.createElement('article');
+    article.className = 'article related col-md-6 col-sm-6 col-xs-12';
+
+    const articleUrl = '/article.html?slug=' + encodeURIComponent(post.slug);
+
+    const inner = document.createElement('div');
+    inner.className = 'inner';
+
+    const figure = document.createElement('figure');
+    const figureLink = document.createElement('a');
+    figureLink.href = articleUrl;
+
+    const img = document.createElement('img');
+    if (post.cover) {
+      img.src = post.cover;
+      img.alt = post.title || 'Related article';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.referrerPolicy = 'no-referrer-when-downgrade';
+    } else {
+      img.src = '/images/logo.png';
+      img.alt = 'AventurOO Logo';
+    }
+    figureLink.appendChild(img);
+    figure.appendChild(figureLink);
+    inner.appendChild(figure);
+
+    const padding = document.createElement('div');
+    padding.className = 'padding';
+
+    const titleEl = document.createElement('h2');
+    const titleLink = document.createElement('a');
+    titleLink.href = articleUrl;
+    titleLink.textContent = post.title || '';
+    titleEl.appendChild(titleLink);
+    padding.appendChild(titleEl);
+
+    const detail = document.createElement('div');
+    detail.className = 'detail';
+    let hasDetail = false;
+
+    if (post.category) {
+      const catDiv = document.createElement('div');
+      catDiv.className = 'category';
+      const catLink = document.createElement('a');
+      const catSlug = slugify(post.category);
+      const subSlug = slugify(post.subcategory || post.sub || '');
+      if (catSlug) {
+        catLink.href = subSlug
+          ? `/category.html?cat=${encodeURIComponent(catSlug)}&sub=${encodeURIComponent(subSlug)}`
+          : `/category.html?cat=${encodeURIComponent(catSlug)}`;
+      } else {
+        catLink.href = '#';
+      }
+      catLink.textContent = post.category;
+      catDiv.appendChild(catLink);
+      detail.appendChild(catDiv);
+      hasDetail = true;
+    }
+
+    const formattedDate = formatDate(post.date);
+    if (formattedDate) {
+      const timeDiv = document.createElement('div');
+      timeDiv.className = 'time';
+      timeDiv.textContent = formattedDate;
+      detail.appendChild(timeDiv);
+      hasDetail = true;
+    }
+
+    if (hasDetail) {
+      padding.appendChild(detail);
+    }
+
+    inner.appendChild(padding);
+    article.appendChild(inner);
+    return article;
   }
 
   function showError(message) {
