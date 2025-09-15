@@ -24,6 +24,7 @@ Env knobs (optional):
 
 import os, re, json, hashlib, datetime, pathlib, urllib.request, urllib.error, socket, sys
 from html import unescape
+from email.utils import parsedate_to_datetime
 from urllib.parse import urlparse, urljoin, urlunparse, parse_qsl, urlencode
 from xml.etree import ElementTree as ET
 
@@ -485,6 +486,90 @@ def slugify(s: str) -> str:
     s = (s or "").lower()
     s = re.sub(r"[^a-z0-9]+", "-", s)
     return s.strip("-") or "post"
+
+def _normalize_date_string(value: str) -> str:
+    value = (value or "").strip()
+    if not value:
+        return ""
+    value = re.sub(r"\s+", " ", value)
+
+    dt = None
+
+    iso_candidate = value
+    if iso_candidate.endswith("Z"):
+        iso_candidate = iso_candidate[:-1] + "+00:00"
+    try:
+        dt = datetime.datetime.fromisoformat(iso_candidate)
+    except ValueError:
+        dt = None
+
+    if dt is None:
+        try:
+            dt = parsedate_to_datetime(value)
+        except (TypeError, ValueError, IndexError):
+            dt = None
+
+    if dt is None:
+        for fmt in (
+            "%Y-%m-%d",
+            "%Y/%m/%d",
+            "%d %b %Y",
+            "%d %B %Y",
+            "%b %d, %Y",
+            "%B %d, %Y",
+        ):
+            try:
+                dt = datetime.datetime.strptime(value, fmt)
+                break
+            except ValueError:
+                continue
+
+    if dt is None:
+        return ""
+
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=datetime.timezone.utc)
+
+    return dt.astimezone(datetime.timezone.utc).date().isoformat()
+
+
+def parse_item_date(it_elem) -> str:
+    if it_elem is None:
+        return today_iso()
+
+    candidates = []
+    for tag in ("pubDate", "published", "updated"):
+        text = it_elem.findtext(tag)
+        if text and text.strip():
+            candidates.append(text.strip())
+
+    ns_atom = {"atom": "http://www.w3.org/2005/Atom"}
+    for tag in ("published", "updated"):
+        text = it_elem.findtext(f"atom:{tag}", ns_atom)
+        if text and text.strip():
+            candidates.append(text.strip())
+
+    ns_dc = {"dc": "http://purl.org/dc/elements/1.1/"}
+    text = it_elem.findtext("dc:date", ns_dc)
+    if text and text.strip():
+        candidates.append(text.strip())
+
+    for candidate in candidates:
+        normalized = _normalize_date_string(candidate)
+        if normalized:
+            return normalized
+
+    return today_iso()
+
+
+def _entry_sort_key(entry) -> str:
+    if not isinstance(entry, dict):
+        return ""
+    raw = entry.get("date")
+    raw_str = str(raw or "").strip()
+    normalized = _normalize_date_string(raw_str)
+    return normalized or raw_str
+
 
 def today_iso() -> str:
     return datetime.datetime.utcnow().strftime("%Y-%m-%d")
