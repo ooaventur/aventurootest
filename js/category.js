@@ -37,7 +37,10 @@
     if (!cat) {
       var parts = location.pathname.replace(/\/+$/, '').split('/'); // p.sh. ["", "news", "politics.html"]
       if (parts[1]) cat = slugify(parts[1]);
-      if (parts[2]) sub = slugify(parts[2]);
+      if (parts[2]) {
+        var p2 = parts[2];
+        if (p2 !== 'index' && p2 !== 'index.html') sub = slugify(p2);
+      }
     }
 
     // opsionale: lexo edhe data-attr në <body data-cat="..." data-sub="...">
