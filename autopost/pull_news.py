@@ -10,7 +10,7 @@ AventurOO – Autopost (News)
 - Rrit cilësinë e imazheve (srcset → më i madhi, Guardian width=1600) vetëm për 'cover'
 - Zgjidh 'mixed content' me https ose proxy opsional për 'cover'
 - Shton linkun e burimit ne fund
-- Shkruan ne data/posts.json: {slug,title,category,date,excerpt,cover,source,author,body}
+- Shkruan ne data/posts.json: {slug,title,category,subcategory,date,excerpt,cover,source,author,body}
 """
 
 import os, re, json, hashlib, datetime, pathlib, urllib.request, urllib.error, socket
@@ -338,8 +338,10 @@ def main():
             continue
         if "|" not in raw:
             continue
-        cat, url = raw.split("|", 1)
-        category = (cat or "").strip().title()
+        cat_str, url = raw.split("|", 1)
+        category_part, sub_part = (cat_str.split('/', 1) + [''])[:2]
+        category = (category_part or "").strip().title()
+        sub = (sub_part or "").strip().title()
         feed_url = (url or "").strip()
         if category != CATEGORY or not feed_url:
             continue
@@ -421,7 +423,13 @@ def main():
             }
             new_entries.append(entry)
 
-            seen[key] = {"title": title, "url": link, "category": category, "created": date}
+            seen[key] = {
+                "title": title,
+                "url": link,
+                "category": category,
+                "subcategory": sub,
+                "created": date,
+            }
             per_cat[category] = per_cat.get(category, 0) + 1
             added_total += 1
             print(f"[{CATEGORY}] + {title}")
