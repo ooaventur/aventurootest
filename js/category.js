@@ -19,7 +19,7 @@
       .toLowerCase()
       .replace(/\.html?$/i, '')      // heq .html / .htm
       .replace(/&/g, 'and')
-      .replace(/[^\w]+/g, '-')       // gjithçka jo-alfanumerike -> -
+      .replace(/[_\W]+/g, '-')       // gjithçka jo-alfanumerike ose _ -> -
       .replace(/^-+|-+$/g, '');
   }
 
