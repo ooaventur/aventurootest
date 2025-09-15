@@ -82,22 +82,118 @@ def parse_feed(xml_bytes: bytes):
 
 
 def find_cover_from_item(it_elem, page_url: str = "") -> str:
+    TARGET_WIDTH = 1200
+
+    def _parse_int(val) -> int:
+        try:
+            return int(float(str(val).strip()))
+        except (TypeError, ValueError):
+            return 0
+
+    def _upgrade_size_in_url(url: str) -> str:
+        url = (url or "").strip()
+        if not url:
+            return url
+        try:
+            parsed = urlparse(url)
+        except Exception:
+            return url
+
+        # Upgrade common size query params (?width=240 → ?width=1200)
+        query_changed = False
+        if parsed.query:
+            params = parse_qsl(parsed.query, keep_blank_values=True)
+            new_params = []
+            for k, v in params:
+                lv = str(v)
+                key = (k or "").lower()
+                if key in {"width", "w"} and lv.isdigit():
+                    num = int(lv)
+                    if num and num < TARGET_WIDTH:
+                        v = str(TARGET_WIDTH)
+                        query_changed = True
+                new_params.append((k, v))
+            if query_changed:
+                parsed = parsed._replace(query=urlencode(new_params, doseq=True))
+
+        # Upgrade path segments like /240/ when they likely encode size.
+        path = parsed.path or ""
+        segments = path.split("/")
+        path_changed = False
+        size_keywords = {"img", "image", "images", "thumb", "thumbnail", "resize", "resized", "size", "sizes", "width", "w", "crop"}
+        for idx, seg in enumerate(segments):
+            if not re.fullmatch(r"\d{2,4}", seg):
+                continue
+            value = int(seg)
+            if value >= TARGET_WIDTH or value == 0:
+                continue
+            prev_seg = segments[idx - 1].lower() if idx > 0 else ""
+            next_seg = segments[idx + 1].lower() if idx + 1 < len(segments) else ""
+            looks_like_size = False
+            if any(key in prev_seg for key in size_keywords) or any(key in next_seg for key in size_keywords):
+                looks_like_size = True
+            if re.search(r"\.(jpe?g|png|gif|webp|avif)", next_seg):
+                looks_like_size = True
+            if looks_like_size:
+                segments[idx] = str(TARGET_WIDTH)
+                path_changed = True
+        if path_changed:
+            parsed = parsed._replace(path="/".join(segments))
+
+        if not (query_changed or path_changed):
+            return url
+        return urlunparse(parsed)
+
+    def _score_candidate(width: int, height: int, fallback: int = 0) -> int:
+        if width and height:
+            return width * height
+        if width or height:
+            return max(width, height)
+        return fallback
+
+    def _consider(url: str, width: int = 0, height: int = 0, fallback: int = 0):
+        nonlocal best_url, best_score
+        if not url:
+            return
+        upgraded = _upgrade_size_in_url(url)
+        score = _score_candidate(width, height, fallback)
+        if upgraded and score > best_score:
+            best_url = upgraded
+            best_score = score
+
+    best_url, best_score = "", -1
     if it_elem is not None:
-        enc = it_elem.find("enclosure")
-        if enc is not None and str(enc.attrib.get("type", "")).startswith("image"):
-            u = enc.attrib.get("url", "")
-            if u:
-                return u
+        for enc in it_elem.findall("enclosure"):
+            enc_type = (enc.attrib.get("type") or "").lower()
+            if enc_type and not enc_type.startswith("image"):
+                continue
+            url = (enc.attrib.get("url") or "").strip()
+            if not url:
+                continue
+            w = _parse_int(enc.attrib.get("width"))
+            h = _parse_int(enc.attrib.get("height"))
+            size_hint = _parse_int(enc.attrib.get("length"))
+            _consider(url, w, h, size_hint)
+
         ns = {"media": "http://search.yahoo.com/mrss/"}
-        m = it_elem.find("media:content", ns) or it_elem.find("media:thumbnail", ns)
-        if m is not None and m.attrib.get("url"):
-            return m.attrib.get("url")
+        for tag in it_elem.findall(".//media:content", ns) + it_elem.findall(".//media:thumbnail", ns):
+            url = (tag.attrib.get("url") or "").strip()
+            if not url:
+                continue
+            w = _parse_int(tag.attrib.get("width"))
+            h = _parse_int(tag.attrib.get("height"))
+            size_hint = _parse_int(tag.attrib.get("fileSize")) or _parse_int(tag.attrib.get("filesize"))
+            _consider(url, w, h, size_hint)
+
+    if best_url:
+        return best_url
+
     if page_url:
         try:
             html = http_get(page_url)
             m = re.search(r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)["\']', html, re.I)
             if m:
-                return m.group(1)
+                return _upgrade_size_in_url(m.group(1))
         except Exception:
             pass
     return ""
