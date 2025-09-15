@@ -557,6 +557,33 @@
 		<script src="../js/demo.js"></script>
 		<script src="../js/e-magz.js"></script>
 <script src="/js/single.js"></script>
+		<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.getElementById("breadcrumb");
+  if (!container) return;
+
+  const parts = window.location.pathname
+    .split("/")
+    .filter(Boolean)
+    .filter(part => part.toLowerCase() !== "index.html");
+
+  let path = "";
+  const items = ['<li><a href="/">Home</a></li>'];
+
+  parts.forEach((p, idx) => {
+    path += `/${p}`;
+    const name = decodeURIComponent(p.replace(/[-_]/g, " "));
+    const isLast = idx === parts.length - 1;
+    items.push(
+      `<li${isLast ? ' class="active"' : ""}>` +
+      (isLast ? `${name}` : `<a href="${path}">${name}</a>`) +
+      `</li>`
+    );
+  });
+
+  container.innerHTML = items.join("");
+});
+</script>
 
 
 	</body>
