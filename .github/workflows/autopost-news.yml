@@ -2,7 +2,7 @@ name: Autopost • News
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: "5,35 * * * *"   # çdo 30 min, në minuta 05 dhe 35
+    - cron: "5 * * * *"   # çdo 30 min, në minuta 05 dhe 35
 
 permissions:
   contents: write
@@ -10,12 +10,14 @@ permissions:
 jobs:
   run:
     runs-on: ubuntu-latest
-    env:  
-      SUMMARY_WORDS: "900"
-      MAX_PER_CAT: "6"
+    env:
+      SUMMARY_WORDS: "1500"
+      MAX_PER_CAT: "10"
       HTTP_TIMEOUT: "18"
       AP_USER_AGENT: "Mozilla/5.0 (AventurOO Autoposter)"
       FALLBACK_COVER: "assets/img/cover-fallback.jpg"
+      FEEDS_FILE: autopost/feeds_news.txt
+      CATEGORY: News          # optional but keeps the job limited to “News”
 
     steps:
       - uses: actions/checkout@v4
