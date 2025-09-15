@@ -744,7 +744,7 @@ def main():
                 pretty_site = host_fallback.split(".")[0].replace("-", " ").title() if host_fallback else ""
                 author = pretty_site or DEFAULT_AUTHOR
 
-            date = today_iso()
+           date = parse_item_date(it_elem)
             slug = slugify(title)[:70]
             host = (urlparse(link).hostname or "").lower().replace("www.", "")
             source_name = host.split(".")[0].replace("-", " ").title() if host else ""
@@ -783,6 +783,7 @@ def main():
         return
 
     posts_idx = new_entries + posts_idx
+    posts_idx.sort(key=_entry_sort_key, reverse=True)
     if MAX_POSTS_PERSIST > 0:
         posts_idx = posts_idx[:MAX_POSTS_PERSIST]
 
