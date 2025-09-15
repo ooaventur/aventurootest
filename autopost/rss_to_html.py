@@ -386,7 +386,7 @@ def main():
             if cover and not cover.lower().startswith(("http://", "https://")):
                 cover = ""
 
-            date = today_iso()
+            date = parse_item_date(it_elem)
             slug = ensure_unique_slug(slugify(title)[:70], existing_slugs)
 
             entry = {
