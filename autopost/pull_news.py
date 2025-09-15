@@ -1,73 +1,57 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-AventurOO – Autopost (News)
-- Lexon vetem rreshtat "News|<RSS>" nga autopost/data/feeds.txt
-- Nxjerr trupin e artikullit si HTML te paster (paragrafe, bold, linke, pa imazhe)
-- Preferon trafilatura (HTML), pastaj fallback readability-lxml
-- Absolutizon URL-t relative te <a> dhe <img> (edhe pse <img> hiqen me pas)
-- Heq script/style/iframes/embed te panevojshem
-- Rrit cilësinë e imazheve (srcset → më i madhi, Guardian width=1600) vetëm për 'cover'
-- Zgjidh 'mixed content' me https ose proxy opsional për 'cover'
-- Shton linkun e burimit ne fund
-- Shkruan ne data/posts.json: {slug,title,category,subcategory,date,excerpt,cover,source,author,rights,body}
+AventurOO – Autopost
+
+Reads feeds in the form:
+    category|subcategory|url
+(also supports legacy cat|url or cat/sub|url)
+
+• Extracts and sanitizes article HTML (trafilatura → readability → fallback text).
+• Keeps the first N full paragraph/heading/blockquote/list blocks (not mid-sentence cuts).
+• Strips ads/widgets (scripts, iframes, common ad/related/newsletter blocks).
+• Picks a clear cover image (largest media/proper https/proxy/fallback).
+• Writes data/posts.json items with:
+  {slug,title,category,subcategory,date,excerpt,cover,source,source_domain,source_name,author,rights,body}
+• Applies per-(Category/Subcategory) limits.
+
+Run:
+  python3 "pull_news (1).py"
+Env knobs (optional):
+  MAX_PER_CAT, MAX_TOTAL, MAX_POSTS_PERSIST, HTTP_TIMEOUT, FALLBACK_COVER, DEFAULT_AUTHOR,
+  IMG_TARGET_WIDTH, IMG_PROXY, FORCE_PROXY, MAX_PARAGRAPHS
 """
 
 import os, re, json, hashlib, datetime, pathlib, urllib.request, urllib.error, socket
 from html import unescape
-from urllib.parse import urlparse
-host = (urlparse(link).hostname or "").lower().replace("www.", "")
-pretty_site = (host.split(".")[0].replace("-", " ").title() if host else "")
-# ...
-if not author:
-    author = pretty_site or DEFAULT_AUTHOR
-
-
-host = (urlparse(link).hostname or "").lower().replace("www.", "")
-pretty = host.split(".")[0].replace("-", " ").title() if host else ""
-
-entry = {
-    "slug": slug,
-    "title": title,
-    "category": category,
-    "subcategory": sub,
-    "date": date,
-    "excerpt": excerpt,
-    "cover": cover,
-    "source": link,
-    "source_domain": host,      # i ri (opsional)
-    "source_name": pretty or "",# i ri (opsional)
-    "author": author,
-    "rights": rights,
-    "body": body_final
-}
-
+from urllib.parse import urlparse, urljoin
 from xml.etree import ElementTree as ET
 
-
-
-# ------------------ Konfigurime ------------------
+# ------------------ Config ------------------
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
 POSTS_JSON = DATA_DIR / "posts.json"
-FEEDS = ROOT / "autopost" / "data" / "feeds.txt"
+# Use your uploaded feeds file:
+FEEDS = ROOT / "feeds_news.txt"
 
-CATEGORY = ""
-SEEN_DB = ROOT / "autopost" / f"seen_{CATEGORY.lower()}.json"
+# Accept all categories by default (set CATEGORY env if you want to filter)
+CATEGORY = os.getenv("CATEGORY", "").strip()
+SEEN_DB = ROOT / "autopost" / ("seen_all.json" if not CATEGORY else f"seen_{CATEGORY.lower()}.json")
 
 MAX_PER_CAT = int(os.getenv("MAX_PER_CAT", "15"))
 MAX_TOTAL   = int(os.getenv("MAX_TOTAL", "0"))
-SUMMARY_WORDS = int(os.getenv("SUMMARY_WORDS", "1000"))
+SUMMARY_WORDS = int(os.getenv("SUMMARY_WORDS", "1000"))  # kept for compatibility
 MAX_POSTS_PERSIST = int(os.getenv("MAX_POSTS_PERSIST", "3000"))
 HTTP_TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "18"))
 UA = os.getenv("AP_USER_AGENT", "Mozilla/5.0 (AventurOO Autoposter)")
 FALLBACK_COVER = os.getenv("FALLBACK_COVER", "assets/img/cover-fallback.jpg")
 DEFAULT_AUTHOR = os.getenv("DEFAULT_AUTHOR", "AventurOO Editorial")
+MAX_PARAGRAPHS = int(os.getenv("MAX_PARAGRAPHS", "4"))  # keep first N full blocks
 
-# Opsione imazhesh (vetëm për 'cover')
+# Image options (for cover only)
 IMG_TARGET_WIDTH = int(os.getenv("IMG_TARGET_WIDTH", "1600"))
-IMG_PROXY = os.getenv("IMG_PROXY", "https://images.weserv.nl/?url=")  # lëre "" nëse s'do proxy
-FORCE_PROXY = os.getenv("FORCE_PROXY", "0")  # "1" = kalo çdo imazh përmes proxy (për cover)
+IMG_PROXY = os.getenv("IMG_PROXY", "https://images.weserv.nl/?url=")  # "" if you don’t want a proxy
+FORCE_PROXY = os.getenv("FORCE_PROXY", "0")  # "1" => route every cover via proxy
 
 try:
     import trafilatura
@@ -79,7 +63,7 @@ try:
 except Exception:
     Document = None
 
-# ------------------ Utilitare HTTP/HTML ------------------
+# ------------------ HTTP/HTML utils ------------------
 def http_get(url: str) -> str:
     req = urllib.request.Request(url, headers={"User-Agent": UA})
     with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT) as r:
@@ -143,7 +127,7 @@ def find_cover_from_item(it_elem, page_url: str = "") -> str:
         m = it_elem.find("media:content", ns) or it_elem.find("media:thumbnail", ns)
         if m is not None and m.attrib.get("url"):
             return m.attrib.get("url")
-    # og:image si fallback
+    # og:image as fallback
     if page_url:
         try:
             html = http_get(page_url)
@@ -171,11 +155,15 @@ def absolutize(html: str, base: str) -> str:
 def sanitize_article_html(html: str) -> str:
     if not html:
         return ""
+    # Remove scripts/styles/iframes/noscript
     html = re.sub(r"(?is)<script.*?</script>", "", html)
     html = re.sub(r"(?is)<style.*?</style>", "", html)
     html = re.sub(r"(?is)<noscript.*?</noscript>", "", html)
     html = re.sub(r"(?is)<iframe.*?</iframe>", "", html)
-    html = re.sub(r'(?is)<(aside|figure)[^>]*class="[^"]*(share|related|promo|newsletter)[^"]*"[^>]*>.*?</\1>', "", html)
+    # Remove common ad/sponsored/related/newsletter blocks
+    BAD = r"(share|related|promo|newsletter|advert|ads?|sponsor(ed)?|outbrain|taboola|recirculation|recommend(ed)?)"
+    html = re.sub(rf'(?is)<(aside|figure|div|section)[^>]*class="[^"]*{BAD}[^"]*"[^>]*>.*?</\1>', "", html)
+    html = re.sub(rf'(?is)<(div|section)[^>]*(id|data-)[^>]*{BAD}[^>]*>.*?</\1>', "", html)
     return html.strip()
 
 def limit_words_html(html: str, max_words: int) -> str:
@@ -197,7 +185,19 @@ def limit_words_html(html: str, max_words: int) -> str:
         return f"<p>{trimmed}</p>"
     return "\n".join(out)
 
-# ---- Image helpers për 'cover' ----
+def limit_paragraphs_html(html: str, max_paras: int) -> str:
+    """Keep the first N full blocks (<p>, <h2/3>, lists, blockquotes), then add ellipsis."""
+    parts = re.findall(
+        r"(?is)<p[^>]*>.*?</p>|<h2[^>]*>.*?</h2>|<h3[^>]*>.*?</h3>|"
+        r"<ul[^>]*>.*?</ul>|<ol[^>]*>.*?</ol>|<blockquote[^>]*>.*?</blockquote>",
+        html or ""
+    )
+    if not parts or len(parts) <= max_paras:
+        return html
+    kept = parts[:max_paras]
+    return "\n".join(kept) + '\n<p><em>…</em></p>'
+
+# ---- Image helpers for 'cover' ----
 def guardian_upscale_url(u: str, target=IMG_TARGET_WIDTH) -> str:
     try:
         from urllib.parse import urlencode, urlparse, parse_qsl, urlunparse
@@ -213,7 +213,6 @@ def guardian_upscale_url(u: str, target=IMG_TARGET_WIDTH) -> str:
         return urlunparse(pr)
     except Exception:
         return u
-
 
 def pick_largest_media_url(it_elem) -> str:
     if it_elem is None:
@@ -236,7 +235,6 @@ def pick_largest_media_url(it_elem) -> str:
             best_url = u
     return best_url or ""
 
-
 def _to_https(u: str) -> str:
     if not u:
         return u
@@ -247,7 +245,6 @@ def _to_https(u: str) -> str:
         return "https://" + u[len("http://"):]
     return u
 
-
 def _proxy_if_mixed(u: str) -> str:
     if not u:
         return u
@@ -256,9 +253,8 @@ def _proxy_if_mixed(u: str) -> str:
         return f"{IMG_PROXY}{base}"
     return u
 
-
 def sanitize_img_url(u: str) -> str:
-    """Sanitizo URL e cover-it: https → (ops.) proxy → Guardian upscale."""
+    """Sanitize cover URL: https → (opt.) proxy → Guardian upscale."""
     u = (u or "").strip()
     if not u:
         return u
@@ -271,9 +267,9 @@ def sanitize_img_url(u: str) -> str:
         u = _proxy_if_mixed(u)
     return u
 
-# ---- Extract body ----
+# ---- Body extractors ----
 def extract_body_html(url: str) -> tuple[str, str]:
-    """Kthen (body_html, first_img_in_body) duke provuar trafilatura → readability → fallback tekst."""
+    """Return (body_html, first_img_in_body) trying trafilatura → readability → fallback text."""
     body_html = ""
     first_img = ""
     # 1) trafilatura
@@ -318,7 +314,7 @@ def extract_body_html(url: str) -> tuple[str, str]:
     return body_html, first_img
 
 def slugify(s: str) -> str:
-    s = s.lower()
+    s = (s or "").lower()
     s = re.sub(r"[^a-z0-9]+", "-", s)
     return s.strip("-") or "post"
 
@@ -327,7 +323,8 @@ def today_iso() -> str:
 
 # ------------------ Main ------------------
 def main():
-    DATA_DIR.mkdir(exist_ok=True)
+    DATA_DIR.mkdir(exist_ok=True, parents=True)
+    SEEN_DB.parent.mkdir(exist_ok=True, parents=True)
 
     # seen
     if SEEN_DB.exists():
@@ -352,7 +349,7 @@ def main():
         posts_idx = []
 
     if not FEEDS.exists():
-        print("ERROR: feeds.txt not found:", FEEDS)
+        print("ERROR: feeds file not found:", FEEDS)
         return
 
     added_total = 0
@@ -366,38 +363,37 @@ def main():
         if not raw:
             continue
         if raw.startswith("#"):
+            # Support comments like: # === NEWS / POLITICS ===
             m = re.search(r"#\s*===\s*[^/]+/\s*(.+?)\s*===", raw, flags=re.I)
             if m:
                 current_sub = m.group(1).strip().title()
             continue
+
         if "|" not in raw:
             continue
         parts = [p.strip() for p in raw.split("|") if p.strip()]
         if len(parts) < 2:
             continue
-        
+
+        # Support: category|subcategory|url OR legacy: category|url OR category/sub|url
         if len(parts) == 3:
-            # Format i plotë: category|subcategory|url
             category = parts[0].title()
             sub = parts[1].title()
             feed_url = parts[2]
         else:
-            # Format i vjetër: cat|url ose cat/sub|url
             cat_str = parts[0]
             feed_url = parts[1]
             category_part, sub_part = (cat_str.split('/', 1) + [''])[:2]
             category = (category_part or "").strip().title()
             sub = (sub_part.strip().title() if sub_part.strip() else current_sub)
 
+        # Optional filter by env CATEGORY (leave empty to accept all)
         if CATEGORY and category != CATEGORY:
             continue
         if not feed_url:
             continue
 
-        if MAX_TOTAL > 0 and added_total >= MAX_TOTAL:
-            break
-
-        print(f"[FEED] {feed_url}")
+        print(f"[FEED] {category} / {sub or '-'} -> {feed_url}")
         xml = fetch_bytes(feed_url)
         if not xml:
             print("Feed empty:", feed_url)
@@ -406,12 +402,10 @@ def main():
         for it in parse_feed(xml):
             if MAX_TOTAL > 0 and added_total >= MAX_TOTAL:
                 break
-        key = f"{category}/{sub or '_'}"
-        if per_cat.get(key, 0) >= MAX_PER_CAT:
-            continue
-        ...
-        per_cat[key] = per_cat.get(key, 0) + 1
 
+            key_limit = f"{category}/{sub or '_'}"
+            if per_cat.get(key_limit, 0) >= MAX_PER_CAT:
+                continue
 
             title = (it.get("title") or "").strip()
             link  = (it.get("link") or "").strip()
@@ -424,26 +418,24 @@ def main():
 
             # 1) Body HTML
             body_html, inner_img = extract_body_html(link)
-            
-            # Nese artikulli kthehet me permbajtje gabimi ose s'eshte i disponueshem, kaloje
+
+            # Skip unavailable content
             body_text = strip_text(body_html).lower()
-            if (
-                "there was an error" in body_text
-                or "this content is not available" in body_text
-            ):
+            if ("there was an error" in body_text or
+                "this content is not available" in body_text):
                 print(f"[SKIP] {link} -> unavailable content")
                 continue
-                
+
             # 2) Absolutize & sanitize
             parsed = urlparse(link)
             base = f"{parsed.scheme}://{parsed.netloc}"
             body_html = absolutize(body_html, base)
             body_html = sanitize_article_html(body_html)
 
-            # 3) Kufizo sipas SUMMARY_WORDS
-            body_html = limit_words_html(body_html, SUMMARY_WORDS)
+            # 3) Keep first N full blocks
+            body_html = limit_paragraphs_html(body_html, MAX_PARAGRAPHS)
 
-            # 4) Cover image (vetëm ky do të shfaqet në faqe)
+            # 4) Cover image (cover only; images inside body removed)
             cover = (
                 pick_largest_media_url(it.get("element"))
                 or find_cover_from_item(it.get("element"), link)
@@ -460,16 +452,16 @@ def main():
             if len(excerpt) > 280:
                 excerpt = excerpt[:277] + "…"
 
-            # 6) HEQ te gjitha imazhet nga body (që të mos ketë dyfishim me cover)
+            # 6) Remove inline images from body (we show cover separately)
             body_html = re.sub(r'<img\b[^>]*>', '', body_html or "", flags=re.I)
 
-            # 7) Footer burimi
+            # 7) Footer source link
             body_final = (body_html or "") + f"""
 <p class="small text-muted mt-4">
-  Source: <a href="{link}" target="_blank" rel="nofollow noopener">Read the full article</a>
+  Source: <a href="{link}" target="_blank" rel="nofollow noopener noreferrer">Read the full article</a>
 </p>"""
 
-            # 8) Persisto
+            # 8) Metadata (author/rights)
             author = ""
             rights = "Unknown"
             it_elem = it.get("element")
@@ -490,11 +482,16 @@ def main():
                 r = it_elem.find("dc:rights", ns_dc) or it_elem.find("copyright")
                 if r is not None and (r.text or "").strip():
                     rights = r.text.strip()
+
             if not author:
-                author = DEFAULT_AUTHOR
+                host_fallback = (urlparse(link).hostname or "").lower().replace("www.", "")
+                pretty_site = host_fallback.split(".")[0].replace("-", " ").title() if host_fallback else ""
+                author = pretty_site or DEFAULT_AUTHOR
 
             date = today_iso()
             slug = slugify(title)[:70]
+            host = (urlparse(link).hostname or "").lower().replace("www.", "")
+            source_name = host.split(".")[0].replace("-", " ").title() if host else ""
 
             entry = {
                 "slug": slug,
@@ -505,6 +502,8 @@ def main():
                 "excerpt": excerpt,
                 "cover": cover,
                 "source": link,
+                "source_domain": host,
+                "source_name": source_name,
                 "author": author,
                 "rights": rights,
                 "body": body_final
@@ -518,9 +517,9 @@ def main():
                 "subcategory": sub,
                 "created": date,
             }
-            per_cat[category] = per_cat.get(category, 0) + 1
+            per_cat[key_limit] = per_cat.get(key_limit, 0) + 1
             added_total += 1
-            print(f"[{CATEGORY}] + {title}")
+            print(f"[{category}/{sub or '-'}] + {title}")
 
     if not new_entries:
         print("New posts this run: 0")
