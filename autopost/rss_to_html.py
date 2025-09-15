@@ -103,6 +103,41 @@ def shorten_words(text: str, max_words: int) -> str:
     return " ".join(words[:max_words]) + "…"
 
 
+def ensure_unique_slug(slug: str, existing_slugs: set[str], max_length: int = 70) -> str:
+    """Return a slug that is unique within ``existing_slugs``.
+
+    The original ``slug`` is used when possible; otherwise a numeric suffix is
+    appended while respecting the ``max_length`` constraint. The chosen slug is
+    added to ``existing_slugs``.
+    """
+
+    cleaned = (slug or "").strip()
+    if not cleaned:
+        cleaned = "post"
+    cleaned = cleaned[:max_length].rstrip("-")
+    if not cleaned:
+        cleaned = "post"
+
+    candidate = cleaned
+    if candidate not in existing_slugs:
+        existing_slugs.add(candidate)
+        return candidate
+
+    suffix = 2
+    while True:
+        suffix_str = str(suffix)
+        base_length = max_length - len(suffix_str) - 1
+        base = cleaned[:base_length].rstrip("-") if base_length > 0 else ""
+        if base:
+            candidate = f"{base}-{suffix_str}"
+        else:
+            candidate = suffix_str[-max_length:]
+        if candidate not in existing_slugs:
+            existing_slugs.add(candidate)
+            return candidate
+        suffix += 1
+
+
 def main():
     DATA_DIR.mkdir(exist_ok=True)
 
@@ -125,6 +160,12 @@ def main():
             posts_idx = []
     else:
         posts_idx = []
+
+    existing_slugs = {
+        str(p.get("slug")).strip()
+        for p in posts_idx
+        if isinstance(p, dict) and p.get("slug")
+    }
 
     if not FEEDS.exists():
         print("ERROR: feeds.txt not found:", FEEDS)
@@ -151,63 +192,7 @@ def main():
         xml = fetch_bytes(feed_url)
         if not xml:
             continue
-
-        for it in parse_feed(xml):
-            if MAX_TOTAL > 0 and added_total >= MAX_TOTAL:
-                break
-            if per_cat.get(category, 0) >= MAX_PER_CAT:
-                continue
-            title = (it.get("title") or "").strip()
-            link = (it.get("link") or "").strip()
-            if not title or not link:
-                continue
-            key = hashlib.sha1(link.encode("utf-8")).hexdigest()
-            if key in seen:
-                continue
-
-            author = ""
-            rights = "Unknown"
-            it_elem = it.get("element")
-            try:
-                if it_elem is not None:
-                    a = it_elem.find("author")
-                    if a is not None and (a.text or "").strip():
-                        author = a.text.strip()
-                    if not author:
-                        ns_atom = {"atom": "http://www.w3.org/2005/Atom"}
-                        an = it_elem.find("atom:author/atom:name", ns_atom)
-                        if an is not None and (an.text or "").strip():
-                            author = an.text.strip()
-                    ns_dc = {"dc": "http://purl.org/dc/elements/1.1/"}
-                    if not author:
-                        c = it_elem.find("dc:creator", ns_dc)
-                        if c is not None and (c.text or "").strip():
-                            author = c.text.strip()
-                    r = it_elem.find("dc:rights", ns_dc) or it_elem.find("copyright")
-                    if r is not None and (r.text or "").strip():
-                        rights = r.text.strip()
-            except Exception:
-                author = ""
-                rights = ""
-            if not author:
-                author = DEFAULT_AUTHOR
-            if not rights:
-                rights = "Unknown"
-
-            text_raw = ""
-            lead_image = ""
-            description = ""
-            if trafilatura is not None:
-                try:
-                    ext = extract_with_trafilatura(link)
-                    text_raw = ext.get("text") or ""
-                    lead_image = ext.get("image") or ""
-                    description = ext.get("description") or ""
-                    if not author and ext.get("author"):
-                        author = ext["author"].strip()
-                except Exception as e:
-                    print("trafilatura error:", e)
-
+@@ -211,51 +252,51 @@ def main():
             if not text_raw:
                 try:
                     html = http_get(link)
@@ -233,7 +218,7 @@ def main():
                     pass
 
             date = today_iso()
-            slug = slugify(title)[:70]
+            slug = ensure_unique_slug(slugify(title)[:70], existing_slugs)
 
             entry = {
                 "slug": slug,
