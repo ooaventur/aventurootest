@@ -48,8 +48,9 @@ SEEN_DB = ROOT / "autopost" / SEEN_DB_FILENAME
 
 MAX_PER_CAT = int(os.getenv("MAX_PER_CAT", "15"))
 MAX_TOTAL   = int(os.getenv("MAX_TOTAL", "0"))
-SUMMARY_WORDS = int(os.getenv("SUMMARY_WORDS", "1000"))  # kept for compatibility
+SUMMARY_WORDS = int(os.getenv("SUMMARY_WORDS", "1500"))  # kept for compatibility
 TARGET_WORDS = int(os.getenv("TARGET_WORDS", str(SUMMARY_WORDS)))
+
 MAX_POSTS_PERSIST = int(os.getenv("MAX_POSTS_PERSIST", "3000"))
 HTTP_TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "18"))
 UA = os.getenv("AP_USER_AGENT", "Mozilla/5.0 (AventurOO Autoposter)")
@@ -689,7 +690,7 @@ def main():
             body_html = sanitize_article_html(body_html)
 
             # 3) Trim to target word count while keeping whole blocks when possible
-            body_html = limit_words_html(body_html, TARGET_WORDS)
+            body_html = limit_paragraphs_html(body_html, MAX_PARAGRAPHS)
 
             # 4) Cover image (cover only; images inside body removed)
             cover = (
