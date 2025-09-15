@@ -2,13 +2,26 @@
   const params = new URLSearchParams(location.search);
   const slug = params.get('slug') || '';
 
+  const POSTS_SOURCES = ['data/posts.json', '/data/posts.json'];
+
+  function fetchSequential(urls) {
+    return new Promise((resolve, reject) => {
+      (function tryI(i) {
+        if (i >= urls.length) return reject(new Error('No posts.json found'));
+        fetch(urls[i], { cache: 'no-store' })
+          .then(r => (r.ok ? resolve(r) : tryI(i + 1)))
+          .catch(() => tryI(i + 1));
+      })(0);
+    });
+  }
+
   async function load() {
     if (!slug) {
       showError('Post not specified.');
       return;
     }
     try {
-      const res = await fetch('/data/posts.json');
+      const res = await fetchSequential(POSTS_SOURCES);
       if (!res.ok) throw new Error('Network response was not ok');
       const posts = await res.json();
       const post = posts.find(p => p.slug === slug);
