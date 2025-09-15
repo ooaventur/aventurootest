@@ -188,33 +188,89 @@ def main():
             continue
         if MAX_TOTAL > 0 and added_total >= MAX_TOTAL:
             break
+        if MAX_PER_CAT > 0 and per_cat.get(category, 0) >= MAX_PER_CAT:
+            continue
 
         xml = fetch_bytes(feed_url)
         if not xml:
             continue
-            if not text_raw:
-                try:
-                    html = http_get(link)
-                    text_raw = strip_text(html)
-                except Exception:
-                    text_raw = ""
 
-            paragraphs = clean_paragraphs(text_raw)
+        items = parse_feed(xml)
+
+        for it in items:
+            if MAX_TOTAL > 0 and added_total >= MAX_TOTAL:
+                break
+
+            if MAX_PER_CAT > 0 and per_cat.get(category, 0) >= MAX_PER_CAT:
+                break
+
+            title = (it.get("title") or "").strip()
+            link = (it.get("link") or "").strip()
+            if not title or not link:
+                continue
+
+            key = hashlib.sha1(link.encode("utf-8")).hexdigest()
+            if key in seen:
+                continue
+
+            description = (it.get("summary") or "").strip()
+            it_elem = it.get("element")
+            lead_image = ""
+            author = ""
+            rights = ""
+            if it_elem is not None:
+                try:
+                    lead_image = find_cover_from_item(it_elem, link)
+                except Exception:
+                    lead_image = ""
+
+                author_el = it_elem.find("author")
+                if author_el is not None and (author_el.text or "").strip():
+                    author = author_el.text.strip()
+
+                if not author:
+                    ns_atom = {"atom": "http://www.w3.org/2005/Atom"}
+                    atom_author = it_elem.find("atom:author/atom:name", ns_atom)
+                    if atom_author is not None and (atom_author.text or "").strip():
+                        author = atom_author.text.strip()
+
+                ns_dc = {"dc": "http://purl.org/dc/elements/1.1/"}
+                if not author:
+                    creator = it_elem.find("dc:creator", ns_dc)
+                    if creator is not None and (creator.text or "").strip():
+                        author = creator.text.strip()
+
+                rights_el = it_elem.find("dc:rights", ns_dc)
+                if rights_el is not None and (rights_el.text or "").strip():
+                    rights = rights_el.text.strip()
+                if not rights:
+                    rights_el = it_elem.find("rights")
+                    if rights_el is not None and (rights_el.text or "").strip():
+                        rights = rights_el.text.strip()
+
+            author = author or DEFAULT_AUTHOR
+            rights = rights or "Unknown"
+
+            try:
+                body_html, first_body_image = extract_body_html(link)
+            except Exception:
+                body_html, first_body_image = "", ""
+
+            article_text = strip_text(body_html)
+            if not article_text:
+                article_text = strip_text(description)
+
+            paragraphs = clean_paragraphs(article_text)
             content_text = "\n\n".join(paragraphs).strip()
+            if not content_text:
+                content_text = article_text
 
-            base_excerpt = content_text if content_text else (description or (it.get("summary") or ""))
-            excerpt_text = shorten_words(strip_text(base_excerpt), SUMMARY_WORDS)
+            base_excerpt = content_text or strip_text(description) or title
+            excerpt_text = shorten_words(base_excerpt, SUMMARY_WORDS)
 
-            cover = ""
-            if lead_image:
-                cover = lead_image
-            if not cover:
-                try:
-                    found_cover = find_cover_from_item(it_elem, link)
-                    if found_cover:
-                        cover = found_cover
-                except Exception:
-                    pass
+            cover = (lead_image or first_body_image or "").strip()
+            if cover and not cover.lower().startswith(("http://", "https://")):
+                cover = ""
 
             date = today_iso()
             slug = ensure_unique_slug(slugify(title)[:70], existing_slugs)
@@ -227,16 +283,21 @@ def main():
                 "author": author,
                 "rights": rights,
                 "source": link,
-                "cover": cover,
                 "excerpt": excerpt_text,
                 "body": content_text,
             }
+            if cover:
+                entry["cover"] = cover
+
             new_entries.append(entry)
 
             seen[key] = {"title": title, "url": link, "category": category, "created": date}
             per_cat[category] = per_cat.get(category, 0) + 1
             added_total += 1
             print(f"Added [{category}]: {title} (by {author})")
+
+        if MAX_TOTAL > 0 and added_total >= MAX_TOTAL:
+            break
 
     if not new_entries:
         print("New posts this run: 0"); return
