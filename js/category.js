@@ -31,7 +31,9 @@
   }
 
   function getCatSub() {
-    var url = new URL(location.href);
+    var articleUrl = '/article.html?slug=' + encodeURIComponent(p.slug);
+'<a href="' + articleUrl + '"> ... </a>'
+
     var cat = slugify(url.searchParams.get('cat'));
     var sub = slugify(url.searchParams.get('sub'));
 
