@@ -382,7 +382,16 @@ def main():
 
             # 1) Body HTML
             body_html, inner_img = extract_body_html(link)
-
+            
+            # Nese artikulli kthehet me permbajtje gabimi ose s'eshte i disponueshem, kaloje
+            body_text = strip_text(body_html).lower()
+            if (
+                "there was an error" in body_text
+                or "this content is not available" in body_text
+            ):
+                print(f"[SKIP] {link} -> unavailable content")
+                continue
+                
             # 2) Absolutize & sanitize
             parsed = urlparse(link)
             base = f"{parsed.scheme}://{parsed.netloc}"
