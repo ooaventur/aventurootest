@@ -1,7 +1,3 @@
-(function() {
-  const params = new URLSearchParams(window.location.search);
-  const slug = params.get('slug');
-
   async function load() {
     if (!slug) {
       showError('Post not specified.');
@@ -27,7 +23,7 @@
     const titleEl = document.querySelector('.main-article header h1');
     if (titleEl) titleEl.textContent = post.title;
 
-    const dateEl = document.querySelector('.main-article header .details li:first-child');
+    const dateEl = document.querySelector('.main-article header .details .date');
     if (dateEl) {
       const date = new Date(post.date);
       if (!isNaN(date)) {
@@ -35,6 +31,15 @@
         dateEl.textContent = `Posted on ${date.toLocaleDateString(undefined, options)}`;
       } else {
         dateEl.textContent = post.date;
+      }
+    }
+
+    const authorEl = document.querySelector('.main-article .details .author');
+    if (authorEl) {
+      if (post.author) {
+        authorEl.textContent = `By ${post.author}`;
+      } else {
+        authorEl.remove();
       }
     }
 
@@ -50,6 +55,24 @@
     const bodyEl = document.querySelector('.main-article .main');
     if (bodyEl) {
       bodyEl.innerHTML = post.body || '';
+    }
+
+    const sourceEl = document.querySelector('.main-article .source');
+    if (sourceEl) {
+      if (post.source) {
+        sourceEl.innerHTML = `<a href="${post.source}" rel="nofollow noopener">Source: Read the full article</a>`;
+      } else {
+        sourceEl.remove();
+      }
+    }
+
+    const rightsEl = document.querySelector('.main-article .rights');
+    if (rightsEl) {
+      if (post.rights) {
+        rightsEl.textContent = `All rights belong to ${post.rights}. This site cites the original article.`;
+      } else {
+        rightsEl.remove();
+      }
     }
   }
 
