@@ -417,13 +417,28 @@ def main():
 </p>"""
 
             # 8) Persisto
+            author = ""
             rights = "Unknown"
             it_elem = it.get("element")
             if it_elem is not None:
+                a = it_elem.find("author")
+                if a is not None and (a.text or "").strip():
+                    author = a.text.strip()
+                if not author:
+                    ns_atom = {"atom": "http://www.w3.org/2005/Atom"}
+                    an = it_elem.find("atom:author/atom:name", ns_atom)
+                    if an is not None and (an.text or "").strip():
+                        author = an.text.strip()
                 ns_dc = {"dc": "http://purl.org/dc/elements/1.1/"}
+                if not author:
+                    c = it_elem.find("dc:creator", ns_dc)
+                    if c is not None and (c.text or "").strip():
+                        author = c.text.strip()
                 r = it_elem.find("dc:rights", ns_dc) or it_elem.find("copyright")
                 if r is not None and (r.text or "").strip():
                     rights = r.text.strip()
+            if not author:
+                author = DEFAULT_AUTHOR
 
             date = today_iso()
             slug = slugify(title)[:70]
@@ -437,7 +452,7 @@ def main():
                 "excerpt": excerpt,
                 "cover": cover,
                 "source": link,
-                "author": DEFAULT_AUTHOR,
+                "author": author,
                 "rights": rights,
                 "body": body_final
             }
