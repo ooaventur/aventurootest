@@ -332,17 +332,27 @@ def main():
     per_cat = {}
     new_entries = []
 
+    current_sub = ""
+
     for raw in FEEDS.read_text(encoding="utf-8").splitlines():
         raw = raw.strip()
-        if not raw or raw.startswith("#"):
+        if not raw:
+            continue
+        if raw.startswith("#"):
+            m = re.search(r"#\s*===\s*[^/]+/\s*(.+?)\s*===", raw, flags=re.I)
+            if m:
+                current_sub = m.group(1).strip().title()
             continue
         if "|" not in raw:
             continue
-        cat_str, url = raw.split("|", 1)
+        parts = [p.strip() for p in raw.split("|") if p.strip()]
+        if len(parts) < 2:
+            continue
+        cat_str = parts[0]
+        feed_url = parts[-1]
         category_part, sub_part = (cat_str.split('/', 1) + [''])[:2]
         category = (category_part or "").strip().title()
-        sub = (sub_part or "").strip().title()
-        feed_url = (url or "").strip()
+        sub = (sub_part.strip().title() if sub_part.strip() else current_sub)
         if category != CATEGORY or not feed_url:
             continue
 
@@ -414,6 +424,7 @@ def main():
                 "slug": slug,
                 "title": title,
                 "category": category,
+                "subcategory": sub,
                 "date": date,
                 "excerpt": excerpt,
                 "cover": cover,
