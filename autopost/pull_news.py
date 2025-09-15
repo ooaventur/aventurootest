@@ -16,7 +16,7 @@ Reads feeds in the form:
 • Applies per-(Category/Subcategory) limits.
 
 Run:
-  python3 "pull_news (1).py"
+  python3 "autopost/pull_news.py"
 Env knobs (optional):
   MAX_PER_CAT, MAX_TOTAL, MAX_POSTS_PERSIST, HTTP_TIMEOUT, FALLBACK_COVER, DEFAULT_AUTHOR,
   IMG_TARGET_WIDTH, IMG_PROXY, FORCE_PROXY, MAX_PARAGRAPHS
@@ -32,7 +32,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
 POSTS_JSON = DATA_DIR / "posts.json"
 # Use your uploaded feeds file:
-FEEDS = ROOT / "feeds_news.txt"
+FEEDS = pathlib.Path(os.getenv("FEEDS_FILE") or (ROOT / "autopost" / "data" / "feeds.txt"))
 
 # Accept all categories by default (set CATEGORY env if you want to filter)
 CATEGORY = os.getenv("CATEGORY", "").strip()
