@@ -32,6 +32,7 @@ MAX_TOTAL = int(os.getenv("MAX_TOTAL", "0"))          # 0 = pa limit total / run
 SUMMARY_WORDS = int(os.getenv("SUMMARY_WORDS", "450"))
 MAX_POSTS_PERSIST = int(os.getenv("MAX_POSTS_PERSIST", "200"))
 FALLBACK_COVER = os.getenv("FALLBACK_COVER", "assets/img/cover-fallback.jpg")
+DEFAULT_AUTHOR = os.getenv("DEFAULT_AUTHOR", "AventurOO Editorial")
 
 # ---- anti-script/code cleaner për paragrafë ----
 CODE_PATTERNS = [
@@ -160,20 +161,24 @@ def main():
             if key in seen:
                 continue
 
-            author = "AventurOO Editorial"
+            author = ""
             rights = "Unknown"
             it_elem = it.get("element")
             try:
-                a = it_elem.find("author") if it_elem is not None else None
-                if a is not None and (a.text or "").strip():
-                    author = a.text.strip()
-                if not author and it_elem is not None:
-                    ns_atom = {"atom": "http://www.w3.org/2005/Atom"}
-                    an = it_elem.find("atom:author/atom:name", ns_atom)
-                    if an is not None and (an.text or "").strip():
-                        author = an.text.strip()
                 if it_elem is not None:
+                    a = it_elem.find("author")
+                    if a is not None and (a.text or "").strip():
+                        author = a.text.strip()
+                    if not author:
+                        ns_atom = {"atom": "http://www.w3.org/2005/Atom"}
+                        an = it_elem.find("atom:author/atom:name", ns_atom)
+                        if an is not None and (an.text or "").strip():
+                            author = an.text.strip()
                     ns_dc = {"dc": "http://purl.org/dc/elements/1.1/"}
+                    if not author:
+                        c = it_elem.find("dc:creator", ns_dc)
+                        if c is not None and (c.text or "").strip():
+                            author = c.text.strip()
                     r = it_elem.find("dc:rights", ns_dc) or it_elem.find("copyright")
                     if r is not None and (r.text or "").strip():
                         rights = r.text.strip()
@@ -181,7 +186,7 @@ def main():
                 author = ""
                 rights = ""
             if not author:
-                author = "AventurOO Editorial"
+                author = DEFAULT_AUTHOR
             if not rights:
                 rights = "Unknown"
 
@@ -194,7 +199,7 @@ def main():
                     text_raw = ext.get("text") or ""
                     lead_image = ext.get("image") or ""
                     description = ext.get("description") or ""
-                    if author == "AventurOO Editorial" and ext.get("author"):
+                    if not author and ext.get("author"):
                         author = ext["author"].strip()
                 except Exception as e:
                     print("trafilatura error:", e)
