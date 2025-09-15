@@ -10,6 +10,7 @@ import urllib.error
 import socket
 from html import unescape
 from urllib.parse import urljoin
+from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
 from xml.etree import ElementTree as ET
 
 HTTP_TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "18"))
