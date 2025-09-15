@@ -233,7 +233,7 @@ def main():
                 "source": link,
                 "cover": cover,
                 "excerpt": excerpt_text,
-                "content": content_text,
+                "body": content_text,
             }
             new_entries.append(entry)
 
