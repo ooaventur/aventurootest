@@ -73,13 +73,25 @@
     var art = document.createElement('article');
     art.className = 'col-md-12 article-list';
     var articleUrl = '/article.html?slug=' + encodeURIComponent(p.slug);
-    art.innerHTML =
-      '<div class="inner">' +
+    var figureHtml;
+    if (p.cover) {
+      figureHtml =
         '<figure>' +
           '<a href="' + articleUrl + '">' +
-            '<img src="' + (p.cover || '/images/news/img01.jpg') + '" alt="">' +
+            '<img src="' + p.cover + '" alt="">' +
           '</a>' +
-        '</figure>' +
+        '</figure>';
+    } else {
+      figureHtml =
+        '<figure class="no-cover">' +
+          '<a href="' + articleUrl + '">' +
+            '<img src="/images/logo.png" alt="AventurOO Logo">' +
+          '</a>' +
+        '</figure>';
+    }
+    art.innerHTML =
+      '<div class="inner">' +
+        figureHtml +
         '<div class="details">' +
           '<div class="detail">' +
             '<div class="category"><a href="#">' + (p.category || '') + '</a></div>' +
