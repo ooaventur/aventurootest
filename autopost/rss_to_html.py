@@ -5,7 +5,10 @@
 # - heq çdo "code/script" nga teksti; filtron paragrafët e shkurtër/jo-kuptimplotë
 # - shkruan: title, category, date, author, cover, source, excerpt (~450 fjalë), content (tekst i pastër me \n\n)
 
-import os, re, json, hashlib, pathlib
+import os, re, json, hashlib, pathlib, sys
+
+if __package__ in (None, ""):
+    sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
 
 from autopost.common import (
     fetch_bytes,
@@ -18,12 +21,13 @@ from autopost.common import (
     trafilatura,
     HTTP_TIMEOUT,
 )
+from autopost import SEEN_DB_FILENAME
 
 # ---- Paths ----
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
 POSTS_JSON = DATA_DIR / "posts.json"
-SEEN_DB = ROOT / "autopost" / "seen.json"
+SEEN_DB = ROOT / "autopost" / SEEN_DB_FILENAME
 FEEDS = ROOT / "autopost" / "data" / "feeds.txt"
 
 # ---- Env / Defaults ----
