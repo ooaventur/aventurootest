@@ -22,10 +22,15 @@ Env knobs (optional):
   IMG_TARGET_WIDTH, IMG_PROXY, FORCE_PROXY, MAX_PARAGRAPHS
 """
 
-import os, re, json, hashlib, datetime, pathlib, urllib.request, urllib.error, socket
+import os, re, json, hashlib, datetime, pathlib, urllib.request, urllib.error, socket, sys
 from html import unescape
 from urllib.parse import urlparse, urljoin, urlunparse, parse_qsl, urlencode
 from xml.etree import ElementTree as ET
+
+if __package__ in (None, ""):
+    sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
+
+from autopost import SEEN_DB_FILENAME
 
 # ------------------ Config ------------------
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -36,7 +41,8 @@ FEEDS = pathlib.Path(os.getenv("FEEDS_FILE") or (ROOT / "autopost" / "data" / "f
 
 # Accept all categories by default (set CATEGORY env if you want to filter)
 CATEGORY = os.getenv("CATEGORY", "").strip()
-SEEN_DB = ROOT / "autopost" / ("seen_all.json" if not CATEGORY else f"seen_{CATEGORY.lower()}.json")
+SEEN_DB = ROOT / "autopost" / SEEN_DB_FILENAME
+# All autopost runs share the same "seen" store to prevent duplicates across jobs.
 
 MAX_PER_CAT = int(os.getenv("MAX_PER_CAT", "15"))
 MAX_TOTAL   = int(os.getenv("MAX_TOTAL", "0"))
