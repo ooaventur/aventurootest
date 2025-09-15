@@ -24,7 +24,7 @@ Env knobs (optional):
 
 import os, re, json, hashlib, datetime, pathlib, urllib.request, urllib.error, socket
 from html import unescape
-from urllib.parse import urlparse, urljoin
+from urllib.parse import urlparse, urljoin, urlunparse, parse_qsl, urlencode
 from xml.etree import ElementTree as ET
 
 # ------------------ Config ------------------
@@ -228,7 +228,6 @@ def _bump_width_query(u: str, target: int) -> str:
     Nëse URL ka parametra si w, width, maxwidth, px, sz, i çon ≥ target.
     """
     try:
-        from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
         pr = urlparse(u)
         q = dict(parse_qsl(pr.query, keep_blank_values=True))
         updated = False
@@ -242,7 +241,12 @@ def _bump_width_query(u: str, target: int) -> str:
                 except Exception:
                     v = 0
                 if v < target:
-                    q[k] = str(target)
+                    val = str(q[k])
+                    if m:
+                        start, end = m.span()
+                        q[k] = f"{val[:start]}{target}{val[end:]}"
+                    else:
+                        q[k] = str(target)
                     updated = True
         if updated:
             pr = pr._replace(query=urlencode(q))
@@ -290,6 +294,76 @@ def _proxy_if_mixed(u: str) -> str:
         base = u[len("http://"):]
         return f"{IMG_PROXY}{base}"
     return u
+def _bump_path_width(u: str, target: int) -> str:
+    """Upgrade numeric path segments that likely encode the image width."""
+    try:
+        parsed = urlparse(u)
+    except Exception:
+        return u
+
+    path = parsed.path or ""
+    if not path:
+        return u
+
+    segments = path.split("/")
+    size_keywords = {
+        "img",
+        "image",
+        "images",
+        "media",
+        "thumb",
+        "thumbnail",
+        "resize",
+        "resized",
+        "size",
+        "sizes",
+        "standard",
+        "width",
+        "w",
+        "crop",
+        "quality",
+    }
+    changed = False
+
+    for idx, seg in enumerate(segments):
+        if not re.fullmatch(r"\d{2,4}", seg or ""):
+            continue
+        try:
+            value = int(seg)
+        except ValueError:
+            continue
+        if value >= target or value == 0:
+            continue
+
+        prev_seg = segments[idx - 1].lower() if idx > 0 else ""
+        next_seg = segments[idx + 1].lower() if idx + 1 < len(segments) else ""
+        next_next = segments[idx + 2].lower() if idx + 2 < len(segments) else ""
+
+        looks_like_size = False
+        if any(key in prev_seg for key in size_keywords) or any(
+            key in next_seg for key in size_keywords
+        ):
+            looks_like_size = True
+        image_pattern = r"\.(?:jpe?g|png|gif|webp|avif)(?:\?.*)?$"
+        if re.search(image_pattern, next_seg) or re.search(image_pattern, next_next):
+            looks_like_size = True
+
+        if not looks_like_size:
+            continue
+
+        segments[idx] = str(target)
+        changed = True
+
+    if not changed:
+        return u
+
+    new_path = "/".join(segments)
+    if path.startswith("/") and not new_path.startswith("/"):
+        new_path = "/" + new_path
+
+    parsed = parsed._replace(path=new_path)
+    return urlunparse(parsed)
+
 
 def sanitize_img_url(u: str) -> str:
     """Sanitize cover URL: https → (opt.) proxy → upscale (Guardian & common CMS)."""
@@ -304,6 +378,7 @@ def sanitize_img_url(u: str) -> str:
     u = guardian_upscale_url(u, target=IMG_TARGET_WIDTH)
     # Rregullime të përgjithshme (WP/Shopify/Cloudinary query width)
     u = _remove_wp_size_suffix(u)
+    u = _bump_path_width(u, IMG_TARGET_WIDTH)
     u = _bump_width_query(u, IMG_TARGET_WIDTH)
     if u.startswith("http://"):
         u = _proxy_if_mixed(u)
