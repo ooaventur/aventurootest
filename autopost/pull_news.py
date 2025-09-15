@@ -213,6 +213,44 @@ def guardian_upscale_url(u: str, target=IMG_TARGET_WIDTH) -> str:
         return urlunparse(pr)
     except Exception:
         return u
+def _remove_wp_size_suffix(u: str) -> str:
+    """
+    Heq sufiksin WordPress -{w}x{h} para prapashtesës, p.sh.
+    example-800x600.jpg -> example.jpg
+    """
+    m = re.search(r'(?i)(.+?)-\d{2,4}x\d{2,4}(\.[a-z]{3,4})(\?.*)?$', u)
+    if m:
+        return (m.group(1) + m.group(2) + (m.group(3) or ''))
+    return u
+
+def _bump_width_query(u: str, target: int) -> str:
+    """
+    Nëse URL ka parametra si w, width, maxwidth, px, sz, i çon ≥ target.
+    """
+    try:
+        from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
+        pr = urlparse(u)
+        q = dict(parse_qsl(pr.query, keep_blank_values=True))
+        updated = False
+        for k in ('w', 'width', 'maxwidth', 'px', 'sz', 's'):
+            if k in q:
+                try:
+                    # kap numrin e parë në vlerë (p.sh. '800', '800px', etj.)
+                    import re as _re
+                    m = _re.search(r'\d+', str(q[k]))
+                    v = int(m.group(0)) if m else 0
+                except Exception:
+                    v = 0
+                if v < target:
+                    q[k] = str(target)
+                    updated = True
+        if updated:
+            pr = pr._replace(query=urlencode(q))
+            u = urlunparse(pr)
+        return u
+    except Exception:
+        return u
+
 
 def pick_largest_media_url(it_elem) -> str:
     if it_elem is None:
@@ -254,7 +292,7 @@ def _proxy_if_mixed(u: str) -> str:
     return u
 
 def sanitize_img_url(u: str) -> str:
-    """Sanitize cover URL: https → (opt.) proxy → Guardian upscale."""
+    """Sanitize cover URL: https → (opt.) proxy → upscale (Guardian & common CMS)."""
     u = (u or "").strip()
     if not u:
         return u
@@ -262,10 +300,15 @@ def sanitize_img_url(u: str) -> str:
         u2 = u.replace("https://", "").replace("http://", "")
         return f"{IMG_PROXY}{u2}"
     u = _to_https(u)
-    u = guardian_upscale_url(u)
+    # Rregullime specifike
+    u = guardian_upscale_url(u, target=IMG_TARGET_WIDTH)
+    # Rregullime të përgjithshme (WP/Shopify/Cloudinary query width)
+    u = _remove_wp_size_suffix(u)
+    u = _bump_width_query(u, IMG_TARGET_WIDTH)
     if u.startswith("http://"):
         u = _proxy_if_mixed(u)
     return u
+
 
 # ---- Body extractors ----
 def extract_body_html(url: str) -> tuple[str, str]:
@@ -442,11 +485,12 @@ def main():
                 pick_largest_media_url(it.get("element"))
                 or find_cover_from_item(it.get("element"), link)
                 or inner_img
-                or FALLBACK_COVER
+                or ""
             )
             cover = sanitize_img_url(cover)
-            if not cover or not cover.startswith(("http://", "https://")):
-                cover = FALLBACK_COVER
+            if not cover.startswith(("http://", "https://")):
+                cover = ""
+
 
             # 5) Excerpt
             first_p = re.search(r"(?is)<p[^>]*>(.*?)</p>", body_html or "")
