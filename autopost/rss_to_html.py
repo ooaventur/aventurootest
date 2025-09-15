@@ -192,7 +192,6 @@ def main():
         xml = fetch_bytes(feed_url)
         if not xml:
             continue
-@@ -211,51 +252,51 @@ def main():
             if not text_raw:
                 try:
                     html = http_get(link)
