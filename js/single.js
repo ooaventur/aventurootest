@@ -58,7 +58,7 @@
 
     const bodyEl = document.querySelector('.main-article .main');
     if (bodyEl) {
-      bodyEl.innerHTML = post.body || '';
+      bodyEl.innerHTML = post.body || post.content || '';
     }
 
     const sourceEl = document.querySelector('.main-article .source');
