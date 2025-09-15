@@ -58,7 +58,9 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
 POSTS_JSON = DATA_DIR / "posts.json"
 # Use your uploaded feeds file:
-FEEDS = pathlib.Path(os.getenv("FEEDS_FILE") or (ROOT / "autopost" / "data" / "feeds.txt"))
+FEEDS = pathlib.Path(
+    os.getenv("FEEDS_FILE") or (ROOT / "autopost" / "feeds_news.txt")
+)
 
 # Accept all categories by default (set CATEGORY env if you want to filter)
 CATEGORY = os.getenv("CATEGORY", "").strip()
