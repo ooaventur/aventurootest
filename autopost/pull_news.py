@@ -48,6 +48,24 @@ FALLBACK_COVER = os.getenv("FALLBACK_COVER", "assets/img/cover-fallback.jpg")
 DEFAULT_AUTHOR = os.getenv("DEFAULT_AUTHOR", "AventurOO Editorial")
 MAX_PARAGRAPHS = int(os.getenv("MAX_PARAGRAPHS", "4"))  # keep first N full blocks
 
+TRACKING_PARAM_PREFIXES = ("utm_",)
+TRACKING_PARAM_NAMES = {
+    "fbclid",
+    "gclid",
+    "dclid",
+    "igshid",
+    "mc_cid",
+    "mc_eid",
+    "mkt_tok",
+    "oly_anon_id",
+    "oly_enc_id",
+    "vero_conv",
+    "vero_id",
+    "yclid",
+    "gbraid",
+    "wbraid",
+}
+
 # Image options (for cover only)
 IMG_TARGET_WIDTH = int(os.getenv("IMG_TARGET_WIDTH", "1600"))
 IMG_PROXY = os.getenv("IMG_PROXY", "https://images.weserv.nl/?url=")  # "" if you don’t want a proxy
@@ -196,6 +214,61 @@ def limit_paragraphs_html(html: str, max_paras: int) -> str:
         return html
     kept = parts[:max_paras]
     return "\n".join(kept) + '\n<p><em>…</em></p>'
+# ---- Link normalization helpers ----
+
+def is_tracking_param(name: str) -> bool:
+    if not name:
+        return False
+    lower = name.lower()
+    if any(lower.startswith(prefix) for prefix in TRACKING_PARAM_PREFIXES):
+        return True
+    return lower in TRACKING_PARAM_NAMES
+
+
+def _normalized_netloc(parsed) -> str:
+    if not parsed.netloc:
+        return ""
+    host = (parsed.hostname or "").lower()
+    if not host:
+        return parsed.netloc.lower()
+    if ":" in host and not host.startswith("["):
+        host = f"[{host}]"
+    userinfo = ""
+    if parsed.username:
+        userinfo = parsed.username
+        if parsed.password:
+            userinfo += f":{parsed.password}"
+        userinfo += "@"
+    try:
+        port = parsed.port
+    except ValueError:
+        port = None
+    port_str = f":{port}" if port else ""
+    return f"{userinfo}{host}{port_str}"
+
+
+def normalize_link(link: str) -> str:
+    link = (link or "").strip()
+    if not link:
+        return ""
+    parsed = urlparse(link)
+    scheme = parsed.scheme.lower()
+    netloc = _normalized_netloc(parsed)
+    path = (parsed.path or "").rstrip("/")
+    query_params = parse_qsl(parsed.query, keep_blank_values=True)
+    filtered_params = [
+        (k, v) for k, v in query_params if not is_tracking_param(k)
+    ]
+    query = urlencode(filtered_params, doseq=True)
+    normalized = urlunparse(
+        parsed._replace(scheme=scheme, netloc=netloc, path=path, query=query)
+    )
+    return normalized
+
+
+def link_hash(link: str) -> str:
+    normalized = normalize_link(link)
+    return hashlib.sha1(normalized.encode("utf-8")).hexdigest()
 
 # ---- Image helpers for 'cover' ----
 def guardian_upscale_url(u: str, target=IMG_TARGET_WIDTH) -> str:
@@ -532,7 +605,7 @@ def main():
             if not title or not link:
                 continue
 
-            key = hashlib.sha1(link.encode("utf-8")).hexdigest()
+            key = link_hash(link)
             if key in seen:
                 continue
 
