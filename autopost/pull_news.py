@@ -15,7 +15,28 @@ AventurOO – Autopost (News)
 
 import os, re, json, hashlib, datetime, pathlib, urllib.request, urllib.error, socket
 from html import unescape
-from urllib.parse import urlparse, urljoin
+from urllib.parse import urlparse
+
+# ...
+host = (urlparse(link).hostname or "").lower().replace("www.", "")
+pretty = host.split(".")[0].replace("-", " ").title() if host else ""
+
+entry = {
+    "slug": slug,
+    "title": title,
+    "category": category,
+    "subcategory": sub,
+    "date": date,
+    "excerpt": excerpt,
+    "cover": cover,
+    "source": link,
+    "source_domain": host,      # i ri (opsional)
+    "source_name": pretty or "",# i ri (opsional)
+    "author": author,
+    "rights": rights,
+    "body": body_final
+}
+
 from xml.etree import ElementTree as ET
 
 
