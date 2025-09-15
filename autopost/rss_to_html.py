@@ -31,7 +31,7 @@ MAX_PER_CAT = int(os.getenv("MAX_PER_CAT", "6"))
 MAX_TOTAL = int(os.getenv("MAX_TOTAL", "0"))          # 0 = pa limit total / run
 SUMMARY_WORDS = int(os.getenv("SUMMARY_WORDS", "450"))
 MAX_POSTS_PERSIST = int(os.getenv("MAX_POSTS_PERSIST", "200"))
-FALLBACK_COVER = os.getenv("FALLBACK_COVER", "assets/img/cover-fallback.jpg")
+
 DEFAULT_AUTHOR = os.getenv("DEFAULT_AUTHOR", "AventurOO Editorial")
 
 # ---- anti-script/code cleaner për paragrafë ----
@@ -218,12 +218,15 @@ def main():
             excerpt_text = shorten_words(strip_text(base_excerpt), SUMMARY_WORDS)
 
             cover = ""
-            if not lead_image:
+            if lead_image:
+                cover = lead_image
+            if not cover:
                 try:
-                    cover = find_cover_from_item(it_elem, link)
+                    found_cover = find_cover_from_item(it_elem, link)
+                    if found_cover:
+                        cover = found_cover
                 except Exception:
-                    cover = ""
-            cover = lead_image or cover or FALLBACK_COVER
+                    pass
 
             date = today_iso()
             slug = slugify(title)[:70]
