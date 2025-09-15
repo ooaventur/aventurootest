@@ -1,66 +1,106 @@
-(function() {
-  const params = new URLSearchParams(window.location.search);
-  const slug = params.get('slug');
+function renderHeader(active){
+  const nav = [
+    {title:'Home', url:'index.html'},
+    {title:'Travel', url:'travel.html'},
+    {title:'Stories', url:'stories.html'},
+    {title:'Culture', url:'culture.html'},
+    {title:'Lifestyle', url:'lifestyle.html'},
+    {title:'Guides', url:'guides.html'},
+    {title:'Deals', url:'deals.html'},
+    {title:'About', url:'about.html'},
+    {title:'Contact', url:'contact.html'}
+  ];
 
-  async function load() {
-    if (!slug) {
-      showError('Post not specified.');
-      return;
-    }
-    try {
-      const res = await fetch('/data/posts.json');
-      if (!res.ok) throw new Error('Network response was not ok');
-      const posts = await res.json();
-      const post = posts.find(p => p.slug === slug);
-      if (!post) {
-        showError('Post not found.');
-        return;
-      }
-      renderPost(post);
-    } catch (err) {
-      console.error(err);
-      showError('Failed to load post.');
-    }
-  }
+  const links = nav.map(n => `
+    <li class="nav-item">
+      <a class="nav-link ${active===n.title?'active fw-semibold':''}" href="${n.url}">${n.title}</a>
+    </li>
+  `).join('');
 
-  function renderPost(post) {
-    const titleEl = document.querySelector('.main-article header h1');
-    if (titleEl) titleEl.textContent = post.title;
+  document.getElementById('site-header').innerHTML = `
+  <header class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">AventurOO</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          ${links}
+          <li class="nav-item">
+            <a class="nav-link" href="search.html" title="Search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>`;
+}
 
-    const dateEl = document.querySelector('.main-article header .details li:first-child');
-    if (dateEl) {
-      const date = new Date(post.date);
-      if (!isNaN(date)) {
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        dateEl.textContent = `Posted on ${date.toLocaleDateString(undefined, options)}`;
-      } else {
-        dateEl.textContent = post.date;
-      }
-    }
+function renderFooter(){
+  document.getElementById('site-footer').innerHTML = `
+  <footer class="bg-light py-5 mt-5 border-top">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <h5 class="fw-bold">AventurOO</h5>
+          <p class="small text-muted">Travel • Stories • Culture • Lifestyle • Deals • Guides</p>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-bold">Explore</h6>
+          <ul class="list-unstyled small">
+            <li><a class="link-secondary text-decoration-none" href="travel.html">Travel</a></li>
+            <li><a class="link-secondary text-decoration-none" href="stories.html">Stories</a></li>
+            <li><a class="link-secondary text-decoration-none" href="culture.html">Culture</a></li>
+            <li><a class="link-secondary text-decoration-none" href="lifestyle.html">Lifestyle</a></li>
+            <li><a class="link-secondary text-decoration-none" href="guides.html">Guides</a></li>
+            <li><a class="link-secondary text-decoration-none" href="deals.html">Deals</a></li>
+          </ul>
+        </div>
+        <div class="col-md-2">
+          <h6 class="fw-bold">Company</h6>
+          <ul class="list-unstyled small">
+            <li><a class="link-secondary text-decoration-none" href="about.html">About</a></li>
+            <li><a class="link-secondary text-decoration-none" href="contact.html">Contact</a></li>
+            <li><a class="link-secondary text-decoration-none" href="privacy.html">Privacy</a></li>
+            <li><a class="link-secondary text-decoration-none" href="terms.html">Terms</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h6 class="fw-bold">Stay updated</h6>
+          <p class="small text-muted">Follow our feeds or subscribe for updates.</p>
+          <a class="btn btn-sm btn-outline-brand me-2" href="rss.xml" target="_blank">
+            <i class="fa-solid fa-rss me-1"></i> RSS
+          </a>
+          <a class="btn btn-sm btn-outline-brand" href="sitemap.xml" target="_blank">
+            <i class="fa-solid fa-sitemap me-1"></i> Sitemap
+          </a>
+        </div>
+      </div>
+      <div class="text-center small text-muted mt-4">
+        &copy; ${new Date().getFullYear()} AventurOO. All rights reserved.
+      </div>
+    </div>
+  </footer>`;
+}
 
-    const coverImg = document.querySelector('.main-article .featured img');
-    if (coverImg) {
-      if (post.cover) {
-        coverImg.src = post.cover;
-      } else {
-        coverImg.remove();
-      }
-    }
 
-    const bodyEl = document.querySelector('.main-article .main');
-    if (bodyEl) {
-      bodyEl.innerHTML = post.body || '';
-    }
-  }
 
-  function showError(message) {
-    const article = document.querySelector('.main-article');
-    if (article) {
-      article.innerHTML = `<p>${message}</p>`;
-    } else {
-      document.body.innerHTML = `<p>${message}</p>`;
-    }
-  }
+(function(){
+  // Script kryesor
+  const gaScript = document.createElement("script");
+  gaScript.async = true;
+  gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-XEHE15B5J6";
+  document.head.appendChild(gaScript);
 
-  load();
+  // Konfigurimi
+  const inlineScript = document.createElement("script");
+  inlineScript.innerHTML = `
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XEHE15B5J6');
+  `;
+  document.head.appendChild(inlineScript);
 })();
