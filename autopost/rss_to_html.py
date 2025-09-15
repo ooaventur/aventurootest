@@ -5,7 +5,9 @@
 # - heq çdo "code/script" nga teksti; filtron paragrafët e shkurtër/jo-kuptimplotë
 # - shkruan: title, category, date, author, cover, source, excerpt (~450 fjalë), content (tekst i pastër me \n\n)
 
+import datetime
 import os, re, json, hashlib, pathlib, sys
+from email.utils import parsedate_to_datetime
 
 if __package__ in (None, ""):
     sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
@@ -82,6 +84,81 @@ CODE_PATTERNS = [
     r"<script", r"</script", r"@media", r"window\.", r"import\s+",
 ]
 CODE_RE = re.compile("|".join(CODE_PATTERNS), re.I)
+
+def _normalize_date_string(value: str) -> str:
+    value = (value or "").strip()
+    if not value:
+        return ""
+    value = re.sub(r"\s+", " ", value)
+
+    dt = None
+
+    iso_candidate = value
+    if iso_candidate.endswith("Z"):
+        iso_candidate = iso_candidate[:-1] + "+00:00"
+    try:
+        dt = datetime.datetime.fromisoformat(iso_candidate)
+    except ValueError:
+        dt = None
+
+    if dt is None:
+        try:
+            dt = parsedate_to_datetime(value)
+        except (TypeError, ValueError, IndexError):
+            dt = None
+
+    if dt is None:
+        for fmt in (
+            "%Y-%m-%d",
+            "%Y/%m/%d",
+            "%d %b %Y",
+            "%d %B %Y",
+            "%b %d, %Y",
+            "%B %d, %Y",
+        ):
+            try:
+                dt = datetime.datetime.strptime(value, fmt)
+                break
+            except ValueError:
+                continue
+
+    if dt is None:
+        return ""
+
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=datetime.timezone.utc)
+
+    return dt.astimezone(datetime.timezone.utc).date().isoformat()
+
+
+def parse_item_date(it_elem) -> str:
+    if it_elem is None:
+        return today_iso()
+
+    candidates = []
+    for tag in ("pubDate", "published", "updated"):
+        text = it_elem.findtext(tag)
+        if text and text.strip():
+            candidates.append(text.strip())
+
+    ns_atom = {"atom": "http://www.w3.org/2005/Atom"}
+    for tag in ("published", "updated"):
+        text = it_elem.findtext(f"atom:{tag}", ns_atom)
+        if text and text.strip():
+            candidates.append(text.strip())
+
+    ns_dc = {"dc": "http://purl.org/dc/elements/1.1/"}
+    text = it_elem.findtext("dc:date", ns_dc)
+    if text and text.strip():
+        candidates.append(text.strip())
+
+    for candidate in candidates:
+        normalized = _normalize_date_string(candidate)
+        if normalized:
+            return normalized
+
+    return today_iso()
+
 
 
 def clean_paragraphs(text: str) -> list:
