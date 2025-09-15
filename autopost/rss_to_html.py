@@ -161,6 +161,7 @@ def main():
                 continue
 
             author = "AventurOO Editorial"
+            rights = "Unknown"
             it_elem = it.get("element")
             try:
                 a = it_elem.find("author") if it_elem is not None else None
@@ -171,10 +172,18 @@ def main():
                     an = it_elem.find("atom:author/atom:name", ns_atom)
                     if an is not None and (an.text or "").strip():
                         author = an.text.strip()
+                if it_elem is not None:
+                    ns_dc = {"dc": "http://purl.org/dc/elements/1.1/"}
+                    r = it_elem.find("dc:rights", ns_dc) or it_elem.find("copyright")
+                    if r is not None and (r.text or "").strip():
+                        rights = r.text.strip()
             except Exception:
                 author = ""
+                rights = ""
             if not author:
                 author = "AventurOO Editorial"
+            if not rights:
+                rights = "Unknown"
 
             text_raw = ""
             lead_image = ""
@@ -220,6 +229,7 @@ def main():
                 "category": category,
                 "date": date,
                 "author": author,
+                "rights": rights,
                 "source": link,
                 "cover": cover,
                 "excerpt": excerpt_text,
