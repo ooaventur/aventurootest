@@ -102,5 +102,38 @@
     }
   }
 
+function escapeHtml(s){return (s||"").replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]));}
+function hostFrom(u){ try{ return new URL(u).hostname.replace(/^www\./,''); } catch(e){ return ''; } }
+function shortenUrl(u){
+  try{
+    const url = new URL(u);
+    const host = url.hostname.replace(/^www\./,'');
+    let path = (url.pathname || '/').replace(/\/+/g,'/').slice(0,60);
+    if(path.length > 1 && path.endsWith('/')) path = path.slice(0,-1);
+    return host + (path === '/' ? '' : path) + (url.search ? '…' : '');
+  } catch(e){ return u; }
+}
+function titleizeHost(host){
+  if(!host) return '';
+  // P.sh. bbc.co.uk -> BBC
+  const base = host.split('.').slice(0,-1)[0].replace(/-/g,' ');
+  return base ? base.replace(/\b\w/g,ch=>ch.toUpperCase()) : host;
+}
+
+// ... brenda renderimit të artikullit:
+var sourceEl = document.querySelector('.article .source');
+if (sourceEl) {
+  if (post.source) {
+    var host = hostFrom(post.source);
+    var name = post.source_name || titleizeHost(host) || host || 'Source';
+    var shortHref = shortenUrl(post.source);
+    sourceEl.innerHTML = 'Source: <strong>' + escapeHtml(name) + '</strong> — '
+      + '<a href="' + escapeHtml(post.source) + '" target="_blank" rel="nofollow noopener noreferrer">'
+      + escapeHtml(shortHref) + '</a>';
+  } else {
+    sourceEl.remove();
+  }
+}
+  
   load();
 })();
