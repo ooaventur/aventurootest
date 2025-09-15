@@ -1,5 +1,27 @@
-# NEWS / POLITICS
-News/Politics|https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml
-News/Politics|https://www.politico.com/rss/politics.xml
-News/Politics|https://www.aljazeera.com/xml/rss/all.xml
-News/Politics|https://feeds.bbci.co.uk/news/politics/rss.xml
+# cat|sub|source|url
+
+# === NEWS / TOP STORIES ===
+news|top-stories|BBC|https://feeds.bbci.co.uk/news/rss.xml
+news|top-stories|CNN|http://rss.cnn.com/rss/edition.rss
+news|top-stories|NYTimes|https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml
+news|top-stories|NPR|https://feeds.npr.org/1001/rss.xml
+news|top-stories|Guardian|https://www.theguardian.com/world/rss
+news|top-stories|AlJazeera|https://www.aljazeera.com/xml/rss/all.xml
+
+# === NEWS / POLITICS ===
+news|politics|BBC|https://feeds.bbci.co.uk/news/politics/rss.xml
+news|politics|CNN|http://rss.cnn.com/rss/cnn_allpolitics.rss
+news|politics|NYTimes|https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml
+news|politics|NPR|https://feeds.npr.org/1014/rss.xml
+news|politics|Guardian|https://www.theguardian.com/politics/rss
+news|politics|TheHill|https://thehill.com/homenews/feed/
+news|politics|Politico|https://www.politico.com/rss/politics-news.xml
+
+# === NEWS / ECONOMY ===
+news|economy|Guardian|https://www.theguardian.com/business/economics/rss
+news|economy|NYTimes|https://rss.nytimes.com/services/xml/rss/nyt/Economy.xml
+news|economy|NPR|https://feeds.npr.org/1032/rss.xml
+news|economy|MarketWatch|https://www.marketwatch.com/feeds/topstories
+news|economy|Economist|https://www.economist.com/finance-and-economics/rss.xml
+# (opsionale) FT:
+# news|economy|FT|https://www.ft.com/economy?format=rss
