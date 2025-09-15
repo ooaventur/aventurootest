@@ -57,6 +57,81 @@ def strip_text(s: str) -> str:
     return s
 
 
+_BLOCK_PATTERN = re.compile(
+    r"(?is)"
+    r"<p[^>]*>.*?</p>|"
+    r"<h2[^>]*>.*?</h2>|"
+    r"<h3[^>]*>.*?</h3>|"
+    r"<ul[^>]*>.*?</ul>|"
+    r"<ol[^>]*>.*?</ol>|"
+    r"<blockquote[^>]*>.*?</blockquote>"
+)
+
+
+def limit_words_html(html: str, max_words: int) -> str:
+    """Return ``html`` trimmed to ``max_words`` words, keeping full blocks when possible."""
+
+    if not html:
+        return ""
+
+    words = strip_text(html).split()
+    if max_words <= 0 or len(words) <= max_words:
+        return html
+
+    blocks = _BLOCK_PATTERN.findall(html or "")
+    if blocks:
+        kept: list[str] = []
+        word_count = 0
+        truncated = False
+
+        for block in blocks:
+            block_words = strip_text(block).split()
+            block_word_count = len(block_words)
+            if block_word_count == 0:
+                kept.append(block)
+                continue
+            if word_count + block_word_count > max_words:
+                truncated = True
+                break
+            kept.append(block)
+            word_count += block_word_count
+
+        if kept:
+            if truncated or len(kept) < len(blocks):
+                kept.append("<p><em>…</em></p>")
+            return "\n".join(kept)
+
+    # Fallback: treat as plain text (no HTML blocks matched or first block too large)
+    trimmed_words = words[:max_words]
+    trimmed_text = " ".join(trimmed_words).strip()
+
+    if "<" in html and ">" in html:
+        return f"<p>{trimmed_text}…</p>"
+
+    paragraphs = [p.strip() for p in re.split(r"\n{2,}", html) if p.strip()]
+    if paragraphs:
+        kept_plain: list[str] = []
+        word_count = 0
+        truncated = False
+        for para in paragraphs:
+            para_words = para.split()
+            para_word_count = len(para_words)
+            if para_word_count == 0:
+                continue
+            if word_count + para_word_count > max_words:
+                truncated = True
+                break
+            kept_plain.append(para)
+            word_count += para_word_count
+        if kept_plain:
+            result = "\n\n".join(kept_plain)
+            if truncated or len(kept_plain) < len(paragraphs):
+                result += "\n\n…"
+            return result
+
+    return trimmed_text + "…"
+
+
 def parse_feed(xml_bytes: bytes):
     if not xml_bytes:
         return []
