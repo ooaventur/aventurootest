@@ -10,7 +10,7 @@ AventurOO – Autopost (News)
 - Rrit cilësinë e imazheve (srcset → më i madhi, Guardian width=1600) vetëm për 'cover'
 - Zgjidh 'mixed content' me https ose proxy opsional për 'cover'
 - Shton linkun e burimit ne fund
-- Shkruan ne data/posts.json: {slug,title,category,subcategory,date,excerpt,cover,source,author,body}
+- Shkruan ne data/posts.json: {slug,title,category,subcategory,date,excerpt,cover,source,author,rights,body}
 """
 
 import os, re, json, hashlib, datetime, pathlib, urllib.request, urllib.error, socket
@@ -417,6 +417,14 @@ def main():
 </p>"""
 
             # 8) Persisto
+            rights = "Unknown"
+            it_elem = it.get("element")
+            if it_elem is not None:
+                ns_dc = {"dc": "http://purl.org/dc/elements/1.1/"}
+                r = it_elem.find("dc:rights", ns_dc) or it_elem.find("copyright")
+                if r is not None and (r.text or "").strip():
+                    rights = r.text.strip()
+
             date = today_iso()
             slug = slugify(title)[:70]
 
@@ -430,6 +438,7 @@ def main():
                 "cover": cover,
                 "source": link,
                 "author": DEFAULT_AUTHOR,
+                "rights": rights,
                 "body": body_final
             }
             new_entries.append(entry)
