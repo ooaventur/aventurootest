@@ -70,10 +70,11 @@
     var dateTxt = (p.date || '').split('T')[0];
     var art = document.createElement('article');
     art.className = 'col-md-12 article-list';
+    var articleUrl = '/article.html?slug=' + encodeURIComponent(p.slug);
     art.innerHTML =
       '<div class="inner">' +
         '<figure>' +
-          '<a href="' + (p.source || '#') + '" target="_blank" rel="noopener">' +
+          '<a href="' + articleUrl + '">' +
             '<img src="' + (p.cover || '/images/news/img01.jpg') + '" alt="">' +
           '</a>' +
         '</figure>' +
@@ -82,11 +83,11 @@
             '<div class="category"><a href="#">' + (p.category || '') + '</a></div>' +
             '<div class="time">' + (dateTxt || '') + '</div>' +
           '</div>' +
-          '<h1><a href="' + (p.source || '#') + '" target="_blank" rel="noopener">' +
+          '<h1><a href="' + articleUrl + '">' +
             (p.title || '') + '</a></h1>' +
           '<p>' + (p.excerpt || '') + '</p>' +
           '<footer>' +
-            '<a class="btn btn-primary more" href="' + (p.source || '#') + '" target="_blank" rel="noopener">' +
+            '<a class="btn btn-primary more" href="' + articleUrl + '">' +
               '<div>More</div><div><i class="ion-ios-arrow-thin-right"></i></div>' +
             '</a>' +
           '</footer>' +
