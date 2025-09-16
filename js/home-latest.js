@@ -198,10 +198,36 @@
     }
   }
 
+  function queryFirst(selectors) {
+    for (var i = 0; i < selectors.length; i += 1) {
+      var element = document.querySelector(selectors[i]);
+      if (element) return element;
+    }
+    return null;
+  }
+
+  function findLatestNewsBlock(container) {
+    var element = container;
+    while (element && element.nodeType === 1) {
+      if (element.getAttribute && element.getAttribute('data-latest-news-block') !== null) {
+        return element;
+      }
+      var className = element.className || '';
+      if (
+        (element.classList && element.classList.contains('latest-news-block')) ||
+        (' ' + className + ' ').indexOf(' latest-news-block ') !== -1
+      ) {
+        return element;
+      }
+      element = element.parentElement;
+    }
+    return queryFirst(['[data-latest-news-block]', '.latest-news-block', '#latest-news-block']);
+  }
+
   function init() {
-    var container = document.getElementById('latest-news-grid');
+    var container = queryFirst(['[data-latest-news-grid]', '.latest-news-grid', '#latest-news-grid']);
     if (!container) return;
-    var block = document.getElementById('latest-news-block');
+    var block = findLatestNewsBlock(container);
 
     Promise.all([
       loadJson(POSTS_SOURCES).catch(function (error) {
