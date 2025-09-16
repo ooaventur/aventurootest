@@ -545,80 +545,104 @@ window.initBestOfTheWeekCarousel = bestOfTheWeek;
     return ((h > 0 ? h + ":" + (m < 10 ? "0" : "") : "") + m + ":" + (s < 10 ? "0" : "") + s);
 	}
 
-	var verticalSlider = function () {
-		$(".vertical-slider").each(function(ii){
-			var $this = $(this), 
-					$item = $this.find($this.data("item")),
-					$item_height = 0,
-					$item_max = $this.data("max"),
-					$nav = $($this.data("nav"));
+        var verticalSlider = function () {
+                $(".vertical-slider").each(function(ii){
+                        var $this = $(this),
+                                        $nav = $($this.data("nav"));
 
-			$this.attr("data-current", 1);
+                        var existingInterval = $this.data('vsInterval');
+                        if (existingInterval) {
+                                clearInterval(existingInterval);
+                        }
 
-			$item.each(function(i){
-				i++;
-				$(this).attr("data-list", i);
-				if(i > $item_max) {
-					return;
-				}
-				$item_height += ($(this).outerHeight() + 15);
-			});
+                        var existingInner = $this.children("[id^='vs_inner_']");
+                        if (existingInner.length) {
+                                existingInner.children().appendTo($this);
+                                existingInner.remove();
+                        }
 
-			$this.css({
-				overflow: 'hidden'
-			});
-			$item.wrapAll($("<div/>", {
-				style: 'height:'+$item_height+'px;',
-				id: 'vs_inner_'+ii
-			}))
+                        var $item = $this.find($this.data("item")),
+                                        $item_height = 0,
+                                        $item_max = $this.data("max");
 
-			function vs_next() {
-				var $current = $this.attr("data-current"),
-						$next = $current;
+                        $nav.find(".prev").off(".verticalSlider");
+                        $nav.find(".next").off(".verticalSlider");
 
-				var $item_move = $this.find("#vs_inner_"+ii+' '+$this.data("item")+"[data-list="+$next+"]");
+                        $this.attr("data-current", 1);
 
-				$item_move.fadeOut(function(){
-					var $clone = $item_move.clone().fadeIn();
-					$item_move.remove();
-					$this.find("#vs_inner_"+ii).append($clone);
-				});
+                        if(!$item.length) {
+                                $this.removeData('vsInterval');
+                                return;
+                        }
 
-				$next = parseInt($current) + 1;
-				if($next > $item.length) {
-					$next = 1;
-				}
-				$this.attr('data-current', $next);
-			}
+                        $item.each(function(i){
+                                i++;
+                                $(this).attr("data-list", i);
+                                if(i > $item_max) {
+                                        return;
+                                }
+                                $item_height += ($(this).outerHeight() + 15);
+                        });
 
-			function vs_prev() {
-				var $current = $this.attr("data-current"),
-						$next = $current;
+                        $this.css({
+                                overflow: 'hidden'
+                        });
+                        var sliderInnerId = 'vs_inner_'+ii;
+                        $item.wrapAll($("<div/>", {
+                                style: 'height:'+$item_height+'px;',
+                                id: sliderInnerId
+                        }));
 
-				$next = parseInt($current) - 1;
-				if($next < 1) {
-					$next = $item.length;
-				}
-				$this.attr('data-current', $next);
+                        function vs_next() {
+                                var $current = $this.attr("data-current"),
+                                                $next = $current;
 
-				var $item_move = $this.find("#vs_inner_"+ii+' '+$this.data("item")+"[data-list="+$next+"]");
-				var $clone = $item_move.clone().css('display','none');
-				$item_move.remove();
-				$this.find("#vs_inner_"+ii).prepend($clone.fadeIn());
-			}
+                                var $item_move = $this.find('#'+sliderInnerId+' '+$this.data("item")+"[data-list="+$next+"]");
 
-			$nav.find(".prev").click(function(){
-				vs_prev();
-			});
-			$nav.find(".next").click(function(){
-				vs_next();
-			});
-			setInterval(function(){
-				vs_next();
-			},10000);
-		});		
-	}
+                                $item_move.fadeOut(function(){
+                                        var $clone = $item_move.clone().fadeIn();
+                                        $item_move.remove();
+                                        $this.find('#'+sliderInnerId).append($clone);
+                                });
 
+                                $next = parseInt($current) + 1;
+                                if($next > $item.length) {
+                                        $next = 1;
+                                }
+                                $this.attr('data-current', $next);
+                        }
+
+                        function vs_prev() {
+                                var $current = $this.attr("data-current"),
+                                                $next = $current;
+
+                                $next = parseInt($current) - 1;
+                                if($next < 1) {
+                                        $next = $item.length;
+                                }
+                                $this.attr('data-current', $next);
+
+                                var $item_move = $this.find('#'+sliderInnerId+' '+$this.data("item")+"[data-list="+$next+"]");
+                                var $clone = $item_move.clone().css('display','none');
+                                $item_move.remove();
+                                $this.find('#'+sliderInnerId).prepend($clone.fadeIn());
+                        }
+
+                        $nav.find(".prev").on("click.verticalSlider", function(){
+                                vs_prev();
+                        });
+                        $nav.find(".next").on("click.verticalSlider", function(){
+                                vs_next();
+                        });
+
+                        var intervalId = setInterval(function(){
+                                vs_next();
+                        },10000);
+                        $this.data('vsInterval', intervalId);
+                });
+        }
+
+        window.refreshVerticalSlider = verticalSlider;
 	var featured = function() {
 		$("#featured").owlCarousel({
 			items: 1,
