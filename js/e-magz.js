@@ -1,5 +1,46 @@
 $(function(){
-	var youtube_api_key = 'YOUR_API_KEY';
+        var youtube_api_key = 'YOUR_API_KEY';
+        var HEADLINE_POSTS_SOURCES = ['data/posts.json', '/data/posts.json'];
+        var HEADLINE_MAX_ITEMS = 20;
+
+        function fetchSequential(urls) {
+                if (typeof fetch !== 'function') {
+                        return Promise.reject(new Error('Fetch API is not available'));
+                }
+                return new Promise(function(resolve, reject) {
+                        (function tryI(i) {
+                                if (i >= urls.length) {
+                                        reject(new Error('No matching resource found'));
+                                        return;
+                                }
+                                fetch(urls[i], { cache: 'no-store' })
+                                        .then(function(response) {
+                                                if (response && response.ok) {
+                                                        resolve(response);
+                                                        return;
+                                                }
+                                                tryI(i + 1);
+                                        })
+                                        .catch(function() {
+                                                tryI(i + 1);
+                                        });
+                        })(0);
+                });
+        }
+
+        function getPostTimestamp(post) {
+                if (!post) return 0;
+                var fields = ['date', 'updated_at', 'published_at', 'created_at'];
+                for (var i = 0; i < fields.length; i++) {
+                        var value = post[fields[i]];
+                        if (!value) continue;
+                        var parsed = Date.parse(value);
+                        if (!isNaN(parsed)) {
+                                return parsed;
+                        }
+                }
+                return 0;
+        }
 
 	var loading = {
 		show: function() {
@@ -211,23 +252,117 @@ $(function(){
 	  });
 	}
 
-	var headline = function() {
-	  var headlineCarousel = $("#headline").owlCarousel({
-	  	items: 1,
-	  	dots: false,
-	  	// autoplay: true,
-	  	autoplayTimeout: 3000,
-	  	loop: true
-	  });
+        var headline = function() {
+                var $headline = $("#headline");
+                if(!$headline.length) {
+                        return;
+                }
 
-		$("#headline-nav [data-slide=next]").click(function(){
-			headlineCarousel.trigger('next.owl.carousel');
-		});
+                var $headlineWrapper = $headline.closest('.headline');
 
-		$("#headline-nav [data-slide=prev]").click(function(){
-			headlineCarousel.trigger('prev.owl.carousel');
-		});		
-	}
+                if (typeof fetch !== 'function') {
+                        console.warn('Fetch API is not available; skipping headline widget.');
+                        if($headlineWrapper.length) {
+                                $headlineWrapper.hide();
+                        }else{
+                                $headline.hide();
+                        }
+                        return;
+                }
+
+                fetchSequential(HEADLINE_POSTS_SOURCES)
+                        .then(function(response) {
+                                return response.json();
+                        })
+                        .then(function(data) {
+                                var posts = [];
+                                if (data) {
+                                        if (Array.isArray(data)) {
+                                                posts = data;
+                                        } else if (Array.isArray(data.posts)) {
+                                                posts = data.posts;
+                                        } else if (Array.isArray(data.items)) {
+                                                posts = data.items;
+                                        }
+                                }
+
+                                posts = posts
+                                        .filter(function(post) {
+                                                return post && typeof post.slug === 'string' && post.slug.trim().length;
+                                        })
+                                        .sort(function(a, b) {
+                                                return getPostTimestamp(b) - getPostTimestamp(a);
+                                        })
+                                        .slice(0, HEADLINE_MAX_ITEMS);
+
+                                $headline.empty();
+
+                                if(!posts.length) {
+                                        console.warn('No headline posts available to display.');
+                                        if($headlineWrapper.length) {
+                                                $headlineWrapper.hide();
+                                        }else{
+                                                $headline.hide();
+                                        }
+                                        return;
+                                }
+
+                                for (var i = 0; i < posts.length; i++) {
+                                        var post = posts[i];
+                                        var slugValue = typeof post.slug === 'string' ? post.slug.trim() : '';
+                                        if (!slugValue.length) {
+                                                continue;
+                                        }
+                                        var slug = encodeURIComponent(slugValue);
+                                        var title = '';
+                                        if (post.title && typeof post.title === 'string' && post.title.trim().length) {
+                                                title = post.title.trim();
+                                        }else{
+                                                title = slugValue;
+                                        }
+                                        var $item = $('<div/>', { 'class': 'item' });
+                                        var $link = $('<a/>', { href: '/article.html?slug=' + slug, title: title });
+                                        $link.text(title);
+                                        $item.append($link);
+                                        $headline.append($item);
+                                }
+
+                                if(!$headline.children().length) {
+                                        if($headlineWrapper.length) {
+                                                $headlineWrapper.hide();
+                                        }else{
+                                                $headline.hide();
+                                        }
+                                        return;
+                                }
+
+                                var headlineCarousel = $headline.owlCarousel({
+                                        items: 1,
+                                        dots: false,
+                                        autoplay: true,
+                                        autoplayTimeout: 2000,
+                                        loop: true
+                                });
+
+                                $("#headline-nav [data-slide=next]").off('.headline').on('click.headline', function(e){
+                                        e.preventDefault();
+                                        headlineCarousel.trigger('next.owl.carousel');
+                                });
+
+                                $("#headline-nav [data-slide=prev]").off('.headline').on('click.headline', function(e){
+                                        e.preventDefault();
+                                        headlineCarousel.trigger('prev.owl.carousel');
+                                });
+                        })
+                        .catch(function(err) {
+                                console.warn('Failed to load headline posts', err);
+                                if($headlineWrapper.length) {
+                                        $headlineWrapper.hide();
+                                }else{
+                                        $headline.hide();
+                                }
+                        });
+        }
 
   // floating label
   var floatingLabel = function() {
