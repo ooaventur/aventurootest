@@ -229,6 +229,7 @@
     if (!container) return;
     var block = findLatestNewsBlock(container);
 
+
     Promise.all([
       loadJson(POSTS_SOURCES).catch(function (error) {
         console.error('Failed to load posts.json', error);
