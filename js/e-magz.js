@@ -255,35 +255,49 @@ $(function(){
 		});
 	}
 
-	var bestOfTheWeek = function() {	
-		var botwCarousel = $(".carousel-1").owlCarousel({
-			items: 4,
-			itemElement: 'article',
-			margin: 20,
-			nav: false,
-			dots: false,
-			responsive: {
-				1024: {
-					items: 4
-				},
-				768: {
-					items: 2
-				},
-				0: {
-					items: 1
-				}
-			}
-		});
+function bestOfTheWeek() {
+var $carousel = $(".best-of-the-week .carousel-1");
+if(!$carousel.length) {
+return null;
+}
+if(!$carousel.children().length) {
+return null;
+}
+if($carousel.data('botw-initialized')) {
+return $carousel.data('botw-instance') || null;
+}
+var botwCarousel = $carousel.owlCarousel({
+items: 4,
+itemElement: 'article',
+margin: 20,
+nav: false,
+dots: false,
+responsive: {
+1024: {
+items: 4
+},
+768: {
+items: 2
+},
+0: {
+items: 1
+}
+}
+});
+$carousel.data('botw-initialized', true);
+$carousel.data('botw-instance', botwCarousel);
 
-		$("#best-of-the-week-nav .next").click(function(){
-			botwCarousel.trigger('next.owl.carousel');
-		});
+$("#best-of-the-week-nav .next").off('.botw').on('click.botw', function(){
+botwCarousel.trigger('next.owl.carousel');
+});
 
-		$("#best-of-the-week-nav .prev").click(function(){
-			botwCarousel.trigger('prev.owl.carousel');
-		});
-	}
+$("#best-of-the-week-nav .prev").off('.botw').on('click.botw', function(){
+botwCarousel.trigger('prev.owl.carousel');
+});
+return botwCarousel;
+}
 
+window.initBestOfTheWeekCarousel = bestOfTheWeek;
 	var youtubeAPI = function() {
 		$("[data-youtube]").each(function(vl_i){
 			var $this = $(this),
