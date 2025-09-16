@@ -29,6 +29,43 @@
       .map(function (w) { return w.charAt(0).toUpperCase() + w.slice(1); })
       .join(' ');
   }
+  function escapeHtml(str) {
+    return (str == null ? '' : String(str))
+      .replace(/[&<>"']/g, function (ch) {
+        return {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        }[ch];
+      });
+  }
+
+  function getPostTimestamp(post) {
+    if (!post) return 0;
+    var candidates = [post.date, post.updated_at, post.published_at, post.created_at];
+    for (var i = 0; i < candidates.length; i++) {
+      var value = candidates[i];
+      if (!value) continue;
+      var time = Date.parse(value);
+      if (!isNaN(time)) return time;
+    }
+    return 0;
+  }
+
+  function formatDateString(dateValue) {
+    if (!dateValue) return '';
+    var raw = String(dateValue);
+    var parts = raw.split('T');
+    return parts[0] || raw;
+  }
+
+  function buildArticleUrl(post) {
+    if (!post) return '#';
+    var slug = post.slug ? encodeURIComponent(post.slug) : '';
+    return slug ? '/article.html?slug=' + slug : '#';
+  }
 
  const url = new URL(window.location.href);
 
