@@ -94,7 +94,7 @@
       base: cleanedBase
     });
 
-    if (totalPages <= 7) {
+    if (totalPages <= 13) {
       for (var i = 1; i <= totalPages; i++) {
         appendItem(list, i, String(i), {
           active: i === currentPage,
