@@ -292,7 +292,7 @@
     const padding = document.createElement('div');
     padding.className = 'padding';
 
-    const titleEl = document.createElement('h2');
+    const titleEl = document.createElement('h3');
     const titleLink = document.createElement('a');
     titleLink.href = articleUrl;
     titleLink.textContent = post.title || '';
