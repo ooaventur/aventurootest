@@ -59,6 +59,25 @@ Let's make it easy! Just download this template, use it on your project.
 The rotating banner creatives that appear in the home page's Latest News module
 are configured in `data/banners.json`. Update that JSON file to swap in new
 image URLs or destination links without editing the HTML templates.
+# Relocating the Latest News module
+Editors can move the Latest News block anywhere on the home page without
+touching the JavaScript. Mark up the wrapper element with either the
+`data-latest-news-block` attribute or the `latest-news-block` class (keeping the
+`latest-news-block` id is optional but still supported). Inside that wrapper, add
+the `data-latest-news-grid` attribute or `latest-news-grid` class to the element
+that should receive the dynamically injected cards. For example:
+
+```html
+<div class="block latest-news-block" data-latest-news-block>
+  <h1 class="block-title">Latest News</h1>
+  <div class="block-body">
+    <div class="row latest-news-grid" data-latest-news-grid></div>
+  </div>
+</div>
+```
+
+The script searches for the new data attributes first and falls back to the
+legacy ids, so existing templates continue to work.
 
 # Report Some Bugs
 Find a Bug? Please, create an issue and we'll fix it together for a better template.
