@@ -55,6 +55,10 @@ Let's make it easy! Just download this template, use it on your project.
 
 # Demo
 [Hit Me](http://magz.multinity.com)
+# Latest News Banners
+The rotating banner creatives that appear in the home page's Latest News module
+are configured in `data/banners.json`. Update that JSON file to swap in new
+image URLs or destination links without editing the HTML templates.
 
 # Report Some Bugs
 Find a Bug? Please, create an issue and we'll fix it together for a better template.
