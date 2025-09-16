@@ -97,7 +97,7 @@
   }
 
   function renderPost(post) {
-    const titleEl = document.querySelector('.main-article header h2');
+    const titleEl = document.querySelector('.main-article header h1');
     if (titleEl) titleEl.textContent = post.title;
 
     const dateEl = document.querySelector('.main-article header .details .date');
