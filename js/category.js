@@ -277,6 +277,9 @@
     .then(function (r) { return r.json(); })
     .then(function (all) {
       all = Array.isArray(all) ? all : [];
+      var allSorted = all.slice().sort(function (a, b) {
+        return getPostTimestamp(b) - getPostTimestamp(a);
+      });
       var filtered = all.filter(function (p) {
         var pCat = slugify(p.category);
         var pSub = slugify(p.subcategory || p.sub || '');
@@ -287,8 +290,8 @@
         return getPostTimestamp(b) - getPostTimestamp(a);
       });
 
-      renderRecentSidebar(sortedByDate.slice(0, 3));
-      var additionalPosts = sortedByDate.slice(3, 13);
+      renderRecentSidebar(allSorted.slice(0, 3));
+      var additionalPosts = allSorted.slice(3, 13);
       renderMiniSidebar(additionalPosts);
 
       var PER_PAGE = 12;
