@@ -86,6 +86,16 @@
     return base ? base.replace(/\b\w/g,ch=>ch.toUpperCase()) : host;
   }
 
+  function extractFirstImage(html) {
+    if (!html) return '';
+    const template = document.createElement('template');
+    template.innerHTML = html;
+    const img = template.content.querySelector('img[src]');
+    if (!img) return '';
+    const src = img.getAttribute('src');
+    return src ? src.trim() : '';
+  }
+
   function renderPost(post) {
     const titleEl = document.querySelector('.main-article header h1');
     if (titleEl) titleEl.textContent = post.title;
@@ -114,13 +124,40 @@
 
     const coverImg = document.querySelector('.main-article .featured img');
     if (coverImg) {
+      const placeholderSrc = '/images/logo.png';
+      let attemptedBodyFallback = false;
+      let attemptedPlaceholder = false;
+      const handleCoverError = () => {
+        if (!attemptedBodyFallback) {
+          attemptedBodyFallback = true;
+          const fallbackSrc = extractFirstImage(post.body || post.content || '');
+          if (fallbackSrc && coverImg.src !== fallbackSrc) {
+            coverImg.src = fallbackSrc;
+            return;
+          }
+        }
+        if (!attemptedPlaceholder) {
+          attemptedPlaceholder = true;
+          if (coverImg.src !== placeholderSrc) {
+            coverImg.src = placeholderSrc;
+            return;
+          }
+        }
+        coverImg.removeEventListener('error', handleCoverError);
+        if (coverImg.parentElement) coverImg.remove();
+      };
+
+      coverImg.addEventListener('error', handleCoverError);
+
+      coverImg.loading = 'lazy';
+      coverImg.decoding = 'async';
+      coverImg.referrerPolicy = 'no-referrer';
+      coverImg.alt = (post.title || 'Cover') + (post.source_name ? (' — ' + post.source_name) : '');
+
       if (post.cover) {
         coverImg.src = post.cover;
-        coverImg.loading = 'lazy';
-        coverImg.decoding = 'async';
-        coverImg.referrerPolicy = 'no-referrer-when-downgrade';
-        coverImg.alt = (post.title || 'Cover') + (post.source_name ? (' — ' + post.source_name) : '');
       } else {
+        coverImg.removeEventListener('error', handleCoverError);
         coverImg.remove();
       }
     }
