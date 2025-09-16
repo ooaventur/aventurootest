@@ -1,0 +1,26 @@
+# cat|sub|source|url
+
+# === NEWS / TOP STORIES ===
+news|top_stories|https://feeds.bbci.co.uk/news/rss.xml
+news|top_stories|http://rss.cnn.com/rss/edition.rss
+news|top_stories|https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml
+news|top_stories|https://feeds.npr.org/1001/rss.xml
+news|top_stories|https://www.theguardian.com/world/rss
+news|top_stories|https://www.aljazeera.com/xml/rss/all.xml
+
+# === NEWS / POLITICS ===
+news|politics|https://feeds.bbci.co.uk/news/politics/rss.xml
+news|politics|http://rss.cnn.com/rss/cnn_allpolitics.rss
+news|politics|https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml
+news|politics|https://feeds.npr.org/1014/rss.xml
+news|politics|https://www.theguardian.com/politics/rss
+news|politics|https://thehill.com/homenews/feed/
+news|politics|https://www.politico.com/rss/politics-news.xml
+
+# === NEWS / ECONOMY ===
+news|economy|https://www.theguardian.com/business/economics/rss
+news|economy|https://rss.nytimes.com/services/xml/rss/nyt/Economy.xml
+news|economy|https://feeds.npr.org/1032/rss.xml
+news|economy|https://www.marketwatch.com/feeds/topstories
+news|economy|https://www.economist.com/finance-and-economics/rss.xml
+news|economy|https://www.ft.com/economy?format=rss
