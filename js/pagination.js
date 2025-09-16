@@ -107,10 +107,10 @@
         base: cleanedBase
       });
 
-      var start = Math.max(2, currentPage - 1);
+      var start = Math.max(3, currentPage - 1);
       var end = Math.min(totalPages - 1, currentPage + 1);
 
-      if (start > 2) appendEllipsis(list);
+      if (start > 3) appendEllipsis(list);
 
       for (var j = start; j <= end; j++) {
         appendItem(list, j, String(j), {
