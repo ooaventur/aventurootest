@@ -134,18 +134,25 @@
         return ctx.sub ? (pCat === ctx.cat && pSub === ctx.sub) : (pCat === ctx.cat);
       });
 
-      var sorted = filtered.slice().sort(function (a, b) {
-        var dateA = new Date(a && a.date ? a.date : 0);
-        var dateB = new Date(b && b.date ? b.date : 0);
-        return dateB - dateA;
-      });
+      var PER_PAGE = 15;
+      var pageParam = parseInt(url.searchParams.get('page'), 10);
+      var page = !isNaN(pageParam) && pageParam > 0 ? pageParam : 1;
+      var totalPages = Math.ceil(filtered.length / PER_PAGE);
+      if (totalPages > 0 && page > totalPages) page = totalPages;
 
-      var topThree = sorted.slice(0, 3);
-      renderList(topThree);
+      var start = (page - 1) * PER_PAGE;
+      var pagedPosts = filtered.slice(start, start + PER_PAGE);
+      renderList(pagedPosts);
+
+      if (typeof renderPagination === 'function') {
+        var baseQuery = '?cat=' + ctx.cat + (ctx.sub ? '&sub=' + ctx.sub : '');
+        renderPagination('pagination', filtered.length, PER_PAGE, page, baseQuery);
+      }
 
       var infoBox = document.getElementById('pagination-info');
       if (infoBox) {
-        infoBox.textContent = 'Showing ' + topThree.length + ' of ' + filtered.length + ' results.';
+        var displayPage = totalPages === 0 ? 0 : page;
+        infoBox.textContent = 'Showing ' + pagedPosts.length + ' results of ' + filtered.length + ' — Page ' + displayPage + ' of ' + totalPages;
       }
     })
     .catch(function (err) {
