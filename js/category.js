@@ -158,6 +158,118 @@
     posts.forEach(function (p) { box.appendChild(renderPost(p)); });
   }
 
+
+  function createSidebarArticle(post, variant) {
+    var article = document.createElement('article');
+    var articleUrl = buildArticleUrl(post);
+    var title = escapeHtml(post && post.title ? post.title : '');
+    var category = escapeHtml(post && post.category ? post.category : '');
+    var excerpt = escapeHtml(post && post.excerpt ? post.excerpt : '');
+    var dateTxt = escapeHtml(formatDateString(post && post.date));
+    var cover = post && post.cover ? escapeHtml(post.cover) : '/images/logo.png';
+    var figureClass = post && post.cover ? '' : ' class="no-cover"';
+
+    if (variant === 'full') {
+      article.className = 'article-fw';
+      article.innerHTML =
+        '<div class="inner">' +
+          '<figure' + figureClass + '>' +
+            '<a href="' + articleUrl + '">' +
+              '<img src="' + cover + '" alt="' + title + '">' +
+            '</a>' +
+          '</figure>' +
+          '<div class="details">' +
+            '<div class="detail">' +
+              '<div class="category"><a href="#">' + category + '</a></div>' +
+              '<div class="time">' + dateTxt + '</div>' +
+            '</div>' +
+            '<h1><a href="' + articleUrl + '">' + title + '</a></h1>' +
+            '<p>' + excerpt + '</p>' +
+          '</div>' +
+        '</div>';
+    } else {
+      article.className = 'article-mini';
+      article.innerHTML =
+        '<div class="inner">' +
+          '<figure' + figureClass + '>' +
+            '<a href="' + articleUrl + '">' +
+              '<img src="' + cover + '" alt="' + title + '">' +
+            '</a>' +
+          '</figure>' +
+          '<div class="padding">' +
+            '<h1><a href="' + articleUrl + '">' + title + '</a></h1>' +
+            '<div class="detail">' +
+              '<div class="category"><a href="#">' + category + '</a></div>' +
+              '<div class="time">' + dateTxt + '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+    }
+
+    return article;
+  }
+
+  function createLineDivider() {
+    var line = document.createElement('div');
+    line.className = 'line';
+    return line;
+  }
+
+  function appendFallbackMessage(container, text) {
+    if (!container) return;
+    var message = document.createElement('p');
+    message.className = 'text-muted sidebar-fallback';
+    message.textContent = text;
+    container.appendChild(message);
+  }
+
+  function renderRecentSidebar(posts) {
+    var container = document.getElementById('sidebar-recent-posts');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (!posts.length) {
+      appendFallbackMessage(container, 'No recent posts available.');
+      return;
+    }
+
+    var first = posts[0];
+    if (first) {
+      container.appendChild(createSidebarArticle(first, 'full'));
+    }
+
+    var minis = posts.slice(1, 3);
+    if (minis.length) {
+      container.appendChild(createLineDivider());
+      minis.forEach(function (post) {
+        container.appendChild(createSidebarArticle(post, 'mini'));
+      });
+    }
+
+    if (posts.length < 3) {
+      appendFallbackMessage(container, 'Only ' + posts.length + ' recent post' + (posts.length === 1 ? '' : 's') + ' available.');
+    }
+  }
+
+  function renderMiniSidebar(posts) {
+    var container = document.getElementById('sidebar-mini-articles');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (!posts.length) {
+      appendFallbackMessage(container, 'No additional stories available.');
+      return;
+    }
+
+    posts.forEach(function (post) {
+      container.appendChild(createSidebarArticle(post, 'mini'));
+    });
+
+    if (posts.length < 10) {
+      appendFallbackMessage(container, 'No more stories available.');
+    }
+  }
+
   var ctx = getCatSub();
   patchHeader(ctx.cat, ctx.sub);
 
@@ -171,7 +283,15 @@
         return ctx.sub ? (pCat === ctx.cat && pSub === ctx.sub) : (pCat === ctx.cat);
       });
 
-      var PER_PAGE = 15;
+      var sortedByDate = filtered.slice().sort(function (a, b) {
+        return getPostTimestamp(b) - getPostTimestamp(a);
+      });
+
+      renderRecentSidebar(sortedByDate.slice(0, 3));
+      var additionalPosts = sortedByDate.slice(3, 13);
+      renderMiniSidebar(additionalPosts);
+
+      var PER_PAGE = 12;
       var pageParam = parseInt(url.searchParams.get('page'), 10);
       var page = !isNaN(pageParam) && pageParam > 0 ? pageParam : 1;
       var totalPages = Math.ceil(filtered.length / PER_PAGE);
