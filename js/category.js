@@ -146,6 +146,7 @@
       .map(function (w) { return w.charAt(0).toUpperCase() + w.slice(1); })
       .join(' ');
   }
+  var CATEGORY_TITLE_LOOKUP = Object.create(null);
 
   function populateCategoryLookup(data) {
     if (!data || typeof data !== 'object') return;
