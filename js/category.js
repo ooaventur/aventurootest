@@ -83,9 +83,20 @@
     return slugs;
   }
 
-  function resolvePostCategorySlug(post) {
+  function resolvePostCategorySlug(post, preferredSlug) {
     var slugs = resolvePostCategorySlugs(post);
-    return slugs.length ? slugs[0] : '';
+    if (!slugs.length) return '';
+
+    var preferred = preferredSlug ? slugify(preferredSlug) : '';
+    if (preferred) {
+      for (var i = 0; i < slugs.length; i++) {
+        if (slugs[i] === preferred) {
+          return slugs[i];
+        }
+      }
+    }
+
+    return slugs[0];
   }
 
 
@@ -364,7 +375,8 @@
         '</a>' +
       '</figure>';
     var categoryName = resolvePostCategoryLabel(p);
-    var categorySlug = resolvePostCategorySlug(p);
+    var preferredSlug = ctx && ctx.cat ? ctx.cat : '';
+    var categorySlug = resolvePostCategorySlug(p, preferredSlug);
     var categoryLink = categorySlug ? buildCategoryUrl(categorySlug) : '#';
     var categoryHtml = categoryName
       ? '<div class="category"><a href="' + escapeHtml(categoryLink) + '">' + escapeHtml(categoryName) + '</a></div>'
@@ -408,7 +420,8 @@
     var title = escapeHtml(post && post.title ? post.title : '');
     var rawLabel = resolvePostCategoryLabel(post);
     var category = escapeHtml(rawLabel);
-    var categorySlug = resolvePostCategorySlug(post);
+    var preferredSlug = ctx && ctx.cat ? ctx.cat : '';
+    var categorySlug = resolvePostCategorySlug(post, preferredSlug);
     var categoryHref = categorySlug ? buildCategoryUrl(categorySlug) : '#';
     var categoryAnchor = category
       ? '<div class="category"><a href="' + escapeHtml(categoryHref) + '">' + category + '</a></div>'
@@ -549,7 +562,8 @@
       });
       var filtered = ctx.cat
         ? all.filter(function (p) {
-          return resolvePostCategorySlug(p) === ctx.cat;
+          var slugs = resolvePostCategorySlugs(p);
+          return slugs.indexOf(ctx.cat) !== -1;
         })
         : all.slice();
 
