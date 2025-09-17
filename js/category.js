@@ -177,13 +177,23 @@
     }
 
     if (!cat) {
-      var trimmedPath = location.pathname.replace(/\/+$/, '');
+      var pathName = window.location && window.location.pathname
+        ? window.location.pathname
+        : '';
+      var trimmedPath = pathName.replace(/\/+$/, '');
       var segments = trimmedPath.split('/');
       for (var i = segments.length - 1; i >= 0; i--) {
         var segment = segments[i];
         if (!segment) continue;
 
-        var cleaned = segment.replace(/\.html?$/i, '');
+        var decoded = segment;
+        try {
+          decoded = decodeURIComponent(segment);
+        } catch (err) {
+          // ignore decode errors and fall back to the raw segment
+        }
+
+        var cleaned = decoded.replace(/\.html?$/i, '');
         if (!cleaned || /^index$/i.test(cleaned)) continue;
 
         var derived = slugify(cleaned);
