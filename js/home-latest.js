@@ -1,37 +1,16 @@
 (function () {
-  var POSTS_SOURCES = ['data/posts.json', '/data/posts.json'];
+  var POSTS_SOURCES = ['/data/posts.json', 'data/posts.json'];
   var BANNERS_SOURCES = ['data/banners.json', '/data/banners.json'];
   var MAX_ARTICLES = 12;
   var BANNER_FREQUENCY = 4;
   var DEFAULT_IMAGE = '/images/logo.png';
   var DEFAULT_BANNER_IMAGE = '/images/ads.png';
 
-  function fetchSequential(urls) {
-    return new Promise(function (resolve, reject) {
-      (function tryIndex(index) {
-        if (index >= urls.length) {
-          reject(new Error('No matching resource found'));
-          return;
-        }
-        fetch(urls[index], { cache: 'no-store' })
-          .then(function (response) {
-            if (response.ok) {
-              resolve(response);
-              return;
-            }
-            tryIndex(index + 1);
-          })
-          .catch(function () {
-            tryIndex(index + 1);
-          });
-      })(0);
-    });
-  }
-
   function loadJson(urls) {
-    return fetchSequential(urls).then(function (response) {
-      return response.json();
-    });
+    if (!window.AventurOODataLoader || typeof window.AventurOODataLoader.fetchSequential !== 'function') {
+      return Promise.reject(new Error('Data loader is not available'));
+    }
+    return window.AventurOODataLoader.fetchSequential(urls);
   }
 
   function slugify(value) {
