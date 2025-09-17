@@ -102,7 +102,6 @@
       { "title": "Multi-merchant",      "href": "/shopping/multi-merchant" }
     ]},
 
-    { "title": "About",   "href": "page.html" },
-    { "title": "Contact", "href": "contact.html" }
+    { "title": "About",   "href": "page.html" }
   ]
 }
