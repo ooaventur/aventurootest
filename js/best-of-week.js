@@ -1,26 +1,7 @@
 (function () {
-  var POSTS_SOURCES = ['data/posts.json', '/data/posts.json'];
+  var POSTS_SOURCES = ['/data/posts.json', 'data/posts.json'];
   var BEST_OF_WEEK_SOURCES = ['data/best-of-week.json', '/data/best-of-week.json'];
   var DEFAULT_IMAGE = '/images/logo.png';
-
-  function fetchSequential(urls) {
-    return new Promise(function (resolve, reject) {
-      (function tryI(i) {
-        if (i >= urls.length) {
-          reject(new Error('No matching resource found'));
-          return;
-        }
-        fetch(urls[i], { cache: 'no-store' })
-          .then(function (response) {
-            if (response.ok) return resolve(response);
-            tryI(i + 1);
-          })
-          .catch(function () {
-            tryI(i + 1);
-          });
-      })(0);
-    });
-  }
 
   function slugify(str) {
     return (str || '')
@@ -170,9 +151,10 @@
   }
 
   function loadJson(urls) {
-    return fetchSequential(urls).then(function (response) {
-      return response.json();
-    });
+    if (!window.AventurOODataLoader || typeof window.AventurOODataLoader.fetchSequential !== 'function') {
+      return Promise.reject(new Error('Data loader is not available'));
+    }
+    return window.AventurOODataLoader.fetchSequential(urls);
   }
 
   function init() {
