@@ -17,7 +17,19 @@
   var DEFAULT_IMAGE = basePath.resolve ? basePath.resolve('/images/logo.png') : '/images/logo.png';
   var HOME_URL = basePath.resolve ? basePath.resolve('/') : '/';
   var POSTS_SOURCES = ['/data/posts.json', 'data/posts.json'];
+  
   var TAXONOMY_SOURCES = ['/data/taxonomy.json', 'data/taxonomy.json'];
+    function addSlug(normalized) {
+      if (!normalized || seen[normalized]) return;
+      seen[normalized] = true;
+      slugs.push(normalized);
+
+      var parentSlugs = CATEGORY_PARENT_LOOKUP[normalized];
+      if (!parentSlugs || !parentSlugs.length) return;
+      for (var i = 0; i < parentSlugs.length; i++) {
+        addSlug(parentSlugs[i]);
+      }
+    }
 
   function fetchSequential(urls) {
     if (!window.AventurOODataLoader || typeof window.AventurOODataLoader.fetchSequential !== 'function') {
@@ -41,15 +53,25 @@
 
     var slugs = [];
     var seen = Object.create(null);
+    
+    function addSlug(normalized) {
+      if (!normalized || seen[normalized]) return;
+      seen[normalized] = true;
+      slugs.push(normalized);
+
+      var parentSlugs = CATEGORY_PARENT_LOOKUP[normalized];
+      if (!parentSlugs || !parentSlugs.length) return;
+      for (var i = 0; i < parentSlugs.length; i++) {
+        addSlug(parentSlugs[i]);
+      }
+    }
 
     function appendSlug(value) {
       if (value == null) return;
       var trimmed = String(value).trim();
       if (!trimmed) return;
       var normalized = slugify(trimmed);
-      if (!normalized || seen[normalized]) return;
-      seen[normalized] = true;
-      slugs.push(normalized);
+      addSlug(normalized);
     }
 
     var rawSlug = post.category_slug;
@@ -158,7 +180,21 @@
       .map(function (w) { return w.charAt(0).toUpperCase() + w.slice(1); })
       .join(' ');
   }
-  var CATEGORY_TITLE_LOOKUP = Object.create(null);
+  function normalizeGroupValues(groupValue) {
+    if (groupValue == null) return [];
+    var values = Array.isArray(groupValue) ? groupValue : [groupValue];
+    var result = [];
+    for (var i = 0; i < values.length; i++) {
+      var value = values[i];
+      if (value == null) continue;
+      var normalized = slugify(value);
+      if (!normalized) continue;
+      if (result.indexOf(normalized) === -1) {
+        result.push(normalized);
+      }
+    }
+    return result;
+  }
 
   function populateCategoryLookup(data) {
     if (!data || typeof data !== 'object') return;
@@ -172,6 +208,28 @@
         title = titleize(slug);
       }
       CATEGORY_TITLE_LOOKUP[slug] = title;
+
+      var parents = normalizeGroupValues(entry.group);
+      var extraParents = normalizeGroupValues(entry.groups);
+      for (var i = 0; i < extraParents.length; i++) {
+        var parentSlug = extraParents[i];
+        if (parents.indexOf(parentSlug) === -1) {
+          parents.push(parentSlug);
+        }
+      }
+
+      if (!CATEGORY_PARENT_LOOKUP[slug]) {
+        CATEGORY_PARENT_LOOKUP[slug] = parents;
+      } else {
+        var existing = CATEGORY_PARENT_LOOKUP[slug];
+        for (var j = 0; j < parents.length; j++) {
+          var value = parents[j];
+          if (existing.indexOf(value) === -1) {
+            existing.push(value);
+          }
+        }
+      }
+
     });
   }
 
