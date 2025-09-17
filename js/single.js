@@ -2,18 +2,14 @@
   const params = new URLSearchParams(location.search);
   const slug = params.get('slug') || '';
 
-  const POSTS_SOURCES = ['data/posts.json', '/data/posts.json'];
+  const POSTS_SOURCES = ['/data/posts.json', 'data/posts.json'];
   const articleContainer = document.querySelector('.main-article');
 
   function fetchSequential(urls) {
-    return new Promise((resolve, reject) => {
-      (function tryI(i) {
-        if (i >= urls.length) return reject(new Error('No posts.json found'));
-        fetch(urls[i], { cache: 'no-store' })
-          .then(r => (r.ok ? resolve(r) : tryI(i + 1)))
-          .catch(() => tryI(i + 1));
-      })(0);
-    });
+    if (!window.AventurOODataLoader || typeof window.AventurOODataLoader.fetchSequential !== 'function') {
+      return Promise.reject(new Error('Data loader is not available'));
+    }
+    return window.AventurOODataLoader.fetchSequential(urls);
   }
 
   function slugify(value) {
