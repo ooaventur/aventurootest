@@ -15,8 +15,8 @@
   var TAG_LIMIT = 10;
   var HOT_NEWS_LIMIT = 6;
   var FALLBACK_MESSAGE = 'We\'re sorry, but the latest stories are unavailable right now. Please try again soon.';
-  var DEFAULT_CATEGORY_SLUG = 'news';
-  var DEFAULT_CATEGORY_LABEL = 'News';
+  var DEFAULT_CATEGORY_SLUG = 'top-stories';
+  var DEFAULT_CATEGORY_LABEL = 'Top Stories';
   var DEFAULT_IMAGE = basePath.resolve ? basePath.resolve('/images/logo.png') : '/images/logo.png';
 
   function fetchSequential(urls) {
@@ -99,7 +99,7 @@
   function createHotNewsArticle(post) {
     if (!post || !post.slug || !post.title) return null;
     var timestamp = getPostTimestamp(post);
-    var categoryInfo = normalizeTag(post.subcategory) || normalizeTag(post.category);
+    var categoryInfo = normalizeTag(post.category);
     if (!categoryInfo) {
       categoryInfo = {
         slug: DEFAULT_CATEGORY_SLUG,
@@ -192,11 +192,6 @@
       } else if (post.category != null) {
         tags.push(post.category);
       }
-      if (Array.isArray(post.subcategory)) {
-        tags = tags.concat(post.subcategory);
-      } else if (post.subcategory != null) {
-        tags.push(post.subcategory);
-      }
 
       var seen = {};
       for (var i = 0; i < tags.length; i++) {
@@ -233,7 +228,9 @@
     items.forEach(function (item) {
       var li = document.createElement('li');
       var link = document.createElement('a');
-      link.href = '/category.html?cat=' + encodeURIComponent(item.slug);
+      link.href = basePath.categoryUrl
+        ? basePath.categoryUrl(item.slug)
+        : '/category.html?cat=' + encodeURIComponent(item.slug);
       link.textContent = item.label;
       li.appendChild(link);
       fragment.appendChild(li);
