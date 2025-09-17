@@ -1,5 +1,5 @@
 (function () {
-  var POSTS_SOURCES = ['data/posts.json', '/data/posts.json'];
+  var POSTS_SOURCES = ['/data/posts.json', 'data/posts.json'];
   var TAG_LIMIT = 10;
   var HOT_NEWS_LIMIT = 6;
   var FALLBACK_MESSAGE = 'We\'re sorry, but the latest stories are unavailable right now. Please try again soon.';
@@ -8,28 +8,10 @@
   var DEFAULT_IMAGE = '/images/logo.png';
 
   function fetchSequential(urls) {
-    if (typeof window.fetch !== 'function') {
-      return Promise.reject(new Error('Fetch API is not available'));
+    if (!window.AventurOODataLoader || typeof window.AventurOODataLoader.fetchSequential !== 'function') {
+      return Promise.reject(new Error('Data loader is not available'));
     }
-    return new Promise(function (resolve, reject) {
-      (function tryI(i) {
-        if (i >= urls.length) {
-          reject(new Error('No matching resource found'));
-          return;
-        }
-        fetch(urls[i], { cache: 'no-store' })
-          .then(function (response) {
-            if (!response || !response.ok) throw new Error('Failed request');
-            return response.json();
-          })
-          .then(function (json) {
-            resolve(json);
-          })
-          .catch(function () {
-            tryI(i + 1);
-          });
-      })(0);
-    });
+    return window.AventurOODataLoader.fetchSequential(urls);
   }
 
   function normalizeTag(tag) {
