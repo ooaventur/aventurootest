@@ -1,4 +1,12 @@
 (function () {
+  var basePath = window.AventurOOBasePath || {
+    sectionUrl: function (slug) {
+      if (!slug) return '#';
+      var normalized = String(slug).trim().replace(/^\/+|\/+$/g, '');
+      return normalized ? '/' + normalized + '/' : '#';
+    }
+  };
+
   // --- Helpers ---
   function $(sel, root){ return (root||document).querySelector(sel); }
   function $all(sel, root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
@@ -24,24 +32,7 @@
 
   // Fallback nëse s’ka cat
   if (!catSlug) { catSlug = 'news'; }
-
-  // Burimet e mundshme për taxonomy
-  var TAXO_SOURCES = [
-    'data/taxonomy.json',
-    '/data/taxonomy.json',
-    'data/toxanomi.json',
-    '/data/toxanomi.json'
-  ];
-
-  function fetchSequential(urls) {
-    return new Promise(function(resolve, reject){
-      (function tryI(i){
-        if (i >= urls.length) return reject(new Error('No taxonomy file found'));
-        fetch(urls[i], { cache: 'no-store' })
-          .then(function(r){ return r.ok ? resolve(r) : tryI(i+1); })
-          .catch(function(){ tryI(i+1); });
-      })(0);
-    });
+@@ -45,49 +53,50 @@
   }
 
   function findInTaxonomy(tax, catSlug, subSlug){
@@ -67,7 +58,8 @@
     // Opsionale: vendos kategorinë si etiketë te artikujt demo
     $all('.article-list .details .detail .category a').forEach(function(a){
       a.textContent = catTitle || 'News';
-      a.setAttribute('href', '/' + catSlug);
+      var href = basePath.sectionUrl ? basePath.sectionUrl(catSlug) : '/' + catSlug;
+      a.setAttribute('href', href);
     });
   }
 
