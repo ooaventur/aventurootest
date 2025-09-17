@@ -3,6 +3,7 @@
     resolve: function (value) { return value; },
     resolveAll: function (values) { return Array.isArray(values) ? values.slice() : []; },
     articleUrl: function (slug) { return slug ? '/article.html?slug=' + encodeURIComponent(slug) : '#'; },
+    categoryUrl: function (slug) { return slug ? '/category.html?cat=' + encodeURIComponent(slug) : '#'; },
     sectionUrl: function (slug) {
       if (!slug) return '#';
       var normalized = String(slug).trim().replace(/^\/+|\/+$/g, '');
@@ -82,7 +83,11 @@
 
   function categoryUrl(category) {
     var slug = slugify(category);
-    return slug ? (basePath.sectionUrl ? basePath.sectionUrl(slug) : '/' + slug + '/') : '#';
+    if (!slug) return '#';
+    if (basePath.categoryUrl) {
+      return basePath.categoryUrl(slug);
+    }
+    return '/category.html?cat=' + encodeURIComponent(slug);
   }
 
   function pickArticles(posts, limit) {
