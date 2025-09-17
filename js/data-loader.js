@@ -3,13 +3,32 @@
 
   var fetch = global.fetch;
 
-  function normalizeUrls(urls) {
-    if (!Array.isArray(urls)) return [];
-    return urls
-      .map(function (url) { return typeof url === 'string' ? url.trim() : ''; })
-      .filter(function (url) { return !!url; });
+  function applyBasePath(url) {
+    if (!url) return '';
+    var helper = global.AventurOOBasePath;
+    if (!helper || typeof helper.resolve !== 'function') {
+      return url;
+    }
+    return helper.resolve(url);
   }
 
+  function normalizeUrls(urls) {
+    if (!Array.isArray(urls)) return [];
+    var seen = Object.create(null);
+    var list = [];
+
+    urls
+      .map(function (url) { return typeof url === 'string' ? url.trim() : ''; })
+      .forEach(function (url) {
+        if (!url) return;
+        var resolved = applyBasePath(url);
+        if (!resolved || seen[resolved]) return;
+        seen[resolved] = true;
+        list.push(resolved);
+      });
+
+    return list;
+  }
   function isJsonResponse(response) {
     if (!response || !response.headers || typeof response.headers.get !== 'function') {
       return false;
