@@ -47,9 +47,7 @@
       return;
     }
     try {
-      const res = await fetchSequential(POSTS_SOURCES);
-      if (!res.ok) throw new Error('Network response was not ok');
-      const data = await res.json();
+   const data = await fetchSequential(POSTS_SOURCES);
       const posts = Array.isArray(data) ? data : [];
       const post = posts.find(p => p && p.slug === slug);
       if (!post) {
