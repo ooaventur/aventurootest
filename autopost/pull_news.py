@@ -69,7 +69,7 @@ SEEN_DB = ROOT / "autopost" / SEEN_DB_FILENAME
 
 MAX_PER_CAT = _env_int("MAX_PER_CAT", 15)
 MAX_TOTAL   = _env_int("MAX_TOTAL", 0)
-SUMMARY_WORDS = _env_int("SUMMARY_WORDS", 1500)  # kept for compatibility
+SUMMARY_WORDS = _env_int("SUMMARY_WORDS", 750)  # kept for compatibility
 TARGET_WORDS = _env_int("TARGET_WORDS", SUMMARY_WORDS)
 MAX_POSTS_PERSIST = _env_int("MAX_POSTS_PERSIST", 3000)
 HTTP_TIMEOUT = _env_int("HTTP_TIMEOUT", 18)
@@ -97,7 +97,7 @@ TRACKING_PARAM_NAMES = {
 }
 
 # Image options (for cover only)
-IMG_TARGET_WIDTH = int(os.getenv("IMG_TARGET_WIDTH", "1600"))
+IMG_TARGET_WIDTH = int(os.getenv("IMG_TARGET_WIDTH", "1200"))
 IMG_PROXY = os.getenv("IMG_PROXY", "https://images.weserv.nl/?url=")  # "" if you don’t want a proxy
 FORCE_PROXY = os.getenv("FORCE_PROXY", "0")  # "1" => route every cover via proxy
 
