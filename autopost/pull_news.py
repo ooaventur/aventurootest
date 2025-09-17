@@ -368,6 +368,64 @@ def _proxy_if_mixed(u: str) -> str:
     return u
 def _bump_path_width(u: str, target: int) -> str:
     """Upgrade numeric path segments that likely encode the image width."""
+
+    def _has_size_keyword(segment: str) -> bool:
+        if not segment:
+            return False
+        segment = segment.lower()
+        for key in size_keywords:
+            pattern = fr"(?:^|[-_]){re.escape(key)}(?:[-_]|$)"
+            if re.search(pattern, segment):
+                return True
+        return False
+
+    def _is_date_like(idx: int) -> bool:
+        def _int_or_none(raw: str):
+            if raw is None or not raw.isdigit():
+                return None
+            try:
+                return int(raw)
+            except ValueError:
+                return None
+
+        seg = segments[idx]
+        if not seg or not seg.isdigit():
+            return False
+
+        year = _int_or_none(seg)
+        if year is not None and len(seg) == 4 and 1900 <= year <= 2100:
+            month = _int_or_none(segments[idx + 1]) if idx + 1 < len(segments) else None
+            day = _int_or_none(segments[idx + 2]) if idx + 2 < len(segments) else None
+            if month is not None and 1 <= month <= 12:
+                if day is None:
+                    return True
+                if 1 <= day <= 31:
+                    return True
+        if idx > 0:
+            prev = segments[idx - 1]
+            prev_val = _int_or_none(prev)
+            if prev_val is not None and len(prev) == 4 and 1900 <= prev_val <= 2100:
+                val = _int_or_none(seg)
+                if val is not None and 1 <= val <= 12:
+                    return True
+        if idx > 1:
+            prev_prev = segments[idx - 2]
+            prev_prev_val = _int_or_none(prev_prev)
+            prev = segments[idx - 1]
+            prev_val = _int_or_none(prev)
+            cur_val = _int_or_none(seg)
+            if (
+                prev_prev_val is not None
+                and len(prev_prev) == 4
+                and 1900 <= prev_prev_val <= 2100
+                and prev_val is not None
+                and 1 <= prev_val <= 12
+                and cur_val is not None
+                and 1 <= cur_val <= 31
+            ):
+                return True
+        return False
+
     try:
         parsed = urlparse(u)
     except Exception:
@@ -379,21 +437,23 @@ def _bump_path_width(u: str, target: int) -> str:
 
     segments = path.split("/")
     size_keywords = {
-        "img",
-        "image",
-        "images",
-        "media",
-        "thumb",
-        "thumbnail",
         "resize",
         "resized",
+        "resizer",
+        "thumb",
+        "thumbs",
+        "thumbnail",
+        "thumbnails",
         "size",
         "sizes",
-        "standard",
         "width",
         "w",
         "crop",
         "quality",
+        "scaled",
+        "scale",
+        "fit",
+        "fill",
     }
     changed = False
 
@@ -407,20 +467,23 @@ def _bump_path_width(u: str, target: int) -> str:
         if value >= target or value == 0:
             continue
 
-        prev_seg = segments[idx - 1].lower() if idx > 0 else ""
-        next_seg = segments[idx + 1].lower() if idx + 1 < len(segments) else ""
-        next_next = segments[idx + 2].lower() if idx + 2 < len(segments) else ""
+        if _is_date_like(idx):
+            continue
 
-        looks_like_size = False
-        if any(key in prev_seg for key in size_keywords) or any(
-            key in next_seg for key in size_keywords
-        ):
-            looks_like_size = True
-        image_pattern = r"\.(?:jpe?g|png|gif|webp|avif)(?:\?.*)?$"
-        if re.search(image_pattern, next_seg) or re.search(image_pattern, next_next):
-            looks_like_size = True
+        prev_seg = segments[idx - 1] if idx > 0 else ""
+        next_seg = segments[idx + 1] if idx + 1 < len(segments) else ""
+        prev_prev_seg = segments[idx - 2] if idx > 1 else ""
+        next_next_seg = segments[idx + 2] if idx + 2 < len(segments) else ""
 
-        if not looks_like_size:
+        keyword_context = any(
+            _has_size_keyword(candidate)
+            for candidate in (prev_prev_seg, prev_seg, next_seg, next_next_seg)
+        )
+        if not keyword_context:
+            keyword_context = any(
+                _has_size_keyword(ancestor) for ancestor in segments[:idx]
+            )
+        if not keyword_context:
             continue
 
         segments[idx] = str(target)
