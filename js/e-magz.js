@@ -385,17 +385,29 @@ $(function(){
   }
 
   // browser
-	if($.browser.safari) {
-		$("head").append($("<link/>", {
-			rel: "stylesheet",
-			href: "css/safari.css"
-		}));
-	}else if($.browser.mozilla) {
-		$(".social li").each(function() {
-			$(this).find("rect").attr("width", "100%");
-			$(this).find("rect").attr("height", "100%");
-		});
-	}
+       var navigatorInfo = (typeof navigator !== 'undefined') ? navigator : null;
+        var userAgent = navigatorInfo && navigatorInfo.userAgent ? navigatorInfo.userAgent.toLowerCase() : '';
+        var isSafari = userAgent.indexOf('safari') > -1 &&
+                userAgent.indexOf('chrome') === -1 &&
+                userAgent.indexOf('crios') === -1 &&
+                userAgent.indexOf('android') === -1 &&
+                userAgent.indexOf('fxios') === -1 &&
+                userAgent.indexOf('edg') === -1 &&
+                userAgent.indexOf('opr') === -1;
+        var isFirefox = userAgent.indexOf('firefox') > -1 || userAgent.indexOf('fxios') > -1;
+
+        if(isSafari) {
+                var safariStylesheetUrl = basePath && typeof basePath.resolve === 'function' ? basePath.resolve('/css/safari.css') : '/css/safari.css';
+                $("head").append($("<link/>", {
+                        rel: "stylesheet",
+                        href: safariStylesheetUrl
+                }));
+        }else if(isFirefox) {
+                $(".social li").each(function() {
+                        $(this).find("rect").attr("width", "100%");
+                        $(this).find("rect").attr("height", "100%");
+                });
+        }
 
 function bestOfTheWeek() {
 var $carousel = $(".best-of-the-week .carousel-1");
