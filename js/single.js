@@ -3,10 +3,9 @@
     resolve: (value) => value,
     resolveAll: (values) => (Array.isArray(values) ? values.slice() : []),
     articleUrl: (slugValue) => `/article.html?slug=${encodeURIComponent(slugValue)}`,
-    categoryUrl: (slugValue, subSlug) => {
+    categoryUrl: (slugValue) => {
       if (!slugValue) return '#';
-      const query = `?cat=${encodeURIComponent(slugValue)}` + (subSlug ? `&sub=${encodeURIComponent(subSlug)}` : '');
-      return `/category.html${query}`;
+      return `/category.html?cat=${encodeURIComponent(slugValue)}`;
     }
   };
 
@@ -542,7 +541,6 @@
 
     const currentSlug = currentPost.slug;
     const currentCat = slugify(currentPost.category);
-    const currentSub = slugify(currentPost.subcategory || currentPost.sub || '');
 
     const candidates = [];
 
@@ -553,13 +551,6 @@
         if (candidates.some(existing => existing.slug === post.slug)) return;
         candidates.push(post);
       });
-    }
-
-    if (currentCat && currentSub) {
-      pushCandidates(list.filter(post =>
-        slugify(post.category) === currentCat &&
-        slugify(post.subcategory || post.sub || '') === currentSub
-      ));
     }
 
     if (currentCat) {
@@ -628,13 +619,10 @@
       catDiv.className = 'category';
       const catLink = document.createElement('a');
       const catSlug = slugify(post.category);
-      const subSlug = slugify(post.subcategory || post.sub || '');
       if (catSlug) {
         catLink.href = basePath.categoryUrl
-          ? basePath.categoryUrl(catSlug, subSlug)
-          : (subSlug
-            ? `/category.html?cat=${encodeURIComponent(catSlug)}&sub=${encodeURIComponent(subSlug)}`
-            : `/category.html?cat=${encodeURIComponent(catSlug)}`);
+          ? basePath.categoryUrl(catSlug)
+          : `/category.html?cat=${encodeURIComponent(catSlug)}`;
       } else {
         catLink.href = '#';
       }
