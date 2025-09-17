@@ -2,7 +2,18 @@
   const params = new URLSearchParams(location.search);
   const slug = params.get('slug') || '';
 
-  const POSTS_SOURCES = ['/data/posts.json', 'data/posts.json'];
+  const basePath = window.AventurOOBasePath || {
+    resolve: (value) => value,
+    resolveAll: (values) => (Array.isArray(values) ? values.slice() : []),
+    articleUrl: (slugValue) => `/article.html?slug=${encodeURIComponent(slugValue)}`,
+    categoryUrl: (slugValue, subSlug) => {
+      if (!slugValue) return '#';
+      const query = `?cat=${encodeURIComponent(slugValue)}` + (subSlug ? `&sub=${encodeURIComponent(subSlug)}` : '');
+      return `/category.html${query}`;
+    }
+  };
+
+  const POSTS_SOURCES = basePath.resolveAll ? basePath.resolveAll(['/data/posts.json', 'data/posts.json']) : ['/data/posts.json', 'data/posts.json'];
   const articleContainer = document.querySelector('.main-article');
 
   function fetchSequential(urls) {
@@ -119,7 +130,7 @@
 
     const coverImg = document.querySelector('.main-article .featured img');
     if (coverImg) {
-      const placeholderSrc = '/images/logo.png';
+      const placeholderSrc = basePath.resolve ? basePath.resolve('/images/logo.png') : '/images/logo.png';
       let attemptedBodyFallback = false;
       let attemptedPlaceholder = false;
       const handleCoverError = () => {
@@ -150,7 +161,7 @@
       coverImg.alt = (post.title || 'Cover') + (post.source_name ? (' — ' + post.source_name) : '');
 
       if (post.cover) {
-        coverImg.src = post.cover;
+        coverImg.src = basePath.resolve ? basePath.resolve(post.cover) : post.cover;
       } else {
         coverImg.removeEventListener('error', handleCoverError);
         coverImg.remove();
@@ -260,7 +271,7 @@
     const article = document.createElement('article');
     article.className = 'article related col-md-6 col-sm-6 col-xs-12';
 
-    const articleUrl = '/article.html?slug=' + encodeURIComponent(post.slug);
+  const articleUrl = basePath.articleUrl ? basePath.articleUrl(post.slug) : '/article.html?slug=' + encodeURIComponent(post.slug);
 
     const inner = document.createElement('div');
     inner.className = 'inner';
@@ -277,7 +288,7 @@
       img.decoding = 'async';
       img.referrerPolicy = 'no-referrer-when-downgrade';
     } else {
-      img.src = '/images/logo.png';
+      img.src = basePath.resolve ? basePath.resolve('/images/logo.png') : '/images/logo.png';
       img.alt = 'AventurOO Logo';
     }
     figureLink.appendChild(img);
@@ -305,9 +316,11 @@
       const catSlug = slugify(post.category);
       const subSlug = slugify(post.subcategory || post.sub || '');
       if (catSlug) {
-        catLink.href = subSlug
-          ? `/category.html?cat=${encodeURIComponent(catSlug)}&sub=${encodeURIComponent(subSlug)}`
-          : `/category.html?cat=${encodeURIComponent(catSlug)}`;
+        catLink.href = basePath.categoryUrl
+          ? basePath.categoryUrl(catSlug, subSlug)
+          : (subSlug
+            ? `/category.html?cat=${encodeURIComponent(catSlug)}&sub=${encodeURIComponent(subSlug)}`
+            : `/category.html?cat=${encodeURIComponent(catSlug)}`);
       } else {
         catLink.href = '#';
       }
