@@ -1,15 +1,11 @@
 (function () {
-  var POSTS_SOURCES = ['data/posts.json', '/data/posts.json'];
+  var POSTS_SOURCES = ['/data/posts.json', 'data/posts.json'];
 
   function fetchSequential(urls) {
-    return new Promise(function(resolve, reject){
-      (function tryI(i){
-        if (i >= urls.length) return reject(new Error('No posts.json found'));
-        fetch(urls[i], { cache: 'no-store' })
-          .then(function(r){ return r.ok ? resolve(r) : tryI(i + 1); })
-          .catch(function(){ tryI(i + 1); });
-      })(0);
-    });
+    if (!window.AventurOODataLoader || typeof window.AventurOODataLoader.fetchSequential !== 'function') {
+      return Promise.reject(new Error('Data loader is not available'));
+    }
+    return window.AventurOODataLoader.fetchSequential(urls);
   }
 
   function slugify(s) {
@@ -274,7 +270,6 @@
   patchHeader(ctx.cat, ctx.sub);
 
   fetchSequential(POSTS_SOURCES)
-    .then(function (r) { return r.json(); })
     .then(function (all) {
       all = Array.isArray(all) ? all : [];
       var allSorted = all.slice().sort(function (a, b) {
