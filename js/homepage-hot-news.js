@@ -1,11 +1,23 @@
 (function () {
+  var basePath = window.AventurOOBasePath || {
+    resolve: function (value) { return value; },
+    resolveAll: function (values) { return Array.isArray(values) ? values.slice() : []; },
+    articleUrl: function (slug) { return slug ? '/article.html?slug=' + encodeURIComponent(slug) : '#'; },
+    categoryUrl: function (slug) { return slug ? '/category.html?cat=' + encodeURIComponent(slug) : '#'; },
+    sectionUrl: function (slug) {
+      if (!slug) return '#';
+      var normalized = String(slug).trim().replace(/^\/+|\/+$/g, '');
+      return normalized ? '/' + normalized + '/' : '#';
+    }
+  };
+
   var POSTS_SOURCES = ['/data/posts.json', 'data/posts.json'];
   var TAG_LIMIT = 10;
   var HOT_NEWS_LIMIT = 6;
   var FALLBACK_MESSAGE = 'We\'re sorry, but the latest stories are unavailable right now. Please try again soon.';
   var DEFAULT_CATEGORY_SLUG = 'news';
   var DEFAULT_CATEGORY_LABEL = 'News';
-  var DEFAULT_IMAGE = '/images/logo.png';
+  var DEFAULT_IMAGE = basePath.resolve ? basePath.resolve('/images/logo.png') : '/images/logo.png';
 
   function fetchSequential(urls) {
     if (!window.AventurOODataLoader || typeof window.AventurOODataLoader.fetchSequential !== 'function') {
@@ -77,7 +89,9 @@
       var value = sources[i];
       if (typeof value !== 'string') continue;
       var trimmed = value.trim();
-      if (trimmed) return trimmed;
+      if (trimmed) {
+        return basePath.resolve ? basePath.resolve(trimmed) : trimmed;
+      }
     }
     return DEFAULT_IMAGE;
   }
@@ -98,7 +112,7 @@
       figure.classList.add('no-cover');
     }
     var figureLink = document.createElement('a');
-    figureLink.href = '/article.html?slug=' + encodeURIComponent(post.slug);
+    figureLink.href = basePath.articleUrl ? basePath.articleUrl(post.slug) : '/article.html?slug=' + encodeURIComponent(post.slug);
     var img = document.createElement('img');
     img.src = coverSrc;
     img.alt = post.title;
@@ -111,7 +125,7 @@
 
     var titleHeading = document.createElement('h1');
     var titleLink = document.createElement('a');
-    titleLink.href = '/article.html?slug=' + encodeURIComponent(post.slug);
+    titleLink.href = basePath.articleUrl ? basePath.articleUrl(post.slug) : '/article.html?slug=' + encodeURIComponent(post.slug);
     titleLink.textContent = post.title;
     titleHeading.appendChild(titleLink);
     padding.appendChild(titleHeading);
@@ -122,7 +136,7 @@
     var categoryDiv = document.createElement('div');
     categoryDiv.className = 'category';
     var categoryLink = document.createElement('a');
-    categoryLink.href = '/category.html?cat=' + encodeURIComponent(categoryInfo.slug);
+    categoryLink.href = basePath.categoryUrl ? basePath.categoryUrl(categoryInfo.slug) : '/category.html?cat=' + encodeURIComponent(categoryInfo.slug);
     categoryLink.textContent = categoryInfo.label;
     categoryDiv.appendChild(categoryLink);
     detail.appendChild(categoryDiv);
