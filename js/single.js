@@ -3,6 +3,7 @@
   const slug = params.get('slug') || '';
 
   const POSTS_SOURCES = ['data/posts.json', '/data/posts.json'];
+  const articleContainer = document.querySelector('.main-article');
 
   function fetchSequential(urls) {
     return new Promise((resolve, reject) => {
