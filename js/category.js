@@ -17,9 +17,7 @@
   var DEFAULT_IMAGE = basePath.resolve ? basePath.resolve('/images/logo.png') : '/images/logo.png';
   var HOME_URL = basePath.resolve ? basePath.resolve('/') : '/';
   var POSTS_SOURCES = ['/data/posts.json', 'data/posts.json'];
-  var TAXONOMY_SOURCES = ['/data/taxonomy.json', 'data/taxonomy.json'];
-  var CATEGORY_TITLE_LOOKUP = Object.create(null);
-  
+
   function fetchSequential(urls) {
     if (!window.AventurOODataLoader || typeof window.AventurOODataLoader.fetchSequential !== 'function') {
       return Promise.reject(new Error('Data loader is not available'));
@@ -37,28 +35,58 @@
       .replace(/[_\W]+/g, '-')       // gjithçka jo-alfanumerike ose _ -> -
       .replace(/^-+|-+$/g, '');
   }
-  function resolvePostCategorySlug(post) {
-    if (!post) return '';
+  function resolvePostCategorySlugs(post) {
+    if (!post) return [];
+
+    var slugs = [];
+    var seen = Object.create(null);
+
+    function appendSlug(value) {
+      if (value == null) return;
+      var trimmed = String(value).trim();
+      if (!trimmed) return;
+      var normalized = slugify(trimmed);
+      if (!normalized || seen[normalized]) return;
+      seen[normalized] = true;
+      slugs.push(normalized);
+    }
 
     var rawSlug = post.category_slug;
     if (rawSlug != null && String(rawSlug).trim()) {
-      var normalized = slugify(rawSlug);
-      if (normalized) return normalized;
+      appendSlug(rawSlug);
+
+      var rawSegments = String(rawSlug).split('/');
+      if (rawSegments.length > 1) {
+        var lastRawSegment = rawSegments[rawSegments.length - 1];
+        appendSlug(lastRawSegment);
+      }
     }
 
     var subcategory = post.subcategory;
-    if (subcategory != null && String(subcategory).trim()) {
-      var fromSub = slugify(subcategory);
-      if (fromSub) return fromSub;
+    appendSlug(subcategory);
+
+    if (subcategory != null && String(subcategory).indexOf('/') !== -1) {
+      var subSegments = String(subcategory).split('/');
+      var lastSubSegment = subSegments[subSegments.length - 1];
+      appendSlug(lastSubSegment);
     }
 
     var category = post.category;
-    if (category != null && String(category).trim()) {
-      return slugify(category);
+    appendSlug(category);
+    if (category != null && String(category).indexOf('/') !== -1) {
+      var categorySegments = String(category).split('/');
+      var lastCategorySegment = categorySegments[categorySegments.length - 1];
+      appendSlug(lastCategorySegment);
     }
 
-    return '';
+    return slugs;
   }
+
+  function resolvePostCategorySlug(post) {
+    var slugs = resolvePostCategorySlugs(post);
+    return slugs.length ? slugs[0] : '';
+  }
+
 
   var LABEL_PRIORITY_SUBCATEGORY = 1;
   var LABEL_PRIORITY_SLUG = 2;
