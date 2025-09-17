@@ -81,8 +81,8 @@ permalink: article.html
                         <aside id="sidebar-top-ad">
                           <div class="aside-body">
                             <figure class="ads">
-                              <a href="/single.html">
-                                <img src="/images/ad.png" alt="Advertisement">
+                              <a href="{{ '/single.html' | url }}">
+                                <img src="{{ '/images/ad.png' | url }}" alt="Advertisement">
                               </a>
                               <figcaption>Advertisement</figcaption>
                             </figure>
@@ -97,8 +97,8 @@ permalink: article.html
                         <aside id="sidebar-second-ad">
                           <div class="aside-body">
                             <figure class="ads">
-                              <a href="/single.html">
-                                <img src="/images/ad.png" alt="Advertisement">
+                              <a href="{{ '/single.html' | url }}">
+                                <img src="{{ '/images/ad.png' | url }}" alt="Advertisement">
                               </a>
                               <figcaption>Advertisement</figcaption>
                             </figure>
@@ -113,8 +113,8 @@ permalink: article.html
                         <aside id="sidebar-third-ad">
                           <div class="aside-body">
                             <figure class="ads">
-                              <a href="/single.html">
-                                <img src="/images/ad.png" alt="Advertisement">
+                              <a href="{{ '/single.html' | url }}">
+                                <img src="{{ '/images/ad.png' | url }}" alt="Advertisement">
                               </a>
                               <figcaption>Advertisement</figcaption>
                             </figure>
@@ -148,25 +148,53 @@ document.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById("breadcrumb");
   if (!container) return;
 
-  const parts = window.location.pathname
+  const helper = window.AventurOOBasePath || {
+    resolve: (value) => value,
+    basePath: ''
+  };
+
+  const rawParts = window.location.pathname
     .split("/")
     .filter(Boolean)
-    .filter(part => part.toLowerCase() !== "index.html");
+    .filter((part) => part.toLowerCase() !== "index.html");
 
-  let path = "";
-  const items = ['<li><a href="/">Home</a></li>'];
+  const baseSegments = (helper.basePath || '')
+    .split("/")
+    .filter(Boolean)
+    .map((segment) => segment.toLowerCase());
 
-  parts.forEach((p, idx) => {
-    path += `/${p}`;
-    const name = decodeURIComponent(p.replace(/[-_]/g, " "));
-    const isLast = idx === parts.length - 1;
-    items.push(
-      `<li${isLast ? ' class="active"' : ""}>` +
-      (isLast ? `${name}` : `<a href="${path}">${name}</a>`) +
-      `</li>`
-    );
+  const trimmedParts = rawParts.slice();
+  while (baseSegments.length && trimmedParts.length) {
+    if (trimmedParts[0].toLowerCase() === baseSegments[0]) {
+      trimmedParts.shift();
+      baseSegments.shift();
+    } else {
+      break;
+    }
+  }
+
+  const buildUrl = (segments) => {
+    if (!segments.length) {
+      return helper.resolve ? helper.resolve('/') : '/';
+    }
+    const path = '/' + segments.join('/');
+    return helper.resolve ? helper.resolve(path) : path;
+  };
+
+  const items = [`<li><a href="${buildUrl([])}">Home</a></li>`];
+  const current = [];
+
+  trimmedParts.forEach((segment, index) => {
+    current.push(segment);
+    const name = decodeURIComponent(segment.replace(/[-_]/g, ' '));
+    const isLast = index === trimmedParts.length - 1;
+    if (isLast) {
+      items.push(`<li class="active">${name}</li>`);
+    } else {
+      items.push(`<li><a href="${buildUrl(current)}">${name}</a></li>`);
+    }
   });
 
-  container.innerHTML = items.join("");
+  container.innerHTML = items.join('');
 });
 </script>
