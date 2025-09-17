@@ -22,7 +22,9 @@ class ResolveCoverUrlTests(unittest.TestCase):
             pull_news.resolve_cover_url(cover),
             pull_news.sanitize_img_url(cover),
         )
-
+    def test_wordpress_date_path_unchanged(self):
+        url = "https://example.com/2023/09/01/photo.jpg"
+        self.assertEqual(pull_news.sanitize_img_url(url), url)
 
 if __name__ == "__main__":
     unittest.main()
