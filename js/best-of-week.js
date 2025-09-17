@@ -127,7 +127,11 @@
   function categoryUrl(category) {
     if (!category) return '#';
     var slug = slugify(category);
-    return slug ? (basePath.sectionUrl ? basePath.sectionUrl(slug) : '/' + slug + '/') : '#';
+    if (!slug) return '#';
+    if (basePath.categoryUrl) {
+      return basePath.categoryUrl(slug);
+    }
+    return '/category.html?cat=' + encodeURIComponent(slug);
   }
 
   function createArticle(data) {
