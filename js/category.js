@@ -35,7 +35,55 @@
       .replace(/[_\W]+/g, '-')       // gjithçka jo-alfanumerike ose _ -> -
       .replace(/^-+|-+$/g, '');
   }
+  function resolvePostCategorySlug(post) {
+    if (!post) return '';
 
+    var rawSlug = post.category_slug;
+    if (rawSlug != null && String(rawSlug).trim()) {
+      var normalized = slugify(rawSlug);
+      if (normalized) return normalized;
+    }
+
+    var subcategory = post.subcategory;
+    if (subcategory != null && String(subcategory).trim()) {
+      var fromSub = slugify(subcategory);
+      if (fromSub) return fromSub;
+    }
+
+    var category = post.category;
+    if (category != null && String(category).trim()) {
+      return slugify(category);
+    }
+
+    return '';
+  }
+
+  function resolvePostCategoryLabel(post) {
+    if (!post) return '';
+
+    var subcategory = post.subcategory;
+    if (subcategory != null && String(subcategory).trim()) {
+      return String(subcategory).trim();
+    }
+
+    var rawSlug = post.category_slug;
+    if (rawSlug != null && String(rawSlug).trim()) {
+      var normalized = slugify(rawSlug);
+      if (normalized) {
+        return titleize(normalized);
+      }
+      return String(rawSlug).trim();
+    }
+
+    var category = post.category;
+    if (category != null && String(category).trim()) {
+      return String(category).trim();
+    }
+
+    return '';
+  }
+
+  
   function titleize(slug) {
     return (slug || '')
       .split('-')
@@ -197,8 +245,8 @@
           '<img src="' + escapeHtml(coverSrc) + '" alt="' + escapeHtml(coverAlt) + '">' +
         '</a>' +
       '</figure>';
-    var categoryName = p && p.category ? String(p.category) : '';
-    var categorySlug = slugify(categoryName);
+    var categoryName = resolvePostCategoryLabel(p);
+    var categorySlug = resolvePostCategorySlug(p);
     var categoryLink = categorySlug ? buildCategoryUrl(categorySlug) : '#';
     var categoryHtml = categoryName
       ? '<div class="category"><a href="' + escapeHtml(categoryLink) + '">' + escapeHtml(categoryName) + '</a></div>'
@@ -240,14 +288,10 @@
     var article = document.createElement('article');
     var articleUrl = buildArticleUrl(post);
     var title = escapeHtml(post && post.title ? post.title : '');
-    var category = escapeHtml(post && post.category ? post.category : '');
-    var categoryHref = '#';
-    if (post && post.category) {
-      var slug = slugify(post.category);
-      if (slug) {
-        categoryHref = buildCategoryUrl(slug);
-      }
-    }
+    var rawLabel = resolvePostCategoryLabel(post);
+    var category = escapeHtml(rawLabel);
+    var categorySlug = resolvePostCategorySlug(post);
+    var categoryHref = categorySlug ? buildCategoryUrl(categorySlug) : '#';
     var categoryAnchor = category
       ? '<div class="category"><a href="' + escapeHtml(categoryHref) + '">' + category + '</a></div>'
       : '';
@@ -369,14 +413,14 @@
       });
       var filtered = ctx.cat
         ? all.filter(function (p) {
-          return slugify(p.category) === ctx.cat;
+          return resolvePostCategorySlug(p) === ctx.cat;
         })
         : all.slice();
 
       if (ctx.cat && (!ctx.label || !String(ctx.label).trim()) && filtered.length) {
-        var firstCategory = filtered[0] && filtered[0].category ? String(filtered[0].category).trim() : '';
-        if (firstCategory) {
-          ctx.label = firstCategory;
+        var fallbackLabel = resolvePostCategoryLabel(filtered[0]);
+        if (fallbackLabel) {
+          ctx.label = fallbackLabel;
           patchHeader(ctx);
         }
       }
