@@ -457,6 +457,19 @@ def sanitize_img_url(u: str) -> str:
         u = _proxy_if_mixed(u)
     return u
 
+def resolve_cover_url(candidate: str) -> str:
+    """Return a sanitized cover URL, falling back to the configured default when needed."""
+
+    cover = sanitize_img_url(candidate)
+    if cover and cover.lower().startswith(("http://", "https://")):
+        return cover
+
+    fallback = sanitize_img_url(FALLBACK_COVER)
+    if fallback:
+        return fallback
+
+    return cover or ""
+
 
 # ---- Body extractors ----
 def extract_body_html(url: str) -> tuple[str, str]:
@@ -717,15 +730,12 @@ def main():
             body_html = limit_words_html(body_html, target_words)
 
             # 4) Cover image (cover only; images inside body removed)
-            cover = (
+            cover = resolve_cover_url(
                 pick_largest_media_url(it.get("element"))
                 or find_cover_from_item(it.get("element"), link)
                 or inner_img
                 or ""
             )
-            cover = sanitize_img_url(cover)
-            if not cover.startswith(("http://", "https://")):
-                cover = ""
 
 
             # 5) Excerpt
