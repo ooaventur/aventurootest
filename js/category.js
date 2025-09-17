@@ -325,7 +325,7 @@
       ctx.label = resolvedLabel;
     }
     label = resolvedLabel;
-    }
+
     var bc = document.querySelector('.breadcrumb');
     if (bc) {
       var parts = ['<li><a href="' + HOME_URL + '">Home</a></li>'];
