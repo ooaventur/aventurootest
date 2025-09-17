@@ -14,9 +14,155 @@
     ? basePath.resolveAll(['/data/posts.json', 'data/posts.json'])
     : ['/data/posts.json', 'data/posts.json'];
   const articleContainer = document.querySelector('.main-article');
+  const headElement = document.head || document.getElementsByTagName('head')[0] || null;
+
+  function readMetaContent(attribute, value) {
+    if (!headElement) return '';
+    const element = headElement.querySelector(`meta[${attribute}="${value}"]`);
+    return element ? element.getAttribute('content') || '' : '';
+  }
+
+  function getCanonicalHref() {
+    if (!headElement) return '';
+    const link = headElement.querySelector('link[rel="canonical"]');
+    return link ? link.getAttribute('href') || '' : '';
+  }
+
+  const defaultSeoState = {
+    title: document.title || '',
+    description: readMetaContent('name', 'description'),
+    ogTitle: readMetaContent('property', 'og:title'),
+    ogDescription: readMetaContent('property', 'og:description'),
+    ogUrl: readMetaContent('property', 'og:url'),
+    ogImage: readMetaContent('property', 'og:image'),
+    canonical: getCanonicalHref()
+  };
 
   if (!articleContainer) {
     return;
+  }
+
+  function pickSeoValue(value, fallback) {
+    if (typeof value === 'string') {
+      const trimmed = value.trim();
+      if (trimmed) {
+        return trimmed;
+      }
+    }
+    return typeof fallback === 'string' ? fallback : '';
+  }
+
+  function ensureMetaContent(attribute, key, value) {
+    if (!headElement) return;
+    let element = headElement.querySelector(`meta[${attribute}="${key}"]`);
+    if (!element) {
+      element = document.createElement('meta');
+      element.setAttribute(attribute, key);
+      headElement.appendChild(element);
+    }
+    element.setAttribute('content', typeof value === 'string' ? value : '');
+  }
+
+  function setCanonicalLink(url) {
+    if (!headElement) return;
+    const finalUrl = pickSeoValue(url, defaultSeoState.canonical);
+    if (!finalUrl) {
+      const existing = headElement.querySelector('link[rel="canonical"]');
+      if (existing && defaultSeoState.canonical) {
+        existing.setAttribute('href', defaultSeoState.canonical);
+      }
+      return;
+    }
+    let link = headElement.querySelector('link[rel="canonical"]');
+    if (!link) {
+      link = document.createElement('link');
+      link.setAttribute('rel', 'canonical');
+      headElement.appendChild(link);
+    }
+    link.setAttribute('href', finalUrl);
+  }
+
+  function getWindowOrigin() {
+    if (typeof window === 'undefined' || !window.location) {
+      return '';
+    }
+    if (window.location.origin) {
+      return window.location.origin;
+    }
+    const protocol = window.location.protocol || '';
+    const host = window.location.host || '';
+    if (protocol && host) {
+      return `${protocol}//${host}`;
+    }
+    return '';
+  }
+
+  function stripHash(url) {
+    if (typeof url !== 'string') return '';
+    const index = url.indexOf('#');
+    return index === -1 ? url : url.slice(0, index);
+  }
+
+  function absolutizeUrl(url) {
+    if (typeof url !== 'string') return '';
+    const trimmed = url.trim();
+    if (!trimmed) return '';
+    if (/^(?:[a-z][a-z0-9+.-]*:)?\/\//i.test(trimmed)) {
+      return trimmed;
+    }
+    const origin = getWindowOrigin();
+    if (!origin) {
+      return trimmed;
+    }
+    if (trimmed[0] === '/') {
+      return origin + trimmed;
+    }
+    try {
+      return new URL(trimmed, origin).toString();
+    } catch (err) {
+      return trimmed;
+    }
+  }
+
+  function buildCanonicalUrl(post) {
+    const locationHref = (typeof window !== 'undefined' && window.location && window.location.href)
+      ? stripHash(String(window.location.href))
+      : '';
+    if (!post || !post.slug) {
+      return locationHref;
+    }
+    const articlePath = typeof basePath.articleUrl === 'function'
+      ? basePath.articleUrl(post.slug)
+      : `/article.html?slug=${encodeURIComponent(post.slug)}`;
+    const absolute = stripHash(absolutizeUrl(articlePath));
+    return absolute || locationHref;
+  }
+
+  function setDocumentTitle(value) {
+    const finalTitle = pickSeoValue(value, defaultSeoState.title);
+    if (finalTitle || defaultSeoState.title) {
+      document.title = finalTitle;
+    }
+  }
+
+  function updateSeoMetadata(post, options) {
+    const data = post || {};
+    const opts = options || {};
+
+    setDocumentTitle(data.title ? `${data.title} — AventurOO` : '');
+
+    const description = pickSeoValue(opts.description, defaultSeoState.description);
+    const ogDescription = pickSeoValue(opts.ogDescription || description, defaultSeoState.ogDescription);
+    const ogTitle = pickSeoValue(data.title, defaultSeoState.ogTitle);
+    const canonicalUrl = pickSeoValue(opts.canonicalUrl, defaultSeoState.ogUrl || defaultSeoState.canonical);
+    const ogImage = pickSeoValue(opts.image, defaultSeoState.ogImage);
+
+    ensureMetaContent('name', 'description', description);
+    ensureMetaContent('property', 'og:title', ogTitle);
+    ensureMetaContent('property', 'og:description', ogDescription);
+    ensureMetaContent('property', 'og:url', canonicalUrl);
+    ensureMetaContent('property', 'og:image', ogImage);
+    setCanonicalLink(canonicalUrl);
   }
 
   function fetchSequential(urls) {
@@ -249,6 +395,9 @@
   }
 
   function renderPost(post) {
+    const bodyHtml = post.body || post.content || '';
+    const fallbackImageFromBody = extractFirstImage(bodyHtml);
+
     const titleEl = document.querySelector('.main-article header h1');
     if (titleEl) titleEl.textContent = post.title;
 
@@ -274,6 +423,13 @@
       else authorEl.remove();
     }
 
+    const resolvedBodyFallback = fallbackImageFromBody
+      ? (basePath.resolve ? basePath.resolve(fallbackImageFromBody) : fallbackImageFromBody)
+      : '';
+    const resolvedCoverImage = post.cover
+      ? (basePath.resolve ? basePath.resolve(post.cover) : post.cover)
+      : '';
+
     const coverImg = document.querySelector('.main-article .featured img');
     if (coverImg) {
       const placeholderSrc = basePath.resolve ? basePath.resolve('/images/logo.png') : '/images/logo.png';
@@ -282,7 +438,7 @@
       const handleCoverError = () => {
         if (!attemptedBodyFallback) {
           attemptedBodyFallback = true;
-          const fallbackSrc = extractFirstImage(post.body || post.content || '');
+          const fallbackSrc = resolvedBodyFallback;
           if (fallbackSrc && coverImg.src !== fallbackSrc) {
             coverImg.src = fallbackSrc;
             return;
@@ -307,7 +463,7 @@
       coverImg.alt = (post.title || 'Cover') + (post.source_name ? (' — ' + post.source_name) : '');
 
       if (post.cover) {
-        coverImg.src = basePath.resolve ? basePath.resolve(post.cover) : post.cover;
+        coverImg.src = resolvedCoverImage;
       } else {
         coverImg.removeEventListener('error', handleCoverError);
         coverImg.remove();
@@ -316,7 +472,7 @@
 
     const bodyEl = document.querySelector('.main-article .main');
     if (bodyEl) {
-      bodyEl.innerHTML = post.body || post.content || '';
+      bodyEl.innerHTML = bodyHtml;
     }
 
     const sourceEl = document.querySelector('.main-article .source');
@@ -347,6 +503,18 @@
         `To read the complete piece, please visit the ` +
         `<a href="${escapeHtml(post.source || '')}" target="_blank" rel="nofollow noopener noreferrer">original page</a>.`;
     }
+    
+    const resolvedFallbackImage = resolvedBodyFallback || '';
+    const bestImage = resolvedCoverImage || resolvedFallbackImage;
+    const ogImage = absolutizeUrl(bestImage) || bestImage;
+    const description = typeof post.excerpt === 'string' ? post.excerpt.trim() : '';
+    const canonicalUrl = buildCanonicalUrl(post);
+
+    updateSeoMetadata(post, {
+      description,
+      canonicalUrl,
+      image: ogImage
+    });
   }
 
   function renderRelated(allPosts, currentPost) {
