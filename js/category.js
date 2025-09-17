@@ -1,4 +1,23 @@
 (function () {
+  var basePath = window.AventurOOBasePath || {
+    resolve: function (value) { return value; },
+    resolveAll: function (values) { return Array.isArray(values) ? values.slice() : []; },
+    articleUrl: function (slug) { return slug ? '/article.html?slug=' + encodeURIComponent(slug) : '#'; },
+    categoryUrl: function (slug, sub) {
+      if (!slug) return '#';
+      var query = '?cat=' + encodeURIComponent(slug);
+      if (sub) query += '&sub=' + encodeURIComponent(sub);
+      return '/category.html' + query;
+    },
+    sectionUrl: function (slug) {
+      if (!slug) return '#';
+      var normalized = String(slug).trim().replace(/^\/+|\/+$/g, '');
+      return normalized ? '/' + normalized + '/' : '#';
+    }
+  };
+
+  var DEFAULT_IMAGE = basePath.resolve ? basePath.resolve('/images/logo.png') : '/images/logo.png';
+  var HOME_URL = basePath.resolve ? basePath.resolve('/') : '/';
   var POSTS_SOURCES = ['/data/posts.json', 'data/posts.json'];
 
   function fetchSequential(urls) {
@@ -24,15 +43,7 @@
       .split('-')
       .map(function (w) { return w.charAt(0).toUpperCase() + w.slice(1); })
       .join(' ');
-  }
-  function escapeHtml(str) {
-    return (str == null ? '' : String(str))
-      .replace(/[&<>"']/g, function (ch) {
-        return {
-          '&': '&amp;',
-          '<': '&lt;',
-          '>': '&gt;',
-          '"': '&quot;',
+@@ -36,156 +55,160 @@
           "'": '&#39;'
         }[ch];
       });
@@ -58,8 +69,11 @@
   }
 
   function buildArticleUrl(post) {
-    if (!post) return '#';
-    var slug = post.slug ? encodeURIComponent(post.slug) : '';
+    if (!post || !post.slug) return '#';
+    var slug = encodeURIComponent(post.slug);
+    if (basePath.articleUrl) {
+      return basePath.articleUrl(post.slug);
+    }
     return slug ? '/article.html?slug=' + slug : '#';
   }
 
@@ -89,10 +103,15 @@
   function patchHeader(cat, sub) {
     var bc = document.querySelector('.breadcrumb');
     if (bc) {
-      bc.innerHTML =
-        '<li><a href="/">Home</a></li>' +
-        (cat ? '<li><a href="/' + cat + '">' + titleize(cat) + '</a></li>' : '') +
-        (sub ? '<li class="active">' + titleize(sub) + '</li>' : '');
+      var parts = ['<li><a href="' + HOME_URL + '">Home</a></li>'];
+      if (cat) {
+        var catUrl = basePath.sectionUrl ? basePath.sectionUrl(cat) : '/' + cat + '/';
+        parts.push('<li><a href="' + catUrl + '">' + titleize(cat) + '</a></li>');
+      }
+      if (sub) {
+        parts.push('<li class="active">' + titleize(sub) + '</li>');
+      }
+      bc.innerHTML = parts.join('');
     }
     var h1 = document.querySelector('.page-title');
     if (h1) h1.textContent = 'Category: ' + titleize(cat) + (sub ? ' — ' + titleize(sub) : '');
@@ -105,23 +124,17 @@
     var dateTxt = (p.date || '').split('T')[0];
     var art = document.createElement('article');
     art.className = 'col-md-12 article-list';
-    var articleUrl = '/article.html?slug=' + encodeURIComponent(p.slug);
-    var figureHtml;
-    if (p.cover) {
-      figureHtml =
-        '<figure>' +
-          '<a href="' + articleUrl + '">' +
-            '<img src="' + p.cover + '" alt="">' +
-          '</a>' +
-        '</figure>';
-    } else {
-      figureHtml =
-        '<figure class="no-cover">' +
-          '<a href="' + articleUrl + '">' +
-            '<img src="/images/logo.png" alt="AventurOO Logo">' +
-          '</a>' +
-        '</figure>';
-    }
+    var articleUrl = buildArticleUrl(p);
+    var hasCover = p.cover && String(p.cover).trim();
+    var coverSrc = hasCover ? (basePath.resolve ? basePath.resolve(p.cover) : p.cover) : DEFAULT_IMAGE;
+    var coverAlt = (p.title ? String(p.title) : 'AventurOO') + ' cover image';
+    var figureClass = hasCover ? '' : ' class="no-cover"';
+    var figureHtml =
+      '<figure' + figureClass + '>' +
+        '<a href="' + articleUrl + '">' +
+          '<img src="' + escapeHtml(coverSrc) + '" alt="' + escapeHtml(coverAlt) + '">' +
+        '</a>' +
+      '</figure>';
     art.innerHTML =
       '<div class="inner">' +
         figureHtml +
@@ -162,9 +175,10 @@
     var category = escapeHtml(post && post.category ? post.category : '');
     var excerpt = escapeHtml(post && post.excerpt ? post.excerpt : '');
     var dateTxt = escapeHtml(formatDateString(post && post.date));
-    var cover = post && post.cover ? escapeHtml(post.cover) : '/images/logo.png';
-    var figureClass = post && post.cover ? '' : ' class="no-cover"';
-
+    var hasCover = post && post.cover;
+    var coverSrc = hasCover ? (basePath.resolve ? basePath.resolve(post.cover) : post.cover) : DEFAULT_IMAGE;
+    var cover = escapeHtml(coverSrc);
+    var figureClass = hasCover ? '' : ' class="no-cover"';
     if (variant === 'full') {
       article.className = 'article-fw';
       article.innerHTML =
