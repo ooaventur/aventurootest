@@ -3,14 +3,24 @@
   function $(sel, root){ return (root||document).querySelector(sel); }
   function $all(sel, root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
   function noSlash(s){ return (s||'').replace(/^\/+|\/+$/g,''); }
+  function normalizeSlug(value){
+    return noSlash((value || '')
+      .toString()
+      .trim())
+      .toLowerCase()
+      .replace(/\.html?$/i, '')
+      .replace(/&/g, 'and')
+      .replace(/[_\W]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
   function titleCaseFromSlug(slug){
     return (slug||'').split('-').map(s=>s.charAt(0).toUpperCase()+s.slice(1)).join(' ');
   }
 
   // Parametrat nga URL
   var params = new URLSearchParams(location.search);
-  var catSlug = noSlash(params.get('cat') || '');
-  var subSlug = noSlash(params.get('sub') || '');
+  var catSlug = normalizeSlug(params.get('cat') || '');
+  var subSlug = normalizeSlug(params.get('sub') || '');
 
   // Fallback nëse s’ka cat
   if (!catSlug) { catSlug = 'news'; }
