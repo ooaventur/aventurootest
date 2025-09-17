@@ -3807,9 +3807,6 @@ blockquote {
   margin-bottom: 15px;
   display: inline-block;
 }
-.checkbox-group [class^="icheckbox"], .checkbox-group [class^="iradio"] {
-  margin-right: 5px;
-}
 
 .nav-tabs-group {
   display: inline-block;
