@@ -58,29 +58,47 @@
     return '';
   }
 
-  function resolvePostCategoryLabel(post) {
-    if (!post) return '';
+  var LABEL_PRIORITY_SUBCATEGORY = 1;
+  var LABEL_PRIORITY_SLUG = 2;
+  var LABEL_PRIORITY_CATEGORY = 3;
+  var LABEL_PRIORITY_FALLBACK = 99;
+
+  function resolvePostCategoryLabelInfo(post) {
+    if (!post) {
+      return { label: '', priority: LABEL_PRIORITY_FALLBACK };
+    }
 
     var subcategory = post.subcategory;
     if (subcategory != null && String(subcategory).trim()) {
-      return String(subcategory).trim();
+      return {
+        label: String(subcategory).trim(),
+        priority: LABEL_PRIORITY_SUBCATEGORY
+      };
     }
 
     var rawSlug = post.category_slug;
     if (rawSlug != null && String(rawSlug).trim()) {
       var normalized = slugify(rawSlug);
-      if (normalized) {
-        return titleize(normalized);
-      }
-      return String(rawSlug).trim();
+      var formatted = normalized ? titleize(normalized) : String(rawSlug).trim();
+      return {
+        label: formatted,
+        priority: LABEL_PRIORITY_SLUG
+      };
     }
 
     var category = post.category;
     if (category != null && String(category).trim()) {
-      return String(category).trim();
+      return {
+        label: String(category).trim(),
+        priority: LABEL_PRIORITY_CATEGORY
+      };
     }
 
-    return '';
+    return { label: '', priority: LABEL_PRIORITY_FALLBACK };
+  }
+
+  function resolvePostCategoryLabel(post) {
+    return resolvePostCategoryLabelInfo(post).label;
   }
 
   
@@ -404,7 +422,7 @@
   }
 
   var ctx = getCatSub();
- patchHeader(ctx);
+patchHeader(ctx);
 
   fetchSequential(POSTS_SOURCES)
     .then(function (all) {
@@ -418,11 +436,25 @@
         })
         : all.slice();
 
-      if (ctx.cat && (!ctx.label || !String(ctx.label).trim()) && filtered.length) {
-        var fallbackLabel = resolvePostCategoryLabel(filtered[0]);
-        if (fallbackLabel) {
-          ctx.label = fallbackLabel;
-          patchHeader(ctx);
+     if (ctx.cat && filtered.length) {
+        var bestLabelInfo = null;
+        for (var i = 0; i < filtered.length; i++) {
+          var info = resolvePostCategoryLabelInfo(filtered[i]);
+          if (!info.label) continue;
+          if (!bestLabelInfo || info.priority < bestLabelInfo.priority) {
+            bestLabelInfo = info;
+          }
+          if (bestLabelInfo && bestLabelInfo.priority === LABEL_PRIORITY_SUBCATEGORY) {
+            break;
+          }
+        }
+
+        if (bestLabelInfo && bestLabelInfo.label) {
+          var currentLabel = ctx.label ? String(ctx.label).trim() : '';
+          if (!currentLabel || slugify(currentLabel) === ctx.cat) {
+            ctx.label = bestLabelInfo.label;
+            patchHeader(ctx);
+          }
         }
       }
 
