@@ -1,10 +1,21 @@
 (function () {
+  var basePath = window.AventurOOBasePath || {
+    resolve: function (value) { return value; },
+    resolveAll: function (values) { return Array.isArray(values) ? values.slice() : []; },
+    articleUrl: function (slug) { return slug ? '/article.html?slug=' + encodeURIComponent(slug) : '#'; },
+    sectionUrl: function (slug) {
+      if (!slug) return '#';
+      var normalized = String(slug).trim().replace(/^\/+|\/+$/g, '');
+      return normalized ? '/' + normalized + '/' : '#';
+    }
+  };
+
   var POSTS_SOURCES = ['/data/posts.json', 'data/posts.json'];
   var BANNERS_SOURCES = ['data/banners.json', '/data/banners.json'];
   var MAX_ARTICLES = 12;
   var BANNER_FREQUENCY = 4;
-  var DEFAULT_IMAGE = '/images/logo.png';
-  var DEFAULT_BANNER_IMAGE = '/images/ads.png';
+  var DEFAULT_IMAGE = basePath.resolve ? basePath.resolve('/images/logo.png') : '/images/logo.png';
+  var DEFAULT_BANNER_IMAGE = basePath.resolve ? basePath.resolve('/images/ads.png') : '/images/ads.png';
 
   function loadJson(urls) {
     if (!window.AventurOODataLoader || typeof window.AventurOODataLoader.fetchSequential !== 'function') {
@@ -62,14 +73,16 @@
 
   function articleUrl(post) {
     if (!post) return '#';
-    if (post.url) return post.url;
+    if (post.url) {
+      return basePath.resolve ? basePath.resolve(post.url) : post.url;
+    }
     var slug = slugify(post.slug || post.title || '');
-    return slug ? '/article.html?slug=' + encodeURIComponent(slug) : '#';
+    return slug ? basePath.articleUrl ? basePath.articleUrl(slug) : '/article.html?slug=' + encodeURIComponent(slug) : '#';
   }
 
   function categoryUrl(category) {
     var slug = slugify(category);
-    return slug ? '/' + slug + '/' : '#';
+    return slug ? (basePath.sectionUrl ? basePath.sectionUrl(slug) : '/' + slug + '/') : '#';
   }
 
   function pickArticles(posts, limit) {
@@ -125,7 +138,8 @@
     var excerpt = rawExcerpt ? escapeHtml(rawExcerpt) : '';
     var category = post.category ? escapeHtml(post.category) : '';
     var date = escapeHtml(formatDate(post.date));
-    var cover = post.cover ? escapeHtml(post.cover) : escapeHtml(DEFAULT_IMAGE);
+    var coverSrc = post.cover ? (basePath.resolve ? basePath.resolve(post.cover) : post.cover) : DEFAULT_IMAGE;
+    var cover = escapeHtml(coverSrc);
     var link = escapeHtml(articleUrl(post));
     var categoryLink = category ? escapeHtml(categoryUrl(post.category)) : '#';
     var figureClass = post.cover ? '' : ' class="no-cover"';
@@ -151,8 +165,8 @@
   }
 
   function createBannerElement(banner, index) {
-    if (!banner) return null;
-    var href = banner.href ? String(banner.href) : '#';
+    var href = banner.href ? (basePath.resolve ? basePath.resolve(banner.href) : banner.href) : '#';
+    var image = banner.image ? (basePath.resolve ? basePath.resolve(banner.image) : banner.image) : DEFAULT_BANNER_IMAGE;
     var image = banner.image ? String(banner.image) : DEFAULT_BANNER_IMAGE;
     var alt = banner.alt ? String(banner.alt) : 'Advertisement';
     var bannerWrapper = document.createElement('div');
