@@ -1,6 +1,12 @@
 $(function(){
+        var basePath = window.AventurOOBasePath || {
+                resolve: function (value) { return value; },
+                resolveAll: function (values) { return Array.isArray(values) ? values.slice() : []; },
+                articleUrl: function (slug) { return '/article.html?slug=' + encodeURIComponent(slug); }
+        };
+
         var youtube_api_key = 'YOUR_API_KEY';
-        var HEADLINE_POSTS_SOURCES = ['data/posts.json', '/data/posts.json'];
+        var HEADLINE_POSTS_SOURCES = basePath.resolveAll ? basePath.resolveAll(['data/posts.json', '/data/posts.json']) : ['data/posts.json', '/data/posts.json'];
         var HEADLINE_MAX_ITEMS = 20;
 
         function fetchSequential(urls) {
@@ -321,7 +327,8 @@ $(function(){
                                                 title = slugValue;
                                         }
                                         var $item = $('<div/>', { 'class': 'item' });
-                                        var $link = $('<a/>', { href: '/article.html?slug=' + slug, title: title });
+                                        var articleHref = basePath.articleUrl ? basePath.articleUrl(slug) : '/article.html?slug=' + slug;
+                                        var $link = $('<a/>', { href: articleHref, title: title });
                                         $link.text(title);
                                         $item.append($link);
                                         $headline.append($item);
