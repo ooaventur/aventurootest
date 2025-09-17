@@ -1,5 +1,10 @@
 (function () {
   // --------- CONFIG & HELPERS ----------
+  var basePath = window.AventurOOBasePath || {
+    resolve: function (value) { return value; },
+    resolveAll: function (values) { return Array.isArray(values) ? values.slice() : []; }
+  };
+
   function $(sel, root){ return (root||document).querySelector(sel); }
   function $all(sel, root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
 
@@ -11,10 +16,10 @@
     var ctn = $('#menu-list');
     var srcAttr = ctn ? ctn.getAttribute('data-menu-src') : null;
     var list = [];
-    if (srcAttr) list.push(srcAttr);
-    list.push('data/menu.json', '/data/menu.json');
-    return list;
-  }
+    if (srcAttr) list.push(srcAttr);␊
+    list.push('data/menu.json', '/data/menu.json');␊
+    return basePath.resolveAll ? basePath.resolveAll(list) : list;
+  }␊
 
   function fetchSequential(urls) {
     return new Promise(function(resolve, reject){
@@ -37,7 +42,12 @@
 
   function buildLink(aData) {
     var a = document.createElement('a');
-    a.href = aData.href || '#';
+    var rawHref = aData.href || '#';
+    var resolvedHref = rawHref;
+    if (rawHref && rawHref !== '#') {
+      resolvedHref = basePath.resolve ? basePath.resolve(rawHref) : rawHref;
+    }
+    a.href = resolvedHref;
     if (aData.icon) {
       // Ikona opsionale (Ionicons)
       a.innerHTML = '<i class="icon ' + aData.icon + '"></i> ' + (aData.title || '');
@@ -68,7 +78,7 @@
         var ul = el('ul', 'vertical-menu');
         col.links.forEach(function (lnk) {
           var li = document.createElement('li');
-          li.appendChild(buildLink({ title: lnk.title, href: lnk.href || '#', target: lnk.target }));
+          li.appendChild(buildLink({ title: lnk.title, href: lnk.href || '#', target: lnk.target }));␊
           ul.appendChild(li);
         });
         c.appendChild(ul);
@@ -116,9 +126,9 @@
     var liTitle = el('li', 'for-tablet nav-title');
     liTitle.appendChild(el('a', null, cfg.title || 'Menu'));
     var liLogin = el('li', 'for-tablet');
-    liLogin.appendChild(buildLink({ title: 'Login', href: cfg.loginHref || 'login.html' }));
-    var liRegister = el('li', 'for-tablet');
-    liRegister.appendChild(buildLink({ title: 'Register', href: cfg.registerHref || 'register.html' }));
+    liLogin.appendChild(buildLink({ title: 'Login', href: cfg.loginHref || 'login.html' }));␊
+    var liRegister = el('li', 'for-tablet');␊
+    liRegister.appendChild(buildLink({ title: 'Register', href: cfg.registerHref || 'register.html' }));␊
     root.appendChild(liTitle);
     root.appendChild(liLogin);
     root.appendChild(liRegister);
@@ -177,10 +187,10 @@
       .then(renderMenu)
       .catch(function (err) {
         console.error('Menu load error:', err);
-        renderMenu({
-          tabletHeader: { show: true },
-          items: [{ title: 'Home', href: 'index.html' }]
-        });
-      });
-  });
-})();
+        renderMenu({␊
+          tabletHeader: { show: true },␊
+          items: [{ title: 'Home', href: basePath.resolve ? basePath.resolve('/') : 'index.html' }]
+        });␊
+      });␊
+  });␊
+})();␊
