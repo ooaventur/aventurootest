@@ -17,17 +17,17 @@
       </div>
       <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="block">
-          <h1 class="block-title">Popular Tags <div class="right"><a href="#">See All <i class="ion-ios-arrow-thin-right"></i></a></div></h1>
+          <h1 class="block-title">Popular Tags <div class="right"><a href="{{ '/search.html' | url }}">See All <i class="ion-ios-arrow-thin-right"></i></a></div></h1>
           <div class="block-body">
             <ul class="tags">
-              <li><a href="#">News</a></li>
-              <li><a href="#">AI</a></li>
-              <li><a href="#">Travel</a></li>
-              <li><a href="#">Lifestyle</a></li>
-              <li><a href="#">AventurOO</a></li>
-              <li><a href="#">Creative Mind</a></li>
-              <li><a href="#">Standing On The Train</a></li>
-              <li><a href="#">at 6.00PM</a></li>
+              <li><a href="{{ '/category.html' | url }}?cat=news">News</a></li>
+              <li><a href="{{ '/category.html' | url }}?cat=ai-news">AI</a></li>
+              <li><a href="{{ '/category.html' | url }}?cat=travel">Travel</a></li>
+              <li><a href="{{ '/category.html' | url }}?cat=lifestyle">Lifestyle</a></li>
+              <li><a href="{{ '/search.html' | url }}?q=AventurOO">AventurOO</a></li>
+              <li><a href="{{ '/search.html' | url }}?q=Creative%20Mind">Creative Mind</a></li>
+              <li><a href="{{ '/search.html' | url }}?q=Standing%20On%20The%20Train">Standing On The Train</a></li>
+              <li><a href="{{ '/search.html' | url }}?q=at%206.00PM">at 6.00PM</a></li>
             </ul>
           </div>
         </div>
@@ -100,7 +100,7 @@
                 </div>
               </div>
             </article>
-            <a href="#" class="btn btn-magz white btn-block">See All <i class="ion-ios-arrow-thin-right"></i></a>
+            <a href="{{ '/category.html' | url }}?cat=news" class="btn btn-magz white btn-block">See All <i class="ion-ios-arrow-thin-right"></i></a>
           </div>
         </div>
       </div>
