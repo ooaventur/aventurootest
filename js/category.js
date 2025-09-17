@@ -3,11 +3,9 @@
     resolve: function (value) { return value; },
     resolveAll: function (values) { return Array.isArray(values) ? values.slice() : []; },
     articleUrl: function (slug) { return slug ? '/article.html?slug=' + encodeURIComponent(slug) : '#'; },
-    categoryUrl: function (slug, sub) {
+    categoryUrl: function (slug) {
       if (!slug) return '#';
-      var query = '?cat=' + encodeURIComponent(slug);
-      if (sub) query += '&sub=' + encodeURIComponent(sub);
-      return '/category.html' + query;
+      return '/category.html?cat=' + encodeURIComponent(slug);
     },
     sectionUrl: function (slug) {
       if (!slug) return '#';
@@ -87,47 +85,101 @@
     return slug ? '/article.html?slug=' + slug : '#';
   }
 
+  function buildCategoryUrl(slug) {
+    if (!slug) return '#';
+    if (basePath.categoryUrl) {
+      return basePath.categoryUrl(slug);
+    }
+    return '/category.html?cat=' + encodeURIComponent(slug);
+  }
+
   var url = new URL(window.location.href);
 
   function getCatSub() {
-    var cat = slugify(url.searchParams.get('cat'));
-    var sub = slugify(url.searchParams.get('sub'));
+    var catParam = url.searchParams.get('cat');
+    var subParam = url.searchParams.get('sub');
+
+    var cat = slugify(catParam);
+    var alias = slugify(subParam);
+    var label = '';
+
+    if (alias) {
+      cat = alias;
+      label = subParam || '';
+    } else if (catParam) {
+      label = catParam;
+    }
 
     if (!cat) {
       var parts = location.pathname.replace(/\/+$/, '').split('/'); // p.sh. ["", "news", "politics.html"]
-      if (parts[1]) cat = slugify(parts[1]);
-      if (parts[2]) {
-        var p2 = parts[2];
-        if (p2 !== 'index' && p2 !== 'index.html') sub = slugify(p2);
+      if (parts[1]) {
+        var derived = slugify(parts[1]);
+        if (derived) {
+          cat = derived;
+          label = parts[1];
+        }
+      }
+      if (!cat && parts[2]) {
+        var p2 = slugify(parts[2]);
+        if (p2 && p2 !== 'index') {
+          cat = p2;
+          label = parts[2];
+        }
       }
     }
 
     // opsionale: lexo edhe data-attr në <body data-cat="..." data-sub="...">
     var body = document.body;
-    if (!cat && body.dataset.cat) cat = slugify(body.dataset.cat);
-    if (!sub && body.dataset.sub) sub = slugify(body.dataset.sub);
+    if (!cat && body.dataset.cat) {
+      cat = slugify(body.dataset.cat);
+      label = body.dataset.cat;
+    }
+    if (!cat && body.dataset.sub) {
+      cat = slugify(body.dataset.sub);
+      label = body.dataset.sub;
+    }
 
-    return { cat: cat, sub: sub };
+    if (label) {
+      label = String(label)
+        .replace(/[_-]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+    if (!label && cat) {
+      label = titleize(cat);
+    }
+
+    return { cat: cat, label: label };
   }
 
-  function patchHeader(cat, sub) {
+  function patchHeader(ctx) {
+    var cat = ctx && ctx.cat ? ctx.cat : '';
+    var label = '';
+    if (ctx && ctx.label) {
+      label = String(ctx.label).trim();
+    }
+    if (!label && cat) {
+      label = titleize(cat);
+    }
     var bc = document.querySelector('.breadcrumb');
     if (bc) {
       var parts = ['<li><a href="' + HOME_URL + '">Home</a></li>'];
       if (cat) {
-        var catUrl = basePath.sectionUrl ? basePath.sectionUrl(cat) : '/' + cat + '/';
-        parts.push('<li><a href="' + catUrl + '">' + titleize(cat) + '</a></li>');
-      }
-      if (sub) {
-        parts.push('<li class="active">' + titleize(sub) + '</li>');
+        var catUrl = buildCategoryUrl(cat);
+        parts.push('<li class="active"><a href="' + escapeHtml(catUrl) + '">' + escapeHtml(label) + '</a></li>');
       }
       bc.innerHTML = parts.join('');
     }
     var h1 = document.querySelector('.page-title');
-    if (h1) h1.textContent = 'Category: ' + titleize(cat) + (sub ? ' — ' + titleize(sub) : '');
+    if (h1) {
+      h1.textContent = cat ? 'Category: ' + label : 'Category';
+    }
     var subt = document.querySelector('.page-subtitle');
-    if (subt) subt.innerHTML = 'Showing all posts with category <i>' +
-      titleize(cat) + (sub ? ' — ' + titleize(sub) : '') + '</i>';
+    if (subt) {
+      subt.innerHTML = cat
+        ? 'Showing all posts with category <i>' + escapeHtml(label) + '</i>'
+        : 'Showing all posts.';
+    }
   }
 
   function renderPost(p) {
@@ -145,12 +197,18 @@
           '<img src="' + escapeHtml(coverSrc) + '" alt="' + escapeHtml(coverAlt) + '">' +
         '</a>' +
       '</figure>';
+    var categoryName = p && p.category ? String(p.category) : '';
+    var categorySlug = slugify(categoryName);
+    var categoryLink = categorySlug ? buildCategoryUrl(categorySlug) : '#';
+    var categoryHtml = categoryName
+      ? '<div class="category"><a href="' + escapeHtml(categoryLink) + '">' + escapeHtml(categoryName) + '</a></div>'
+      : '';
     art.innerHTML =
       '<div class="inner">' +
         figureHtml +
         '<div class="details">' +
           '<div class="detail">' +
-            '<div class="category"><a href="#">' + (p.category || '') + '</a></div>' +
+            categoryHtml +
             '<div class="time">' + (dateTxt || '') + '</div>' +
           '</div>' +
           '<h1><a href="' + articleUrl + '">' +
@@ -183,6 +241,16 @@
     var articleUrl = buildArticleUrl(post);
     var title = escapeHtml(post && post.title ? post.title : '');
     var category = escapeHtml(post && post.category ? post.category : '');
+    var categoryHref = '#';
+    if (post && post.category) {
+      var slug = slugify(post.category);
+      if (slug) {
+        categoryHref = buildCategoryUrl(slug);
+      }
+    }
+    var categoryAnchor = category
+      ? '<div class="category"><a href="' + escapeHtml(categoryHref) + '">' + category + '</a></div>'
+      : '';
     var excerpt = escapeHtml(post && post.excerpt ? post.excerpt : '');
     var dateTxt = escapeHtml(formatDateString(post && post.date));
     var hasCover = post && post.cover;
@@ -200,7 +268,7 @@
           '</figure>' +
           '<div class="details">' +
             '<div class="detail">' +
-              '<div class="category"><a href="#">' + category + '</a></div>' +
+              categoryAnchor +
               '<div class="time">' + dateTxt + '</div>' +
             '</div>' +
             '<h1><a href="' + articleUrl + '">' + title + '</a></h1>' +
@@ -219,7 +287,7 @@
           '<div class="padding">' +
             '<h1><a href="' + articleUrl + '">' + title + '</a></h1>' +
             '<div class="detail">' +
-              '<div class="category"><a href="#">' + category + '</a></div>' +
+              categoryAnchor +
               '<div class="time">' + dateTxt + '</div>' +
             '</div>' +
           '</div>' +
@@ -291,7 +359,7 @@
   }
 
   var ctx = getCatSub();
-  patchHeader(ctx.cat, ctx.sub);
+ patchHeader(ctx);
 
   fetchSequential(POSTS_SOURCES)
     .then(function (all) {
@@ -299,11 +367,19 @@
       var allSorted = all.slice().sort(function (a, b) {
         return getPostTimestamp(b) - getPostTimestamp(a);
       });
-      var filtered = all.filter(function (p) {
-        var pCat = slugify(p.category);
-        var pSub = slugify(p.subcategory || p.sub || '');
-        return ctx.sub ? (pCat === ctx.cat && pSub === ctx.sub) : (pCat === ctx.cat);
-      });
+      var filtered = ctx.cat
+        ? all.filter(function (p) {
+          return slugify(p.category) === ctx.cat;
+        })
+        : all.slice();
+
+      if (ctx.cat && (!ctx.label || !String(ctx.label).trim()) && filtered.length) {
+        var firstCategory = filtered[0] && filtered[0].category ? String(filtered[0].category).trim() : '';
+        if (firstCategory) {
+          ctx.label = firstCategory;
+          patchHeader(ctx);
+        }
+      }
 
       var sortedByDate = filtered.slice().sort(function (a, b) {
         return getPostTimestamp(b) - getPostTimestamp(a);
@@ -324,7 +400,7 @@
       renderList(pagedPosts);
 
       if (typeof renderPagination === 'function') {
-        var baseQuery = '?cat=' + ctx.cat + (ctx.sub ? '&sub=' + ctx.sub : '');
+        var baseQuery = ctx.cat ? '?cat=' + encodeURIComponent(ctx.cat) : '';
         renderPagination('pagination', filtered.length, PER_PAGE, page, baseQuery);
       }
 
