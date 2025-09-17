@@ -45,15 +45,17 @@
       .join(' ');
   }
 
+  var HTML_ESCAPE = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  };
+
   function escapeHtml(value) {
     return (value == null ? '' : String(value)).replace(/[&<>"']/g, function (ch) {
-      return {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;'
-      }[ch];
+      return HTML_ESCAPE[ch];
     });
   }
 
