@@ -17,6 +17,7 @@
   var DEFAULT_IMAGE = basePath.resolve ? basePath.resolve('/images/logo.png') : '/images/logo.png';
   var HOME_URL = basePath.resolve ? basePath.resolve('/') : '/';
   var POSTS_SOURCES = ['/data/posts.json', 'data/posts.json'];
+  var TAXONOMY_SOURCES = ['/data/taxonomy.json', 'data/taxonomy.json'];
 
   function fetchSequential(urls) {
     if (!window.AventurOODataLoader || typeof window.AventurOODataLoader.fetchSequential !== 'function') {
