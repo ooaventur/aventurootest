@@ -96,16 +96,12 @@
     return resolve('/article.html?slug=' + encodeURIComponent(slug));
   }
 
-  function categoryUrl(slug, subSlug) {
+  function categoryUrl(slug) {
     if (!slug) {
       return '#';
     }
 
-    var query = '?cat=' + encodeURIComponent(slug);
-    if (subSlug) {
-      query += '&sub=' + encodeURIComponent(subSlug);
-    }
-    return resolve('/category.html' + query);
+    return resolve('/category.html?cat=' + slug);
   }
 
   function sectionUrl(slug) {
