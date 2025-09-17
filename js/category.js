@@ -17,7 +17,9 @@
   var DEFAULT_IMAGE = basePath.resolve ? basePath.resolve('/images/logo.png') : '/images/logo.png';
   var HOME_URL = basePath.resolve ? basePath.resolve('/') : '/';
   var POSTS_SOURCES = ['/data/posts.json', 'data/posts.json'];
-
+  var TAXONOMY_SOURCES = ['/data/taxonomy.json', 'data/taxonomy.json'];
+  var CATEGORY_TITLE_LOOKUP = Object.create(null);
+  
   function fetchSequential(urls) {
     if (!window.AventurOODataLoader || typeof window.AventurOODataLoader.fetchSequential !== 'function') {
       return Promise.reject(new Error('Data loader is not available'));
@@ -78,8 +80,11 @@
 
     var rawSlug = post.category_slug;
     if (rawSlug != null && String(rawSlug).trim()) {
-      var normalized = slugify(rawSlug);
-      var formatted = normalized ? titleize(normalized) : String(rawSlug).trim();
+      var slugValue = String(rawSlug).trim();
+      var normalized = slugify(slugValue);
+      var formatted = normalized
+        ? resolveCategoryLabelFromSlug(normalized, slugValue)
+        : slugValue;
       return {
         label: formatted,
         priority: LABEL_PRIORITY_SLUG
@@ -88,8 +93,13 @@
 
     var category = post.category;
     if (category != null && String(category).trim()) {
+      var categoryValue = String(category).trim();
+      var normalizedCategory = slugify(categoryValue);
+      var formattedCategory = normalizedCategory
+        ? resolveCategoryLabelFromSlug(normalizedCategory, categoryValue)
+        : categoryValue;
       return {
-        label: String(category).trim(),
+        label: formattedCategory,
         priority: LABEL_PRIORITY_CATEGORY
       };
     }
@@ -107,6 +117,54 @@
       .split('-')
       .map(function (w) { return w.charAt(0).toUpperCase() + w.slice(1); })
       .join(' ');
+  }
+
+  function populateCategoryLookup(data) {
+    if (!data || typeof data !== 'object') return;
+    var categories = Array.isArray(data.categories) ? data.categories : [];
+    categories.forEach(function (entry) {
+      if (!entry || typeof entry !== 'object') return;
+      var slug = slugify(entry.slug);
+      if (!slug) return;
+      var title = entry.title != null ? String(entry.title).trim() : '';
+      if (!title) {
+        title = titleize(slug);
+      }
+      CATEGORY_TITLE_LOOKUP[slug] = title;
+    });
+  }
+
+  function resolveCategoryLabelFromSlug(slug, rawLabel) {
+    var normalizedSlug = slugify(slug);
+    var trimmed = rawLabel == null ? '' : String(rawLabel).trim();
+
+    if (!normalizedSlug) {
+      return trimmed;
+    }
+
+    var lookupTitle = CATEGORY_TITLE_LOOKUP[normalizedSlug];
+    if (lookupTitle) {
+      return lookupTitle;
+    }
+
+    if (!trimmed) {
+      return titleize(normalizedSlug);
+    }
+
+    var slugFromLabel = slugify(trimmed);
+    if (slugFromLabel === normalizedSlug) {
+      var pretty = titleize(normalizedSlug);
+      var lowerTrimmed = trimmed.toLowerCase();
+      if (
+        lowerTrimmed === normalizedSlug ||
+        trimmed === pretty ||
+        lowerTrimmed === pretty.toLowerCase()
+      ) {
+        return pretty;
+      }
+    }
+
+    return trimmed;
   }
 
   var HTML_ESCAPE = {
@@ -222,9 +280,7 @@
         .replace(/\s+/g, ' ')
         .trim();
     }
-    if (!label && cat) {
-      label = titleize(cat);
-    }
+    label = resolveCategoryLabelFromSlug(cat, label);
 
     return { cat: cat, label: label };
   }
@@ -235,8 +291,11 @@
     if (ctx && ctx.label) {
       label = String(ctx.label).trim();
     }
-    if (!label && cat) {
-      label = titleize(cat);
+    var resolvedLabel = resolveCategoryLabelFromSlug(cat, label);
+    if (ctx && resolvedLabel !== label) {
+      ctx.label = resolvedLabel;
+    }
+    label = resolvedLabel;
     }
     var bc = document.querySelector('.breadcrumb');
     if (bc) {
@@ -432,9 +491,27 @@
   }
 
   var ctx = getCatSub();
-patchHeader(ctx);
+  patchHeader(ctx);
 
-  fetchSequential(POSTS_SOURCES)
+  var taxonomyPromise = fetchSequential(TAXONOMY_SOURCES)
+    .then(function (taxonomy) {
+      populateCategoryLookup(taxonomy);
+    })
+    .catch(function (err) {
+      console.warn('taxonomy load error', err);
+    })
+    .then(function () {
+      var updatedLabel = resolveCategoryLabelFromSlug(ctx.cat, ctx.label);
+      if (updatedLabel !== ctx.label) {
+        ctx.label = updatedLabel;
+        patchHeader(ctx);
+      }
+    });
+
+  taxonomyPromise
+    .then(function () {
+      return fetchSequential(POSTS_SOURCES);
+    })
     .then(function (all) {
       all = Array.isArray(all) ? all : [];
       var allSorted = all.slice().sort(function (a, b) {
@@ -446,7 +523,7 @@ patchHeader(ctx);
         })
         : all.slice();
 
-     if (ctx.cat && filtered.length) {
+      if (ctx.cat && filtered.length) {
         var bestLabelInfo = null;
         for (var i = 0; i < filtered.length; i++) {
           var info = resolvePostCategoryLabelInfo(filtered[i]);
@@ -458,7 +535,7 @@ patchHeader(ctx);
             break;
           }
         }
-
+        
         if (bestLabelInfo && bestLabelInfo.label) {
           var currentLabel = ctx.label ? String(ctx.label).trim() : '';
           if (!currentLabel || slugify(currentLabel) === ctx.cat) {
