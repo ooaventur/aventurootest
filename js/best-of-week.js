@@ -1,7 +1,19 @@
 (function () {
+  var basePath = window.AventurOOBasePath || {
+    resolve: function (value) { return value; },
+    resolveAll: function (values) { return Array.isArray(values) ? values.slice() : []; },
+    articleUrl: function (slug) { return slug ? '/article.html?slug=' + encodeURIComponent(slug) : '#'; },
+    categoryUrl: function (slug) { return slug ? '/category.html?cat=' + encodeURIComponent(slug) : '#'; },
+    sectionUrl: function (slug) {
+      if (!slug) return '#';
+      var normalized = String(slug).trim().replace(/^\/+|\/+$/g, '');
+      return normalized ? '/' + normalized + '/' : '#';
+    }
+  };
+
   var POSTS_SOURCES = ['/data/posts.json', 'data/posts.json'];
   var BEST_OF_WEEK_SOURCES = ['data/best-of-week.json', '/data/best-of-week.json'];
-  var DEFAULT_IMAGE = '/images/logo.png';
+  var DEFAULT_IMAGE = basePath.resolve ? basePath.resolve('/images/logo.png') : '/images/logo.png';
 
   function slugify(str) {
     return (str || '')
@@ -47,11 +59,12 @@
 
   function buildArticleUrl(post) {
     if (!post) return '#';
-    if (post.url) return post.url;
+    if (post.url) {
+      return basePath.resolve ? basePath.resolve(post.url) : post.url;
+    }
     var slug = post.slug ? encodeURIComponent(post.slug) : '';
-    return slug ? '/article.html?slug=' + slug : '#';
+    return slug ? (basePath.articleUrl ? basePath.articleUrl(post.slug) : '/article.html?slug=' + slug) : '#';
   }
-
   function normalizeEntries(raw) {
     if (!raw) return [];
     var list;
@@ -106,7 +119,7 @@
       if (meta.cover) data.cover = meta.cover;
       if (meta.category) data.category = meta.category;
       if (meta.date) data.date = meta.date;
-      if (meta.url) data.url = meta.url;
+      if (meta.url) data.url = basePath.resolve ? basePath.resolve(meta.url) : meta.url;
     }
     return data;
   }
@@ -114,7 +127,7 @@
   function categoryUrl(category) {
     if (!category) return '#';
     var slug = slugify(category);
-    return slug ? '/' + slug + '/' : '#';
+    return slug ? (basePath.sectionUrl ? basePath.sectionUrl(slug) : '/' + slug + '/') : '#';
   }
 
   function createArticle(data) {
@@ -123,8 +136,9 @@
     var excerpt = escapeHtml(data.excerpt || '');
     var category = escapeHtml(data.category || '');
     var date = escapeHtml(formatDate(data.date));
-    var cover = data.cover ? escapeHtml(data.cover) : escapeHtml(DEFAULT_IMAGE);
-    var link = escapeHtml(data.url || buildArticleUrl(data));
+    var coverSrc = data.cover ? (basePath.resolve ? basePath.resolve(data.cover) : data.cover) : DEFAULT_IMAGE;
+    var cover = escapeHtml(coverSrc);
+    var link = escapeHtml((data.url ? data.url : buildArticleUrl(data))); // data.url already resolved
     var categoryLink = category ? escapeHtml(categoryUrl(data.category)) : '#';
     var figureClass = data.cover ? '' : ' class="no-cover"';
     var alt = title || 'AventurOO';
