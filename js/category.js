@@ -159,19 +159,20 @@
     }
 
     if (!cat) {
-      var parts = location.pathname.replace(/\/+$/, '').split('/'); // p.sh. ["", "news", "politics.html"]
-      if (parts[1]) {
-        var derived = slugify(parts[1]);
+      var trimmedPath = location.pathname.replace(/\/+$/, '');
+      var segments = trimmedPath.split('/');
+      for (var i = segments.length - 1; i >= 0; i--) {
+        var segment = segments[i];
+        if (!segment) continue;
+
+        var cleaned = segment.replace(/\.html?$/i, '');
+        if (!cleaned || /^index$/i.test(cleaned)) continue;
+
+        var derived = slugify(cleaned);
         if (derived) {
           cat = derived;
-          label = parts[1];
-        }
-      }
-      if (!cat && parts[2]) {
-        var p2 = slugify(parts[2]);
-        if (p2 && p2 !== 'index') {
-          cat = p2;
-          label = parts[2];
+          label = cleaned;
+          break;
         }
       }
     }
