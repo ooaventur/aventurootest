@@ -43,10 +43,18 @@
       .split('-')
       .map(function (w) { return w.charAt(0).toUpperCase() + w.slice(1); })
       .join(' ');
-@@ -36,156 +55,160 @@
-          "'": '&#39;'
-        }[ch];
-      });
+  }
+
+  function escapeHtml(value) {
+    return (value == null ? '' : String(value)).replace(/[&<>"']/g, function (ch) {
+      return {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[ch];
+    });
   }
 
   function getPostTimestamp(post) {
@@ -77,7 +85,7 @@
     return slug ? '/article.html?slug=' + slug : '#';
   }
 
- const url = new URL(window.location.href);
+  var url = new URL(window.location.href);
 
   function getCatSub() {
     var cat = slugify(url.searchParams.get('cat'));
