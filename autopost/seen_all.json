@@ -12,5 +12,411 @@
     "category": "test/ai-news1",
     "subcategory": "Ai News1",
     "created": "2025-09-18"
+  },
+  "d90b2d617fdd056881170c1bda33008383facde8": {
+    "title": "Clean hydrogen is facing a big reality check",
+    "url": "https://www.technologyreview.com/2025/09/18/1123818/hydrogen-reality-check-china/",
+    "category": "test/ai-news1",
+    "subcategory": "Ai News1",
+    "created": "2025-09-18"
+  },
+  "a3e3f40507cf57dd5e6d1d4947b6799aa35044b6": {
+    "title": "AI-designed viruses are here and already killing bacteria",
+    "url": "https://www.technologyreview.com/2025/09/17/1123801/ai-virus-bacteriophage-life/",
+    "category": "test/ai-news1",
+    "subcategory": "Ai News1",
+    "created": "2025-09-17"
+  },
+  "0fd16b63006644c2c9278c27e774d43fe34dd462": {
+    "title": "Multi-Agent Systems: The Next Frontier in AI-Driven Cyber Defense",
+    "url": "https://machinelearningmastery.com/multi-agent-systems-the-next-frontier-in-ai-driven-cyber-defense/",
+    "category": "test/ai-news5",
+    "subcategory": "Ai News5",
+    "created": "2025-09-09"
+  },
+  "2efa472b1f6adce581e90626d0c6159457f37cd0": {
+    "title": "ROC AUC vs Precision-Recall for Imbalanced Data",
+    "url": "https://machinelearningmastery.com/roc-auc-vs-precision-recall-for-imbalanced-data/",
+    "category": "test/ai-news5",
+    "subcategory": "Ai News5",
+    "created": "2025-09-09"
+  },
+  "558c0efe2cdc648489e1a0eb3145e29eeb5d4382": {
+    "title": "The UK’s ‘Goldilocks Moment for AI’: NVIDIA, UK and US Leaders Highlight AI Infrastructure Investments",
+    "url": "https://blogs.nvidia.com/blog/uk-ai-ecosystem-celebration/",
+    "category": "test/ai-news6",
+    "subcategory": "Ai News6",
+    "created": "2025-09-18"
+  },
+  "90aa726e1069edf8593e956f1dbcf00f41197e1e": {
+    "title": "NVIDIA Blackwell: Born for Extreme-Scale AI Inference",
+    "url": "https://blogs.nvidia.com/blog/blackwell-ai-inference/",
+    "category": "test/ai-news6",
+    "subcategory": "Ai News6",
+    "created": "2025-09-18"
+  },
+  "255d0fc950f33d7a54dd4df0abfc4b500f67c7db": {
+    "title": "AGI Is Not Multimodal",
+    "url": "https://thegradient.pub/agi-is-not-multimodal/",
+    "category": "test/ai-news7",
+    "subcategory": "Ai News7",
+    "created": "2025-06-04"
+  },
+  "70e3dc831fe6f660cc7e49400e46a95ed3f5b776": {
+    "title": "Shape, Symmetries, and Structure: The Changing Role of Mathematics in Machine Learning Research",
+    "url": "https://thegradient.pub/shape-symmetry-structure/",
+    "category": "test/ai-news7",
+    "subcategory": "Ai News7",
+    "created": "2024-11-16"
+  },
+  "63fb96ef64878db6d5625257f8d9aaab7cdc9907": {
+    "title": "AGI in 2025 |Do you think what matters today will still matter in the coming months? TL;DR: No!",
+    "url": "https://becominghuman.ai/agi-in-2025-do-you-think-what-matters-today-will-still-matter-in-the-coming-months-tl-dr-no-5f22fc93c221?source=rss----5e5bef33608a---4",
+    "category": "test/ai-news8",
+    "subcategory": "Ai News8",
+    "created": "2025-02-03"
+  },
+  "ebb02904c8190d24968ce4be829a2e42c72e9b6d": {
+    "title": "When Algorithms Dream of Photons: Can AI Redefine Reality Like Einstein?",
+    "url": "https://becominghuman.ai/when-algorithms-dream-of-photons-can-ai-redefine-reality-like-einstein-47d1a8373178?source=rss----5e5bef33608a---4",
+    "category": "test/ai-news8",
+    "subcategory": "Ai News8",
+    "created": "2025-02-03"
+  },
+  "5033434776afd2acc9c7ba4cf506db4a3516d944": {
+    "title": "Opinion: Ukraine is becoming a global defence tech powerhouse",
+    "url": "https://thenextweb.com/news/ukraine-defence-tech-global-leader",
+    "category": "test/big-tech11",
+    "subcategory": "Big Tech11",
+    "created": "2025-09-17"
+  },
+  "7bbafe0949e3f648a7b5bc593199bf944c398301": {
+    "title": "Startup wisdom: Why resilience is the most underrated metric in startup success",
+    "url": "https://thenextweb.com/news/startup-wisdom-resilience-importance",
+    "category": "test/big-tech11",
+    "subcategory": "Big Tech11",
+    "created": "2025-09-17"
+  },
+  "34cae5e17fbc9cefd57d6a96e9456bc7f99abef9": {
+    "title": "Raising Series A in 2026: Insights from Top Early-Stage VCs at TechCrunch Disrupt 2025",
+    "url": "https://techcrunch.com/2025/09/18/term-sheets-traction-and-truth-bombs-inside-the-series-a-mindset-at-techcrunch-disrupt-2025/",
+    "category": "test/big-tech12",
+    "subcategory": "Big Tech12",
+    "created": "2025-09-18"
+  },
+  "1fa3e010061d7fd89c62080c76ac0cbd62c188e3": {
+    "title": "Huawei announces new AI infrastructure as Nvidia gets locked out of China",
+    "url": "https://techcrunch.com/2025/09/18/huawei-announces-new-ai-infrastructure-as-nvidia-gets-locked-out-of-china/",
+    "category": "test/big-tech12",
+    "subcategory": "Big Tech12",
+    "created": "2025-09-18"
+  },
+  "b28ed4c6561e135eade43764b3a543cba0340053": {
+    "title": "Creatives and Disney+ Subscribers Call for Boycotts Over Jimmy Kimmel Suspension",
+    "url": "https://gizmodo.com/jimmy-kimmel-disney-boycotts-damon-lindelof-tatiana-maslany-2000661128",
+    "category": "test/big-tech17",
+    "subcategory": "Big Tech17",
+    "created": "2025-09-18"
+  },
+  "ef1d1430c1c12e2b2ce5c349320f0425dbba592c": {
+    "title": "RFK Jr.’s Handpicked Vaccine Panel Nixes Measles-Chickenpox Combo for Kids Under 4",
+    "url": "https://gizmodo.com/rfk-jr-s-handpicked-vaccine-panel-nixes-measles-chickenpox-combo-for-kids-under-4-2000660333",
+    "category": "test/big-tech17",
+    "subcategory": "Big Tech17",
+    "created": "2025-09-18"
+  },
+  "4bab2b26db626b510ea89864704aa8c3953387e9": {
+    "title": "Inside the world’s most powerful AI datacenter",
+    "url": "https://blogs.microsoft.com/blog/2025/09/18/inside-the-worlds-most-powerful-ai-datacenter/",
+    "category": "test/big-tech18",
+    "subcategory": "Big Tech18",
+    "created": "2025-09-18"
+  },
+  "2afd7982241d3e6ef69e62a5377c34329c4b2e34": {
+    "title": "Microsoft leads shift beyond data unification to organization, delivering next-gen AI readiness with new Microsoft Fabric capabilities",
+    "url": "https://blogs.microsoft.com/blog/2025/09/16/microsoft-leads-shift-beyond-data-unification-to-organization-delivering-next-gen-ai-readiness-with-new-microsoft-fabric-capabilities/",
+    "category": "test/big-tech18",
+    "subcategory": "Big Tech18",
+    "created": "2025-09-16"
+  },
+  "454a39e086a7bafbd0ce9c8d4357927155fb6d39": {
+    "title": "Google pushes emergency patch for Chrome 0-day - check your browser version now",
+    "url": "https://go.theregister.com/feed/www.theregister.com/2025/09/18/google_emergency_patch_chrome_0_day/",
+    "category": "test/security-privacy21",
+    "subcategory": "Security Privacy21",
+    "created": "2025-09-18"
+  },
+  "d508f60b734089c5fb2633dba714f592c43b62c5": {
+    "title": "Crims bust through SonicWall to grab sensitive config data",
+    "url": "https://go.theregister.com/feed/www.theregister.com/2025/09/18/sonicwall_breach/",
+    "category": "test/security-privacy21",
+    "subcategory": "Security Privacy21",
+    "created": "2025-09-18"
+  },
+  "f33e8d580268f69443fdc02deac55809a6e0e54b": {
+    "title": "Self-Replicating Worm Hits 180+ Software Packages",
+    "url": "https://krebsonsecurity.com/2025/09/self-replicating-worm-hits-180-software-packages/",
+    "category": "test/security-privacy22",
+    "subcategory": "Security Privacy22",
+    "created": "2025-09-16"
+  },
+  "75f99bc1d95b215f4c01db2f5c4d856299a93b6c": {
+    "title": "Bulletproof Host Stark Industries Evades EU Sanctions",
+    "url": "https://krebsonsecurity.com/2025/09/bulletproof-host-stark-industries-evades-eu-sanctions/",
+    "category": "test/security-privacy22",
+    "subcategory": "Security Privacy22",
+    "created": "2025-09-11"
+  },
+  "a87a5b44a397685682b08ca74cd3cf26ae5068ac": {
+    "title": "HybridPetya: The Petya/NotPetya copycat comes with a twist",
+    "url": "https://www.welivesecurity.com/en/videos/hybridpetya-petya-notpetya-copycat-twist/",
+    "category": "test/security-privacy24",
+    "subcategory": "Security Privacy24",
+    "created": "2025-09-16"
+  },
+  "f9cc9ec954e775112d8f8440939f58c957f77fa3": {
+    "title": "Introducing HybridPetya: Petya/NotPetya copycat with UEFI Secure Boot bypass",
+    "url": "https://www.welivesecurity.com/en/eset-research/introducing-hybridpetya-petya-notpetya-copycat-uefi-secure-boot-bypass/",
+    "category": "test/security-privacy24",
+    "subcategory": "Security Privacy24",
+    "created": "2025-09-12"
+  },
+  "125ec3757486698a4d3869c65a135677934736ae": {
+    "title": "Library of Congress explains how parts of US Constitution vanished from its website",
+    "url": "https://techcrunch.com/2025/08/07/library-of-congress-explains-how-parts-of-us-constitution-vanished-from-its-website/",
+    "category": "test/internet-platforms32",
+    "subcategory": "Internet Platforms32",
+    "created": "2025-08-07"
+  },
+  "67259cd03ffd3ab62b80e25e92d67ffd0cc542fc": {
+    "title": "Key sections of the US Constitution deleted from government’s website",
+    "url": "https://techcrunch.com/2025/08/06/key-sections-of-the-us-constitution-deleted-from-governments-website/",
+    "category": "test/internet-platforms32",
+    "subcategory": "Internet Platforms32",
+    "created": "2025-08-06"
+  },
+  "c7196b82a95b9e24a3a1198e86a893ef5cafa87a": {
+    "title": "New attack on ChatGPT research agent pilfers secrets from Gmail inboxes",
+    "url": "https://arstechnica.com/information-technology/2025/09/new-attack-on-chatgpt-research-agent-pilfers-secrets-from-gmail-inboxes/",
+    "category": "test/internet-platforms34",
+    "subcategory": "Internet Platforms34",
+    "created": "2025-09-18"
+  },
+  "725779f978e48932515d049c4061dbfe7a8221c8": {
+    "title": "How weak passwords and other failings led to catastrophic breach of Ascension",
+    "url": "https://arstechnica.com/security/2025/09/how-weak-passwords-and-other-failings-led-to-catastrophic-breach-of-ascension/",
+    "category": "test/internet-platforms34",
+    "subcategory": "Internet Platforms34",
+    "created": "2025-09-18"
+  },
+  "e2bcaf3293c143630f0c168bd1d99e495a5a8fd5": {
+    "title": "Young people are outsmarting period tracking apps",
+    "url": "https://blog.mozilla.org/en/internet-culture/period-tracking-apps/",
+    "category": "test/internet-platforms35",
+    "subcategory": "Internet Platforms35",
+    "created": "2025-09-17"
+  },
+  "a1351f98ac4df83f6bc1df83d49422c557d369e0": {
+    "title": "Firefox DNS privacy: Faster than ever, now on Android",
+    "url": "https://blog.mozilla.org/en/firefox/dns-android/",
+    "category": "test/internet-platforms35",
+    "subcategory": "Internet Platforms35",
+    "created": "2025-09-17"
+  },
+  "ce82b3415054b9e09db55ab7d52451c4804357d4": {
+    "title": "Reimagining work: Microsoft’s vision for the future of Desktop as a Service",
+    "url": "https://techcommunity.microsoft.com/blog/windows-itpro-blog/reimagining-work-microsoft%E2%80%99s-vision-for-the-future-of-desktop-as-a-service/4448016",
+    "category": "test/internet-platforms36",
+    "subcategory": "Internet Platforms36",
+    "created": "2025-08-28"
+  },
+  "9f31151d04293161f26b79ca0b7b484738853f0a": {
+    "title": "Available today: GPT-5 in Microsoft 365 Copilot",
+    "url": "https://www.microsoft.com/en-us/microsoft-365/blog/2025/08/07/available-today-gpt-5-in-microsoft-365-copilot/",
+    "category": "test/internet-platforms36",
+    "subcategory": "Internet Platforms36",
+    "created": "2025-08-07"
+  },
+  "72524d18f17a2352483094ca00915c80c297ee7a": {
+    "title": "App Store submissions now open for the latest OS releases",
+    "url": "https://developer.apple.com/news/?id=6lxhtioi",
+    "category": "test/internet-platforms37",
+    "subcategory": "Internet Platforms37",
+    "created": "2025-09-09"
+  },
+  "9937a557f01892f93d7e31cbec92701ad0b891ae": {
+    "title": "Hello Developer: September 2025",
+    "url": "https://developer.apple.com/news/?id=6zd7a3al",
+    "category": "test/internet-platforms37",
+    "subcategory": "Internet Platforms37",
+    "created": "2025-09-02"
+  },
+  "009bb7d719309803e73d12dfa9d647376a7794e5": {
+    "title": "Qwen models are now available in Amazon Bedrock",
+    "url": "https://aws.amazon.com/blogs/aws/qwen-models-are-now-available-in-amazon-bedrock/",
+    "category": "test/internet-platforms38",
+    "subcategory": "Internet Platforms38",
+    "created": "2025-09-18"
+  },
+  "6cf3c04b05aa85f39efd3a4146dd74f55ab9629b": {
+    "title": "DeepSeek-V3.1 model now available in Amazon Bedrock",
+    "url": "https://aws.amazon.com/blogs/aws/deepseek-v3-1-now-available-in-amazon-bedrock/",
+    "category": "test/internet-platforms38",
+    "subcategory": "Internet Platforms38",
+    "created": "2025-09-18"
+  },
+  "f276f3ef2d2f9cdaf7759e2c991c9c272426469d": {
+    "title": "Connect and secure any private or public app by hostname, not IP — free for everyone in Cloudflare One",
+    "url": "https://blog.cloudflare.com/tunnel-hostname-routing/",
+    "category": "test/internet-platforms39",
+    "subcategory": "Internet Platforms39",
+    "created": "2025-09-18"
+  },
+  "9225a91e54b01299fb2fe728331113261cc9a415": {
+    "title": "The RUM Diaries: enabling Web Analytics by default",
+    "url": "https://blog.cloudflare.com/the-rum-diaries-enabling-web-analytics-by-default/",
+    "category": "test/internet-platforms39",
+    "subcategory": "Internet Platforms39",
+    "created": "2025-09-17"
+  },
+  "c767ac7e0698a30c37db505d440e35e86a0af590": {
+    "title": "Apple: SSH and FileVault",
+    "url": "https://keith.github.io/xcode-man-pages/apple_ssh_and_filevault.7.html",
+    "category": "test/internet-platforms40",
+    "subcategory": "Internet Platforms40",
+    "created": "2025-09-18"
+  },
+  "bc54f409fef55c1c5fcb6a3124b3bb550ca610dd": {
+    "title": "Learn Your Way: Reimagining Textbooks with Generative AI",
+    "url": "https://research.google/blog/learn-your-way-reimagining-textbooks-with-generative-ai/",
+    "category": "test/internet-platforms40",
+    "subcategory": "Internet Platforms40",
+    "created": "2025-09-18"
+  },
+  "4a1c77135e6ccc6ead0c579bff9ee88d251ed064": {
+    "title": "Ready to download iOS 26? See if your iPhone is eligible for the free update first",
+    "url": "https://www.engadget.com/mobile/ready-to-download-ios-26-see-if-your-iphone-is-eligible-for-the-free-update-first-191854926.html?src=rss",
+    "category": "test/innovation-gadgets41",
+    "subcategory": "Innovation Gadgets41",
+    "created": "2025-09-18"
+  },
+  "7f37ef4c0c93cca6dbd27bc7a4b10058b61d0c28": {
+    "title": "iOS 26 is ready to download: Everything to know about the free iPhone software update",
+    "url": "https://www.engadget.com/mobile/ios-26-is-ready-to-download-everything-to-know-about-the-free-iphone-software-update-135749287.html?src=rss",
+    "category": "test/innovation-gadgets41",
+    "subcategory": "Innovation Gadgets41",
+    "created": "2025-09-18"
+  },
+  "558b3b3d51e98d9e46b0e093e5e2b1b99054983a": {
+    "title": "An Odd Trio of ‘Halloween’ Movies Is Returning to Theaters",
+    "url": "https://gizmodo.com/an-odd-trio-of-halloween-movies-is-returning-to-theaters-2000660874",
+    "category": "test/innovation-gadgets42",
+    "subcategory": "Innovation Gadgets42",
+    "created": "2025-09-18"
+  },
+  "179428d3cc2137266b8598514a01b3c0dfff1d86": {
+    "title": "‘Star Trek: Strange New Worlds’ Needs to Imagine More for Its Female Characters",
+    "url": "https://gizmodo.com/star-trek-strange-new-worlds-season-3-women-romance-2000660935",
+    "category": "test/innovation-gadgets42",
+    "subcategory": "Innovation Gadgets42",
+    "created": "2025-09-18"
+  },
+  "d528adf6d08202c35694349d23d1e41894a1f430": {
+    "title": "iPhone Air MagSafe Battery teardown reveals a surprisingly familiar component inside",
+    "url": "https://9to5mac.com/2025/09/18/iphone-air-magsafe-battery-teardown/",
+    "category": "test/innovation-gadgets49",
+    "subcategory": "Innovation Gadgets49",
+    "created": "2025-09-18"
+  },
+  "a4cb681fa90a7e15388fafeadd565ca1a91adcbb": {
+    "title": "iOS 26’s new Battery feature can help save a draining iPhone",
+    "url": "https://9to5mac.com/2025/09/18/ios-26s-new-battery-feature-can-help-save-a-draining-iphone/",
+    "category": "test/innovation-gadgets49",
+    "subcategory": "Innovation Gadgets49",
+    "created": "2025-09-18"
+  },
+  "b1f2c2558e7c3f0a501b9b6c239438332589e4ef": {
+    "title": "Weapons director says his Resident Evil movie will leave everything 'intact' from the games: 'I'm not gonna steal Leon and put him in an original story'",
+    "url": "https://www.pcgamer.com/movies-tv/weapons-director-says-his-resident-evil-movie-will-leave-everything-intact-from-the-games-im-not-gonna-steal-leon-and-put-him-in-an-original-story/",
+    "category": "test/gaming-tech-ai-gaming50",
+    "subcategory": "Gaming Tech Ai Gaming50",
+    "created": "2025-09-18"
+  },
+  "692c2329cf51d2a8336b8fe2c163d1d470f0b591": {
+    "title": "Nintendo reportedly gets even more obnoxious about patent law by taking a 'mods aren't real games' stance against a Dark Souls 3 mod that could invalidate its Palworld lawsuit",
+    "url": "https://www.pcgamer.com/games/survival-crafting/nintendo-reportedly-gets-even-more-obnoxious-about-patent-law-by-taking-a-mods-arent-real-games-stance-against-a-dark-souls-3-mod-that-could-invalidate-its-palworld-lawsuit/",
+    "category": "test/gaming-tech-ai-gaming50",
+    "subcategory": "Gaming Tech Ai Gaming50",
+    "created": "2025-09-18"
+  },
+  "287e4eb6eee8ba3160a361ef52124c3e9fde1b3c": {
+    "title": "Lego Spider-Verse Minifigure Collection Is Back In Stock At Amazon",
+    "url": "https://www.gamespot.com/articles/lego-minifigures-marvel-spider-man-spider-verse-collection-2025-buying-guide/1100-6533603/?ftag=CAD-01-10abi2f",
+    "category": "test/gaming-tech-ai-gaming52",
+    "subcategory": "Gaming Tech Ai Gaming52",
+    "created": "2025-09-18"
+  },
+  "5b5a15b9d8cceaa63dd845943fa8b6bb3cbfa969": {
+    "title": "The GameSpot Deals Team Now Has A Weekly Newsletter: Here's What You Need To Know",
+    "url": "https://www.gamespot.com/articles/gamespot-deals-weekly-newsletter-email-sign-up/1100-6534863/?ftag=CAD-01-10abi2f",
+    "category": "test/gaming-tech-ai-gaming52",
+    "subcategory": "Gaming Tech Ai Gaming52",
+    "created": "2025-09-18"
+  },
+  "01180ae4ffb4e2983e4544205b61888c9b6f2d2a": {
+    "title": "How to use Eridium in Borderlands 4",
+    "url": "https://www.polygon.com/borderlands-4-eridium-how-to-use/",
+    "category": "test/gaming-tech-ai-gaming53",
+    "subcategory": "Gaming Tech Ai Gaming53",
+    "created": "2025-09-18"
+  },
+  "0e2fd44bafc5fc4e89c54ee9d81884f04ff4fade": {
+    "title": "All Hollow Knight: Silksong ability locations",
+    "url": "https://www.polygon.com/hollow-knight-silksong-ability-locations-all-where-to-find/",
+    "category": "test/gaming-tech-ai-gaming53",
+    "subcategory": "Gaming Tech Ai Gaming53",
+    "created": "2025-09-18"
+  },
+  "665ab12871e652da1657dd91ab5a28769c89ca1c": {
+    "title": "The Biggest Reason To Buy The Xbox Ally Handheld Just Leaked",
+    "url": "https://kotaku.com/xbox-rog-ally-x-windows-handheld-app-leak-2000626934",
+    "category": "test/gaming-tech-ai-gaming57",
+    "subcategory": "Gaming Tech Ai Gaming57",
+    "created": "2025-09-18"
+  },
+  "d4f23e96a398f3e8b407d06cd10bdd048717994e": {
+    "title": "Battlefield 6 Devs Have A Button That Blows Up Everything In A Map And It’s ‘Fun’ To Press",
+    "url": "https://kotaku.com/battlefield-6-devs-have-a-button-that-blows-up-everything-in-a-map-and-its-fun-to-press-it-2000626898",
+    "category": "test/gaming-tech-ai-gaming57",
+    "subcategory": "Gaming Tech Ai Gaming57",
+    "created": "2025-09-18"
+  },
+  "5bf6a99cc678d1eb271a14e91d52e9c75fe93d1a": {
+    "title": "We Review EMEET’s Dual-Camera PTZ Webcam: Meet the PIXY",
+    "url": "https://fstoppers.com/reviews/review-emeets-dual-camera-ptz-webcam-meet-pixy-709614?utm_source=FS_RSS&utm_medium=RSS&utm_campaign=Main_RSS",
+    "category": "test/audio-creator-tools60",
+    "subcategory": "Audio Creator Tools60",
+    "created": "2025-09-18"
+  },
+  "711f7fc40359bd68afa9dac771af599ff74807a6": {
+    "title": "The Usefulness of Smart Objects in Photoshop",
+    "url": "https://fstoppers.com/photoshop/usefulness-smart-objects-photoshop-711819?utm_source=FS_RSS&utm_medium=RSS&utm_campaign=Main_RSS",
+    "category": "test/audio-creator-tools60",
+    "subcategory": "Audio Creator Tools60",
+    "created": "2025-09-18"
+  },
+  "599a018879a8371c2e0508c539b2cff12e937fe1": {
+    "title": "Alpaca interweaves code and pattern, from music to textile to dance",
+    "url": "https://cdm.link/alpaca-interweaves-code-and-pattern-from-music-to-textile-to-dance/",
+    "category": "test/audio-creator-tools64",
+    "subcategory": "Audio Creator Tools64",
+    "created": "2025-09-18"
+  },
+  "96d56ffbefc9039ee80069548334c6d68877ddcc": {
+    "title": "The Blaster Beam, a massive instrument invented by Captain Kirk’s nephew",
+    "url": "https://cdm.link/blaster-beam/",
+    "category": "test/audio-creator-tools64",
+    "subcategory": "Audio Creator Tools64",
+    "created": "2025-09-17"
   }
 }
