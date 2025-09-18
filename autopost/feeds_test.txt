@@ -1,10 +1,1 @@
-test|11|https://dailyhodl.com/altcoins/feed
-test|12|https://altcoininvestor.com/latest/rss
-test|13|https://dailycoin.com/altcoins/feed
-test|14|https://cointelegraph.com/rss/tag/altcoins
-test|15|https://e-cryptonews.com/category/altcoin-news/feed/
-test|16|https://beincrypto.com/altcoin-news/feed/
-test|17|https://news.tokeninsight.com/rss/news
-test|18|https://www.ccn.com/news/crypto-news/feeds/
-test|19|https://cryptonews.com/news/altcoin-crypto/feed/
-test|20|https://blockchain.news/feed
+Tech & AI|AI News|https://www.technologyreview.com/feed/ 
