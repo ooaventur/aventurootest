@@ -25,6 +25,17 @@ jobs:
         with:
           fetch-depth: 0   # që të lejojmë pull/rebase
 
+      - name: Ensure branch checkout
+        shell: bash
+        run: |
+          branch="${GITHUB_REF_NAME:-${GITHUB_HEAD_REF:-main}}"
+          if git show-ref --verify --quiet "refs/heads/$branch"; then
+            git checkout "$branch"
+          else
+            git switch --track "origin/$branch"
+          fi
+          echo "AUTOPOST_BRANCH=$branch" >> "$GITHUB_ENV"
+          
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
