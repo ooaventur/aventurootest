@@ -303,27 +303,6 @@ def sanitize_article_html(html: str) -> str:
     html = re.sub(r'(?is)<(aside|figure)[^>]*class="[^"]*(share|related|promo|newsletter)[^"]*"[^>]*>.*?</\1>', "", html)
     return html.strip()
 
-
-def limit_words_html(html: str, max_words: int) -> str:
-    text = strip_text(html)
-    words = text.split()
-    if len(words) <= max_words:
-        return html
-    parts = re.findall(r"(?is)<p[^>]*>.*?</p>|<h2[^>]*>.*?</h2>|<h3[^>]*>.*?</h3>|<ul[^>]*>.*?</ul>|<ol[^>]*>.*?</ol>|<blockquote[^>]*>.*?</blockquote>", html)
-    out, count = [], 0
-    for block in parts:
-        t = strip_text(block)
-        w = len(t.split())
-        if count + w > max_words:
-            break
-        out.append(block)
-        count += w
-    if not out:
-        trimmed = " ".join(words[:max_words]) + "…"
-        return f"<p>{trimmed}</p>"
-    return "\n".join(out)
-
-
 def extract_body_html(url: str) -> tuple[str, str]:
     body_html = ""
     first_img = ""
