@@ -1,11 +1,10 @@
-# === CRYPTO / 111111 ===
-test|1|https://news.bitcoin.com/feed/   
-test|2|https://beincrypto.com/bitcoin-news/feed/      
-test|3|https://bitcoinist.com/feed/     
-test|4|https://blockonomi.com/bitcoin/feed     
-test|5|https://cryptonews.com/news/bitcoin-crypto/feed/   
-test|6|https://cryptoslate.com/news/bitcoin   
-test|7|https://cointelegraph.com/tags/bitcoin/feed  
-test|8|https://dailyhodl.com/feed/                        
-test|9|https://livebitcoinnews.com/feed             
-test|10|https://bitcoinmagazine.com/.rss/full/          
+test|11|https://dailyhodl.com/altcoins/feed
+test|12|https://altcoininvestor.com/latest/rss
+test|13|https://dailycoin.com/altcoins/feed
+test|14|https://cointelegraph.com/rss/tag/altcoins
+test|15|https://e-cryptonews.com/category/altcoin-news/feed/
+test|16|https://beincrypto.com/altcoin-news/feed/
+test|17|https://news.tokeninsight.com/rss/news
+test|18|https://www.ccn.com/news/crypto-news/feeds/
+test|19|https://cryptonews.com/news/altcoin-crypto/feed/
+test|20|https://blockchain.news/feed
