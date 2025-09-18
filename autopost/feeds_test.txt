@@ -1,12 +1,11 @@
 # === CRYPTO / 111111 ===
-test|1|https://news.bitcoin.com/feed/                           # Bitcoin.com – për lajmet e përgjithshme mbi Bitcoin :contentReference[oaicite:0]{index=0}
-test|2|https://beincrypto.com/bitcoin-news/feed/               # BeInCrypto – për lajme të Bitcoin :contentReference[oaicite:1]{index=1}
-test|3|https://bitcoinist.com/feed/                            # Bitcoinist – për analiza dhe lajme mbi Bitcoin & kripto sfera në përgjithësi :contentReference[oaicite:2]{index=2}
-test|4|https://blockonomi.com/bitcoin/feed                     # Blockonomi – seksioni Bitcoin :contentReference[oaicite:3]{index=3}
-test|5|https://cryptonews.com/news/bitcoin-crypto/feed/         # Cryptonews – Bitcoin lajme dhe analiza :contentReference[oaicite:4]{index=4}
-test|6|https://cryptoslate.com/news/bitcoin                    # CryptoSlate – sekcioni Bitcoin i lajmeve :contentReference[oaicite:5]{index=5}
-test|7|https://cointelegraph.com/tags/bitcoin/feed             # CoinTelegraph – për lajme kryesore të Bitcoin-it :contentReference[oaicite:6]{index=6}
-test|8|https://dailyhodl.com/feed/                             # The Daily Hodl – shpesh për lajme më të shpejta në Bitcoin sferë :contentReference[oaicite:7]{index=7}
-test|9|https://livebitcoinnews.com/feed                        # Live Bitcoin News – lajme të fundit rreth Bitcoin :contentReference[oaicite:8]{index=8}
-test|10|https://bitcoinmagazine.com/.rss/full/                  # Bitcoin Magazine – artikuj dhe analiza për Bitcoin dhe tema kryesore të tij :contentReference[oaicite:9]{index=9}
-
+test|1|https://news.bitcoin.com/feed/   
+test|2|https://beincrypto.com/bitcoin-news/feed/      
+test|3|https://bitcoinist.com/feed/     
+test|4|https://blockonomi.com/bitcoin/feed     
+test|5|https://cryptonews.com/news/bitcoin-crypto/feed/   
+test|6|https://cryptoslate.com/news/bitcoin   
+test|7|https://cointelegraph.com/tags/bitcoin/feed  
+test|8|https://dailyhodl.com/feed/                        
+test|9|https://livebitcoinnews.com/feed             
+test|10|https://bitcoinmagazine.com/.rss/full/          
