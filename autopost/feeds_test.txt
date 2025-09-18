@@ -1,1 +1,2 @@
-test|General|https://cryptopotato.com/feed
+
+test|General|https://cryptoslate.com/feed/
