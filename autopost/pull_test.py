@@ -14,7 +14,8 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 os.environ.setdefault("FEEDS_FILE", str(ROOT / "feeds_test.txt"))
 os.environ.setdefault("CATEGORY", "test")
-
+os.environ.setdefault("MAX_PER_FEED", "2")
+os.environ.setdefault("MAX_PER_CAT", "2")
 # Import after setting environment defaults so pull_news picks them up.
 pull_news = importlib.import_module("autopost.pull_news")
 
