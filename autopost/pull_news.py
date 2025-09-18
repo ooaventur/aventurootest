@@ -538,11 +538,175 @@ def slug_to_label(slug: str) -> str:
     return slug.strip().title()
 
 
-def _normalize_label_from_slug(label: str, slug: str) -> str:
+TAXONOMY_FILE = DATA_DIR / "taxonomy.json"
+CATEGORY_TITLES: dict[str, str] = {}
+SUBCATEGORY_TITLES: dict[str, dict[str, str]] = {}
+
+
+def _load_taxonomy_lookup() -> None:
+    CATEGORY_TITLES.clear()
+    SUBCATEGORY_TITLES.clear()
+
+    try:
+        raw = TAXONOMY_FILE.read_text(encoding="utf-8")
+    except OSError:
+        return
+
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError:
+        return
+
+    entries = []
+    if isinstance(data, dict):
+        entries = data.get("categories", [])
+    elif isinstance(data, list):
+        entries = data
+    if not isinstance(entries, list):
+        return
+
+    def ensure_title(slug_value: str, title_value: str) -> str:
+        slug_norm = slugify_taxonomy(slug_value)
+        if not slug_norm:
+            return ""
+        clean_title = (title_value or "").strip()
+        if not clean_title:
+            clean_title = CATEGORY_TITLES.get(slug_norm) or slug_to_label(slug_norm)
+        CATEGORY_TITLES[slug_norm] = clean_title
+        return clean_title
+
+    def register_parent_child(parent_value: str, child_value: str, child_title: str) -> None:
+        parent_norm = slugify_taxonomy(parent_value)
+        child_norm = slugify_taxonomy(child_value)
+        if not parent_norm or not child_norm:
+            return
+        if parent_norm not in CATEGORY_TITLES:
+            CATEGORY_TITLES[parent_norm] = slug_to_label(parent_norm)
+        title_final = ensure_title(child_norm, child_title)
+        if not title_final:
+            title_final = slug_to_label(child_norm)
+            CATEGORY_TITLES[child_norm] = title_final
+        SUBCATEGORY_TITLES.setdefault(parent_norm, {})[child_norm] = title_final
+
+    def walk(node, parent_slug: str = "") -> None:
+        if not isinstance(node, dict):
+            return
+        slug_value = node.get("slug")
+        if not slug_value:
+            return
+        title_value = (node.get("title") or "").strip()
+        slug_norm = slugify_taxonomy(slug_value)
+        if not slug_norm:
+            return
+        ensure_title(slug_norm, title_value)
+        if parent_slug:
+            register_parent_child(parent_slug, slug_norm, title_value)
+        group_value = node.get("group")
+        if isinstance(group_value, str):
+            register_parent_child(group_value, slug_norm, title_value)
+        elif isinstance(group_value, list):
+            for g in group_value:
+                if isinstance(g, str):
+                    register_parent_child(g, slug_norm, title_value)
+        subs_value = node.get("subs")
+        if isinstance(subs_value, list):
+            for sub_node in subs_value:
+                walk(sub_node, slug_norm)
+
+    for entry in entries:
+        walk(entry)
+
+
+_load_taxonomy_lookup()
+
+
+def taxonomy_title_for_slug(slug: str) -> str:
+    slug_norm = slugify_taxonomy(slug)
+    if not slug_norm:
+        return ""
+    return CATEGORY_TITLES.get(slug_norm) or slug_to_label(slug_norm)
+
+
+def category_label_from_slug(slug: str) -> str:
+    slug = (slug or "").strip().strip("/")
+    if not slug:
+        return ""
+    segments = [seg for seg in slug.split("/") if seg]
+    if not segments:
+        return ""
+    cat_slug = slugify_taxonomy(segments[0])
+    if not cat_slug:
+        return ""
+    return taxonomy_title_for_slug(cat_slug)
+
+
+def subcategory_label_from_slug(slug: str, parent_slug: str = "") -> str:
+    slug = (slug or "").strip().strip("/")
+    if not slug:
+        return ""
+    segments = [seg for seg in slug.split("/") if seg]
+    if not segments:
+        return ""
+    parent_norm = slugify_taxonomy(parent_slug)
+    child_norm = slugify_taxonomy(segments[-1])
+    if parent_norm and child_norm:
+        label = SUBCATEGORY_TITLES.get(parent_norm, {}).get(child_norm)
+        if label:
+            return label
+    if len(segments) > 1:
+        chosen_parent = ""
+        chosen_child = ""
+        for idx in range(len(segments) - 1):
+            candidate_parent = slugify_taxonomy(segments[idx])
+            candidate_child = slugify_taxonomy(segments[idx + 1])
+            if SUBCATEGORY_TITLES.get(candidate_parent, {}).get(candidate_child):
+                chosen_parent = candidate_parent
+                chosen_child = candidate_child
+        if chosen_parent and chosen_child:
+            label = SUBCATEGORY_TITLES.get(chosen_parent, {}).get(chosen_child)
+            if label:
+                return label
+    return taxonomy_title_for_slug(child_norm)
+
+
+def split_category_slug(slug: str) -> tuple[str, str]:
+    slug = (slug or "").strip().strip("/")
+    if not slug:
+        return "", ""
+    segments = [slugify_taxonomy(seg) for seg in slug.split("/") if slugify_taxonomy(seg)]
+    if not segments:
+        return "", ""
+    cat_slug = segments[0]
+    sub_slug = ""
+    if len(segments) > 1:
+        chosen_parent = ""
+        chosen_child = ""
+        for idx in range(len(segments) - 1):
+            parent_candidate = segments[idx]
+            child_candidate = segments[idx + 1]
+            if SUBCATEGORY_TITLES.get(parent_candidate, {}).get(child_candidate):
+                chosen_parent = parent_candidate
+                chosen_child = child_candidate
+        if chosen_parent and chosen_child:
+            cat_slug = chosen_parent
+            sub_slug = chosen_child
+        else:
+            sub_slug = segments[-1]
+    return cat_slug, sub_slug
+
+
+def _normalize_label_from_slug(label: str, slug: str, parent_slug: str = "") -> str:
     slug_norm = slugify_taxonomy(slug)
     label = (label or "").strip()
     if not slug_norm:
         return label
+    curated = (
+        subcategory_label_from_slug(slug_norm, parent_slug)
+        if parent_slug
+        else category_label_from_slug(slug_norm)
+    )
+    if curated:
+        return curated
     if not label or slugify_taxonomy(label) == slug_norm:
         return slug_to_label(slug_norm)
     return label
@@ -565,30 +729,27 @@ def _normalize_post_entry(entry):
                 subcategory = parts[-1]
             category = parts[0]
 
-    slug_segments = [seg for seg in category_slug.split("/") if seg] if category_slug else []
+    derived_cat_slug = ""
+    derived_sub_slug = ""
+    if category_slug:
+        derived_cat_slug, derived_sub_slug = split_category_slug(category_slug)
 
-    cat_slug = slugify_taxonomy(category)
-    sub_slug = slugify_taxonomy(subcategory)
+    cat_slug = derived_cat_slug or slugify_taxonomy(category)
+    sub_slug = derived_sub_slug or slugify_taxonomy(subcategory)
 
-    if slug_segments:
-        cat_slug = slug_segments[0] or cat_slug
-        if not category:
-            category = slug_to_label(cat_slug)
-        if len(slug_segments) > 1:
-            derived_sub = slug_segments[-1]
-            if not sub_slug:
-                sub_slug = derived_sub
-            if not subcategory:
-                subcategory = slug_to_label(derived_sub)
-    else:
-        if not cat_slug and category:
-            cat_slug = slugify_taxonomy(category)
-        if not sub_slug and subcategory:
-            sub_slug = slugify_taxonomy(subcategory)
+    if not cat_slug and category:
+        cat_slug = slugify_taxonomy(category)
+    if not sub_slug and subcategory:
+        sub_slug = slugify_taxonomy(subcategory)
+
+    if not category and cat_slug:
+        category = category_label_from_slug(cat_slug)
+    if not subcategory and sub_slug:
+        subcategory = subcategory_label_from_slug(sub_slug, cat_slug)
 
     category = _normalize_label_from_slug(category, cat_slug)
     if sub_slug:
-        subcategory = _normalize_label_from_slug(subcategory, sub_slug)
+        subcategory = _normalize_label_from_slug(subcategory, sub_slug, cat_slug)
     else:
         subcategory = (subcategory or "").strip()
 
@@ -793,42 +954,36 @@ def main():
         if not feed_url:
             continue
 
-        slug_segments = [seg for seg in category_slug_value.split("/") if seg] if category_slug_value else []
-        cat_slug = slug_segments[0] if slug_segments else slugify_taxonomy(category_label)
-        sub_slug = slugify_taxonomy(subcategory_label)
-        if slug_segments and len(slug_segments) > 1 and not sub_slug:
-            sub_slug = slug_segments[-1]
+        derived_cat_slug = ""
+        derived_sub_slug = ""
+        if category_slug_value:
+            derived_cat_slug, derived_sub_slug = split_category_slug(category_slug_value)
+
+        cat_slug = derived_cat_slug or slugify_taxonomy(category_label)
+        sub_slug = derived_sub_slug or slugify_taxonomy(subcategory_label)
 
         if not subcategory_label and current_sub_label:
             subcategory_label = current_sub_label
-            if not sub_slug:
-                sub_slug = current_sub_slug or slugify_taxonomy(subcategory_label)
+            sub_slug = sub_slug or current_sub_slug or slugify_taxonomy(subcategory_label)
 
         if not category_label and cat_slug:
-            category_label = slug_to_label(cat_slug)
-
-        category_label = _normalize_label_from_slug(category_label, cat_slug)
-        if sub_slug:
-            subcategory_label = _normalize_label_from_slug(subcategory_label, sub_slug)
+            category_label = category_label_from_slug(cat_slug)
+        if not subcategory_label and sub_slug:
+            subcategory_label = subcategory_label_from_slug(sub_slug, cat_slug)
         else:
             subcategory_label = (subcategory_label or "").strip()
 
-        if not category_slug_value:
-            parts_slug = []
-            if cat_slug:
-                parts_slug.append(cat_slug)
-            if sub_slug:
-                parts_slug.append(sub_slug)
-            category_slug_value = "/".join(parts_slug)
+        category_label = _normalize_label_from_slug(category_label, cat_slug)
+        if sub_slug:
+            subcategory_label = _normalize_label_from_slug(subcategory_label, sub_slug, cat_slug)
         else:
-            normalized_parts = []
-            if cat_slug:
-                normalized_parts.append(cat_slug)
-            if sub_slug:
-                normalized_parts.append(sub_slug)
-            elif len(slug_segments) > 1:
-                normalized_parts.append(slug_segments[-1])
-            category_slug_value = "/".join([p for p in normalized_parts if p])
+            subcategory_label = (subcategory_label or "").strip()
+
+        slug_parts = [p for p in (cat_slug, sub_slug) if p]
+        if slug_parts:
+            category_slug_value = "/".join(slug_parts)
+        else:
+            category_slug_value = (category_slug_value or "").strip().strip("/")
 
         # Optional filter by env CATEGORY (leave empty to accept all)
         if CATEGORY and category_label != CATEGORY:
