@@ -522,6 +522,93 @@ def slugify(s: str) -> str:
     s = re.sub(r"[^a-z0-9]+", "-", s)
     return s.strip("-") or "post"
 
+
+def slugify_taxonomy(value: str) -> str:
+    value = (value or "").strip().lower()
+    value = re.sub(r"[^a-z0-9]+", "-", value)
+    return value.strip("-")
+
+
+def slug_to_label(slug: str) -> str:
+    slug = (slug or "").strip()
+    if not slug:
+        return ""
+    slug = slug.replace("_", " ").replace("-", " ")
+    slug = re.sub(r"\s+", " ", slug)
+    return slug.strip().title()
+
+
+def _normalize_label_from_slug(label: str, slug: str) -> str:
+    slug_norm = slugify_taxonomy(slug)
+    label = (label or "").strip()
+    if not slug_norm:
+        return label
+    if not label or slugify_taxonomy(label) == slug_norm:
+        return slug_to_label(slug_norm)
+    return label
+
+
+def _normalize_post_entry(entry):
+    if not isinstance(entry, dict):
+        return None
+
+    normalized = dict(entry)
+
+    category = (normalized.get("category") or "").strip()
+    subcategory = (normalized.get("subcategory") or "").strip()
+    category_slug = (normalized.get("category_slug") or "").strip().strip("/")
+
+    if category and "/" in category:
+        parts = [p.strip() for p in category.split("/") if p.strip()]
+        if parts:
+            if len(parts) > 1 and not subcategory:
+                subcategory = parts[-1]
+            category = parts[0]
+
+    slug_segments = [seg for seg in category_slug.split("/") if seg] if category_slug else []
+
+    cat_slug = slugify_taxonomy(category)
+    sub_slug = slugify_taxonomy(subcategory)
+
+    if slug_segments:
+        cat_slug = slug_segments[0] or cat_slug
+        if not category:
+            category = slug_to_label(cat_slug)
+        if len(slug_segments) > 1:
+            derived_sub = slug_segments[-1]
+            if not sub_slug:
+                sub_slug = derived_sub
+            if not subcategory:
+                subcategory = slug_to_label(derived_sub)
+    else:
+        if not cat_slug and category:
+            cat_slug = slugify_taxonomy(category)
+        if not sub_slug and subcategory:
+            sub_slug = slugify_taxonomy(subcategory)
+
+    category = _normalize_label_from_slug(category, cat_slug)
+    if sub_slug:
+        subcategory = _normalize_label_from_slug(subcategory, sub_slug)
+    else:
+        subcategory = (subcategory or "").strip()
+
+    slug_parts = []
+    if cat_slug:
+        slug_parts.append(cat_slug)
+    if sub_slug:
+        slug_parts.append(sub_slug)
+    category_slug = "/".join(slug_parts)
+
+    normalized["category"] = category
+    normalized["subcategory"] = subcategory
+    if category_slug:
+        normalized["category_slug"] = category_slug
+    else:
+        normalized.pop("category_slug", None)
+
+    return normalized
+
+
 def _normalize_date_string(value: str) -> str:
     value = (value or "").strip()
     if not value:
@@ -637,6 +724,13 @@ def main():
     else:
         posts_idx = []
 
+    posts_idx = [
+        normalized for normalized in (
+            _normalize_post_entry(item) for item in posts_idx
+        )
+        if normalized is not None
+    ]
+
     if not FEEDS.exists():
         print("ERROR: feeds file not found:", FEEDS)
         return
@@ -648,7 +742,8 @@ def main():
     per_cat = {}
     new_entries = []
 
-    current_sub = ""
+    current_sub_label = ""
+    current_sub_slug = ""
 
     for raw in FEEDS.read_text(encoding="utf-8").splitlines():
         raw = raw.strip()
@@ -658,7 +753,8 @@ def main():
             # Support comments like: # === NEWS / POLITICS ===
             m = re.search(r"#\s*===\s*[^/]+/\s*(.+?)\s*===", raw, flags=re.I)
             if m:
-                current_sub = m.group(1).strip().title()
+                current_sub_label = m.group(1).strip().title()
+                current_sub_slug = slugify_taxonomy(current_sub_label)
             continue
 
         if "|" not in raw:
@@ -667,27 +763,78 @@ def main():
         if len(parts) < 2:
             continue
 
+        feed_url = ""
+        category_label = ""
+        subcategory_label = ""
+        category_slug_value = ""
+
         # Support: category|subcategory|url OR legacy: category|url OR category/sub|url
         if len(parts) == 3:
-            category = parts[0].title()
-            sub = parts[1].title()
+            category_label = parts[0]
+            subcategory_label = parts[1]
             feed_url = parts[2]
         else:
             cat_str = parts[0]
             feed_url = parts[1]
-            category_part, sub_part = (cat_str.split('/', 1) + [''])[:2]
-            category = (category_part or "").strip().title()
-            sub = (sub_part.strip().title() if sub_part.strip() else current_sub)
+            segments = [seg.strip() for seg in cat_str.split("/") if seg.strip()]
+            if segments:
+                category_label = segments[0]
+                if len(segments) > 1:
+                    subcategory_label = segments[-1]
+                slug_parts = [slugify_taxonomy(seg) for seg in segments if slugify_taxonomy(seg)]
+                if slug_parts:
+                    category_slug_value = "/".join(slug_parts)
+            else:
+                category_label = cat_str
 
-            sub = slugify(sub) if sub else ""
-
-        # Optional filter by env CATEGORY (leave empty to accept all)
-        if CATEGORY and category != CATEGORY:
-            continue
+        category_label = (category_label or "").strip()
+        subcategory_label = (subcategory_label or "").strip()
+        feed_url = (feed_url or "").strip()
         if not feed_url:
             continue
 
-        print(f"[FEED] {category} / {sub or '-'} -> {feed_url}")
+        slug_segments = [seg for seg in category_slug_value.split("/") if seg] if category_slug_value else []
+        cat_slug = slug_segments[0] if slug_segments else slugify_taxonomy(category_label)
+        sub_slug = slugify_taxonomy(subcategory_label)
+        if slug_segments and len(slug_segments) > 1 and not sub_slug:
+            sub_slug = slug_segments[-1]
+
+        if not subcategory_label and current_sub_label:
+            subcategory_label = current_sub_label
+            if not sub_slug:
+                sub_slug = current_sub_slug or slugify_taxonomy(subcategory_label)
+
+        if not category_label and cat_slug:
+            category_label = slug_to_label(cat_slug)
+
+        category_label = _normalize_label_from_slug(category_label, cat_slug)
+        if sub_slug:
+            subcategory_label = _normalize_label_from_slug(subcategory_label, sub_slug)
+        else:
+            subcategory_label = (subcategory_label or "").strip()
+
+        if not category_slug_value:
+            parts_slug = []
+            if cat_slug:
+                parts_slug.append(cat_slug)
+            if sub_slug:
+                parts_slug.append(sub_slug)
+            category_slug_value = "/".join(parts_slug)
+        else:
+            normalized_parts = []
+            if cat_slug:
+                normalized_parts.append(cat_slug)
+            if sub_slug:
+                normalized_parts.append(sub_slug)
+            elif len(slug_segments) > 1:
+                normalized_parts.append(slug_segments[-1])
+            category_slug_value = "/".join([p for p in normalized_parts if p])
+
+        # Optional filter by env CATEGORY (leave empty to accept all)
+        if CATEGORY and category_label != CATEGORY:
+            continue
+
+        print(f"[FEED] {category_label} / {subcategory_label or '-'} -> {feed_url}")
         xml = fetch_bytes(feed_url)
         if not xml:
             print("Feed empty:", feed_url)
@@ -697,7 +844,7 @@ def main():
             if MAX_TOTAL > 0 and added_total >= MAX_TOTAL:
                 break
 
-            key_limit = f"{category}/{sub or '_'}"
+            key_limit = category_slug_value or cat_slug or (category_label or "_")
             if per_cat.get(key_limit, 0) >= MAX_PER_CAT:
                 continue
 
@@ -791,8 +938,9 @@ def main():
             entry = {
                 "slug": slug,
                 "title": title,
-                "category": category,
-                "subcategory": sub,
+                "category": category_label,
+                "subcategory": subcategory_label,
+                "category_slug": category_slug_value,
                 "date": date,
                 "excerpt": excerpt,
                 "cover": cover,
@@ -803,18 +951,27 @@ def main():
                 "rights": rights,
                 "body": body_final
             }
+            entry = _normalize_post_entry(entry)
+            if entry is None:
+                continue
+
             new_entries.append(entry)
+
+            normalized_category_slug = entry.get("category_slug") or category_slug_value or cat_slug
+            normalized_category_label = entry.get("category") or category_label
+            normalized_subcategory_label = entry.get("subcategory") or subcategory_label
 
             seen[key] = {
                 "title": title,
                 "url": link,
-                "category": category,
-                "subcategory": sub,
+                "category": normalized_category_slug or slugify_taxonomy(normalized_category_label),
+                "subcategory": normalized_subcategory_label,
                 "created": date,
             }
-            per_cat[key_limit] = per_cat.get(key_limit, 0) + 1
+            limit_key_final = normalized_category_slug or key_limit
+            per_cat[limit_key_final] = per_cat.get(limit_key_final, 0) + 1
             added_total += 1
-            print(f"[{category}/{sub or '-'}] + {title}")
+            print(f"[{normalized_category_label}/{normalized_subcategory_label or '-'}] + {title}")
 
     if not new_entries:
         print("New posts this run: 0")
@@ -825,6 +982,13 @@ def main():
     posts_idx.sort(key=_entry_sort_key, reverse=True)
     if MAX_POSTS_PERSIST > 0:
         posts_idx = posts_idx[:MAX_POSTS_PERSIST]
+
+    posts_idx = [
+        normalized for normalized in (
+            _normalize_post_entry(item) for item in posts_idx
+        )
+        if normalized is not None
+    ]
 
     POSTS_JSON.write_text(json.dumps(posts_idx, ensure_ascii=False, indent=2), encoding="utf-8")
     SEEN_DB.write_text(json.dumps(seen, ensure_ascii=False, indent=2), encoding="utf-8")
