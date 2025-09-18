@@ -1,9 +1,9 @@
 name: Autopost • Crypto
 on:
   workflow_dispatch: {}
-  schedule:
-    - cron: "5 0,3,6,9,12,15,18,21 * * *"   # çdo 90 min (fillon në :15) me një tjetër në :45 për të ruajtur ritmin
-    - cron: "55 1,4,7,10,13,16,19,22 * * *"
+  schedule:␊
+    - cron: "5 0,3,6,9,12,15,18,21 * * *"   # çdo 90 min (fillon në :05) me një tjetër në :35 për të ruajtur ritmin
+    - cron: "35 1,4,7,10,13,16,19,22 * * *"
 
 permissions:
   contents: write
@@ -59,3 +59,4 @@ jobs:
             git pull --rebase origin "${GITHUB_REF_NAME:-${GITHUB_HEAD_REF:-main}}" || true
             git push
           fi
+
