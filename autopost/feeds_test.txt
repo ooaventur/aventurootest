@@ -1,10 +1,4 @@
 test|AI News1|https://www.technologyreview.com/feed/                                     
 test|AI News2|https://openai.com/blog/rss/                                           
 test|AI News3|https://ai.googleblog.com/feeds/posts/default                          
-test|AI News4|https://www.aitrends.com/feed/                                         
-test|AI News5|https://machinelearningmastery.com/blog/feed/                          
-test|AI News6|https://blogs.nvidia.com/rss/                                         
-test|AI News7|https://thegradient.pub/feed/                                          
-test|AI News8|https://becominghuman.ai/feed/                                         
-test|AI News9|https://science.sciencemag.org/rss/news_current.xml                    
-test|AI News10|https://www.aiwire.net/rss-feeds/                                     
+                               
