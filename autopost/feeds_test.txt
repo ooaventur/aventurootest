@@ -1,1 +1,11 @@
-
+# === CRYPTO ===
+Crypto|General|https://www.coindesk.com/arc/outboundfeeds/rss/?outputType=xml
+Crypto|General|https://cointelegraph.com/rss
+Crypto|General|https://cryptopotato.com/feed
+Crypto|General|https://cryptoslate.com/feed/
+Crypto|General|https://cryptonews.com/news/feed/
+Crypto|General|https://thedefiant.io/feed/
+Crypto|General|https://coinjournal.net/feeds/
+Crypto|General|https://www.ccn.com/rss-feeds/crypto/
+Crypto|General|https://news.bitcoin.com/feed/
+Crypto|General|https://blockonomi.com/feed/
