@@ -2,7 +2,7 @@ name: Autopost • Tech & Ai
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: "5 * * * *"   # çdo 30 min, në minuta 05 dhe 35
+    - cron: "30 * * * *"   # çdo 30 min, në minuta 05 dhe 35
 
 permissions:
   contents: write
