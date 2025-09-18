@@ -1056,6 +1056,7 @@ def main():
         category_label = (category_label or "").strip()
         subcategory_label = (subcategory_label or "").strip()
         feed_url = (feed_url or "").strip()
+        feed_url = re.split(r"\s+#", feed_url, 1)[0].strip()
         if not feed_url:
             continue
 
