@@ -1,4 +1,4 @@
-name: Autopost • Tech & Ai
+name: Autopost • Tech & AI
 on:
   workflow_dispatch: {}
   schedule:
@@ -16,8 +16,8 @@ jobs:
       HTTP_TIMEOUT: "18"
       AP_USER_AGENT: "Mozilla/5.0 (AventurOO Autoposter)"
       FALLBACK_COVER: "assets/img/cover-fallback.jpg"
-      FEEDS_FILE: autopost/feeds_tech-ai.txt
-      CATEGORY: Tech & Ai          # optional but keeps the job limited to “Tech & Ai”
+      FEEDS_FILE: autopost/feeds_tech_ai.txt
+      CATEGORY: Tech & AI          # optional but keeps the job limited to “Tech & AI”
 
     steps:
       - uses: actions/checkout@v4
@@ -39,8 +39,8 @@ jobs:
           [ -s autopost/seen_all.json ] || echo "{}" > autopost/seen_all.json
           [ -s data/posts.json ] || echo "[]" > data/posts.json
 
-      - name: Run Tech & Ai autoposter
-        run: python3 autopost/pull_tech-ai.py
+      - name: Run Tech & AI autoposter
+        run: python3 autopost/pull_tech_ai.py
 
       - name: Commit & push
         shell: bash
