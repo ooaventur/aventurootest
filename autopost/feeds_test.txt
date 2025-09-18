@@ -1,2 +1,3 @@
+test|General|https://cryptonews.com/news/feed/
 
-test|General|https://cryptoslate.com/feed/
+
