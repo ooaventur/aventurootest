@@ -1,4 +1,8 @@
 
-test|General|https://coinjournal.net/feeds/
+test|General|https://coinjournal.net/news/crime/feed/
+test|General|https://www.ccn.com/rss-feeds/crypto/
+test|General|https://news.bitcoin.com/feed/
+test|General|https://blockonomi.com/feed/
+
 
 
