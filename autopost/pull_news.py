@@ -404,9 +404,38 @@ def _bump_path_width(u: str, target: int) -> str:
         if value >= target or value == 0:
             continue
 
-        prev_seg = segments[idx - 1].lower() if idx > 0 else ""
-        next_seg = segments[idx + 1].lower() if idx + 1 < len(segments) else ""
-        next_next = segments[idx + 2].lower() if idx + 2 < len(segments) else ""
+        prev_raw = segments[idx - 1] if idx > 0 else ""
+        next_raw = segments[idx + 1] if idx + 1 < len(segments) else ""
+        prev_prev_raw = segments[idx - 2] if idx > 1 else ""
+
+        if prev_raw and re.fullmatch(r"\d{4}", prev_raw):
+            try:
+                year_val = int(prev_raw)
+            except ValueError:
+                year_val = 0
+            if 1900 <= year_val <= 2100 and 1 <= value <= 12:
+                continue
+
+        if (
+            prev_raw
+            and re.fullmatch(r"\d{2}", prev_raw)
+            and prev_prev_raw
+            and re.fullmatch(r"\d{4}", prev_prev_raw)
+        ):
+            try:
+                month_val = int(prev_raw)
+                year_val = int(prev_prev_raw)
+            except ValueError:
+                month_val = 0
+                year_val = 0
+            if 1900 <= year_val <= 2100 and 1 <= month_val <= 12 and 1 <= value <= 31:
+                continue
+
+        prev_seg = (prev_raw or "").lower()
+        next_seg = (next_raw or "").lower()
+        next_next = (
+            segments[idx + 2].lower() if idx + 2 < len(segments) else ""
+        )
 
         looks_like_size = False
         if any(key in prev_seg for key in size_keywords) or any(
@@ -452,21 +481,28 @@ def sanitize_img_url(u: str) -> str:
     if u.startswith("http://"):
         u = _proxy_if_mixed(u)
     return u
+    
+def resolve_cover_url(u: str) -> str:
+    """Return a sanitized HTTPS cover URL or the configured fallback."""
 
+    sanitized = sanitize_img_url(u)
+    sanitized = (sanitized or "").strip()
+    if not sanitized:
+        return FALLBACK_COVER
 
+    lowered = sanitized.lower()
+    if lowered.startswith("data:"):
+        return FALLBACK_COVER
 
+    if lowered.startswith("http://"):
+        sanitized = _to_https(sanitized)
+        lowered = sanitized.lower()
 
+    if not lowered.startswith("https://"):
+        return FALLBACK_COVER
 
-
-
-
-
-
-
-
-
-
-
+    return sanitized
+    
 # ---- Body extractors ----
 def extract_body_html(url: str) -> tuple[str, str]:
     """Return (body_html, first_img_in_body) trying trafilatura → readability → fallback text."""
@@ -1028,15 +1064,12 @@ def main():
             body_html = limit_words_html(body_html, target_words)
 
             # 4) Cover image (cover only; images inside body removed)
-            cover = (
+            cover = resolve_cover_url(
                 pick_largest_media_url(it.get("element"))
                 or find_cover_from_item(it.get("element"), link)
                 or inner_img
                 or ""
             )
-            cover = sanitize_img_url(cover)
-            if not cover.startswith(("http://", "https://")):
-                cover = ""
 
 
             # 5) Excerpt
