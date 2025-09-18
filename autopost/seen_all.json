@@ -1678,5 +1678,495 @@
     "category": "news/economy",
     "subcategory": "Economy",
     "created": "2025-08-25"
+  },
+  "a3e3f40507cf57dd5e6d1d4947b6799aa35044b6": {
+    "title": "AI-designed viruses are here and already killing bacteria",
+    "url": "https://www.technologyreview.com/2025/09/17/1123801/ai-virus-bacteriophage-life/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-17"
+  },
+  "42c610a963ec47f1af143f16792e741b23d6d564": {
+    "title": "The Download: measuring returns on R&D, and AI’s creative potential",
+    "url": "https://www.technologyreview.com/2025/09/17/1123795/the-download-measuring-returns-on-rd-and-ais-creative-potential/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-17"
+  },
+  "bd01e0247bf062b9fe10b55eec2f47f65f935879": {
+    "title": "How to measure the returns on R&D spending",
+    "url": "https://www.technologyreview.com/2025/09/17/1123760/how-to-measure-the-returns-to-rd-spending/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-17"
+  },
+  "a24100c538937f3949afc4bb3421a96cbc4ff3ff": {
+    "title": "De-risking investment in AI agents",
+    "url": "https://www.technologyreview.com/2025/09/16/1123592/de-risking-investment-in-ai-agents/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-16"
+  },
+  "42acabae11d9c17aeb52d3e1ae4bd06e3178e18a": {
+    "title": "The Download: regulators are coming for AI companions, and meet our Innovator of 2025",
+    "url": "https://www.technologyreview.com/2025/09/16/1123695/the-download-regulators-are-coming-for-ai-companions-and-meet-our-innovator-of-2025/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-16"
+  },
+  "16e2148c470d62d27ece9f322d78c1f8d1353b07": {
+    "title": "The looming crackdown on AI companionship",
+    "url": "https://www.technologyreview.com/2025/09/16/1123614/the-looming-crackdown-on-ai-companionship/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-16"
+  },
+  "ca102c5f4a90df5eb848be3b15b02d0811995c3a": {
+    "title": "The Download: computing’s bright young minds, and cleaning up satellite streaks",
+    "url": "https://www.technologyreview.com/2025/09/15/1123608/the-download-computings-bright-young-minds-and-cleaning-up-satellite-streaks/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-15"
+  },
+  "56a0de6b11a01f4cdd02c763ca00792b149ff44d": {
+    "title": "The Download: America’s gun crisis, and how AI video models work",
+    "url": "https://www.technologyreview.com/2025/09/12/1123577/the-download-americas-gun-crisis-and-how-ai-video-models-work/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-12"
+  },
+  "19bb4a362579d548e09674f425741259fbc4d234": {
+    "title": "How do AI models generate videos?",
+    "url": "https://www.technologyreview.com/2025/09/12/1123562/how-do-ai-models-generate-videos/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-12"
+  },
+  "bb509e1bcbd649d430b91179e955dfc3edcb3aa7": {
+    "title": "We can’t “make American children healthy again” without tackling the gun crisis",
+    "url": "https://www.technologyreview.com/2025/09/11/1123553/maha-report-gun-violence-checkup/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-11"
+  },
+  "48edef6e65ce1045f84739671144eb07ea145afd": {
+    "title": "India leads the way on Google’s Nano Banana with a local creative twist",
+    "url": "https://techcrunch.com/2025/09/17/india-leads-the-way-on-googles-nano-banana-with-a-local-creative-twist/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-18"
+  },
+  "01c475cb9fa4146bb59fff2d0549d3c02f62c8c9": {
+    "title": "Meta launches Hyperscape, technology to turn real-world spaces into VR",
+    "url": "https://techcrunch.com/2025/09/17/meta-launches-hyperscape-technology-to-turn-real-world-spaces-into-vr/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-18"
+  },
+  "c43832c43e79f2310e1d6d51a88eb42ca6d3bd08": {
+    "title": "Meta unveils new smart glasses with a display and wristband controller",
+    "url": "https://techcrunch.com/2025/09/17/meta-unveils-new-smart-glasses-with-a-display-and-wristband-controller/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-18"
+  },
+  "caf100c74b53b8adc8fbe2f45a62a2e00ba6f2b5": {
+    "title": "Meta unveils its new Oakley Meta Vanguard smart glasses for athletes",
+    "url": "https://techcrunch.com/2025/09/17/meta-unveils-its-new-oakley-meta-vanguard-smart-glasses-for-athletes/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-18"
+  },
+  "f08ef644ab5d6d6bd2ff95322767b1f411523d4e": {
+    "title": "Nvidia AI chip challenger Groq raises even more than expected, hits $6.9B valuation",
+    "url": "https://techcrunch.com/2025/09/17/nvidia-ai-chip-challenger-groq-raises-even-more-than-expected-hits-6-9b-valuation/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-17"
+  },
+  "d5b596f52fdb6ca6e9b4a184e108d412e1a035be": {
+    "title": "Eric Baker’s long, winding road to taking StubHub public",
+    "url": "https://techcrunch.com/2025/09/17/eric-bakers-long-winding-road-to-taking-stubhub-public/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-17"
+  },
+  "3a9df3523b4f08cc2d362da959706548331ea61b": {
+    "title": "Irregular raises $80 million to secure frontier AI models",
+    "url": "https://techcrunch.com/2025/09/17/irregular-raises-80-million-to-secure-frontier-ai-models/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-17"
+  },
+  "3367e540249b37568319905faad6a75577f7850c": {
+    "title": "Tesla is redesigning its door handles following safety probe, Bloomberg investigation",
+    "url": "https://techcrunch.com/2025/09/17/tesla-is-redesigning-its-door-handles-following-safety-probe-bloomberg-investigation/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-17"
+  },
+  "54e91a7cc56f7b69151ae2c8537b79341e999150": {
+    "title": "Kleiner Perkins-backed voice AI startup Keplar aims to replace traditional market research",
+    "url": "https://techcrunch.com/2025/09/17/kleiner-perkins-backed-voice-ai-startup-keplar-aims-to-replace-traditional-market-research/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-17"
+  },
+  "1c48013db9b94a749bc72980168d8543612ea1da": {
+    "title": "Meet Macroscope: an AI tool for understanding your code base, fixing bugs",
+    "url": "https://techcrunch.com/2025/09/17/meet-macroscope-an-ai-tool-for-understanding-your-code-base-fixing-bugs/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-17"
+  },
+  "24285ae9c865c9e6db91bd2fb794a02747607895": {
+    "title": "A DHS Data Hub Exposed Sensitive Intel to Thousands of Unauthorized Users",
+    "url": "https://www.wired.com/story/a-dhs-data-hub-exposed-sensitive-intel-to-thousands-of-unauthorized-users/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-09-16"
+  },
+  "db349876ac7651a4f1c5f220364bf969156ae347": {
+    "title": "How to Set Up and Use a Burner Phone",
+    "url": "https://www.wired.com/story/how-to-set-up-use-burner-phone/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-09-16"
+  },
+  "c68f42fb39ebe5a5d6a9ba0dc8d72cdd18dacecf": {
+    "title": "5 Best VPN Services (2025), Tested and Reviewed",
+    "url": "https://www.wired.com/gallery/best-vpn/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-09-16"
+  },
+  "6dc1a852bd63a79fa8be3fab36ca4c97a7557440": {
+    "title": "Jeffrey Epstein’s Yahoo Inbox Revealed",
+    "url": "https://www.wired.com/story/jeffrey-epsteins-yahoo-inbox-revealed/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-09-13"
+  },
+  "1bd6f45aa705cfec3ada6edfe54f333107284bd5": {
+    "title": "Apple’s Big Bet to Eliminate the iPhone’s Most Targeted Vulnerabilities",
+    "url": "https://www.wired.com/story/apple-iphone-17-memory-integrity-enforcement/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-09-11"
+  },
+  "330462fad2517a44c04f2701c243f6a8ded8738a": {
+    "title": "US Investment in Spyware Is Skyrocketing",
+    "url": "https://www.wired.com/story/us-spyware-investment/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-09-10"
+  },
+  "4eecd168c00a15f6fe4003c904c419253795a553": {
+    "title": "Cindy Cohn Is Leaving the EFF, but Not the Fight for Digital Rights",
+    "url": "https://www.wired.com/story/eff-cindy-cohn-stepping-down/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-09-09"
+  },
+  "98f63d2a80a056025e17944b7c3ddc831057bbfd": {
+    "title": "How China’s Propaganda and Surveillance Systems Really Operate",
+    "url": "https://www.wired.com/story/made-in-china-how-chinas-surveillance-industry-actually-works/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-09-11"
+  },
+  "d9b77b3f7ac043fb6c23e61df295e1e3426e1879": {
+    "title": "A New Platform Offers Privacy Tools to Millions of Public Servants",
+    "url": "https://www.wired.com/story/public-service-alliance-marketplace-privacy-threats/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-09-09"
+  },
+  "3d8dbe663b84ca4e96b1a0a000144c8040906d89": {
+    "title": "Massive Leak Shows How a Chinese Company Is Exporting the Great Firewall to the World",
+    "url": "https://www.wired.com/story/geedge-networks-mass-censorship-leak/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-09-09"
+  },
+  "7031ae5788adb24d8195f646cb14993f28c2f898": {
+    "title": "Memes and nihilistic in-jokes: the online world of Charlie Kirk’s alleged killer",
+    "url": "https://www.theguardian.com/technology/2025/sep/17/charlie-kirk-suspect-online-memes",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-17"
+  },
+  "8e46cccd9a507b9fe2ade94a4a403ce80ff1b31d": {
+    "title": "Starmer and Trump to hold talks as PM warned UK faces ‘huge dilemma’ over relationship with US – UK politics live",
+    "url": "https://www.theguardian.com/politics/live/2025/sep/18/donald-trump-state-visit-uk-keir-starmer-labour-politics-latest-news",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-18"
+  },
+  "591244b13e99d090596591461ded3d21f9bb6fec": {
+    "title": "Will Bartolo and Rae Colquhoun-Fairweather: the 10 funniest things we have ever seen (on the internet)",
+    "url": "https://www.theguardian.com/culture/2025/sep/18/will-bartolo-and-rae-colquhoun-fairweather-the-10-funniest-things-we-have-ever-seen-on-the-internet",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-17"
+  },
+  "cec5ce29debb6155c24ae3ddab4ff48d180bd0d3": {
+    "title": "Password1: how scammers exploit variations of your logins",
+    "url": "https://www.theguardian.com/money/2025/sep/14/password1-scammers-logins-two-step-verification-hackers",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-14"
+  },
+  "b68b271c13e7acfb954c5d2d2c3b68803b4dc389": {
+    "title": "Six great reads: rebels in Nazi Germany, how creativity works and Europe’s biggest pornography conference",
+    "url": "https://www.theguardian.com/news/2025/sep/13/six-great-reads-rebels-in-nazi-germany-how-creativity-works-and-europes-biggest-pornography-conference",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-13"
+  },
+  "132510012dbe7315d3616e230cab65cfafceb591": {
+    "title": "Australians will have to verify their age to watch pornography from December. Here’s what you need to know",
+    "url": "https://www.theguardian.com/australia-news/2025/sep/13/australians-will-verify-age-photo-id-facial-recognition-to-watch-pornography-from-december",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-13"
+  },
+  "30f5c409bfb6100c74e4ea3fd89a1a88f5b9ca3c": {
+    "title": "Boom times and total burnout: three days at Europe’s biggest pornography conference",
+    "url": "https://www.theguardian.com/society/2025/sep/11/boom-times-and-total-burnout-three-days-at-europes-biggest-pornography-conference",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-11"
+  },
+  "0a5bc6afd7cf556f383bc63e5e934f4a4e3e9526": {
+    "title": "How to Save the Internet by Nick Clegg review – spinning Silicon Valley",
+    "url": "https://www.theguardian.com/technology/2025/sep/10/how-to-save-the-internet-by-nick-clegg-review-spinning-silicon-valley",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-10"
+  },
+  "cdc126a2ffc6c8972f33aef3971e14c3d5d26d87": {
+    "title": "How Google dodged a major breakup – and why OpenAI is to thank for it",
+    "url": "https://www.theguardian.com/technology/2025/sep/08/google-antitrust-apocalypse",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-09"
+  },
+  "378fe57d44e9575055650593c35148548714d6c9": {
+    "title": "‘I broke completely’: how jobseekers from Africa are being tricked into slavery in Asia’s cyberscam compounds",
+    "url": "https://www.theguardian.com/global-development/2025/sep/09/cyberslavery-kenya-uganda-ethiopia-southeast-asia-myanmar-scam-centres",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-09"
+  },
+  "e575b89727090d426146f4276470c4e519444808": {
+    "title": "Meta Goes Even Harder Into Smart Glasses With 3 New Models",
+    "url": "https://www.wired.com/story/meta-smart-glasses-ray-ban-display-ray-ban-gen-2-oakley-vanguard/",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-18"
+  },
+  "4a7380a6cb07f97d61091f81a9ff4209ccb538c3": {
+    "title": "Big Deals on Big TCL TVs—Some Of Our Top Tested Models Are Nearly 50% Off",
+    "url": "https://www.wired.com/story/save-big-on-our-favorite-tcl-televisions/",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-17"
+  },
+  "e435531d6a4a2648b2bb0da638ff98540192c907": {
+    "title": "How to Change Your Kindle’s Language: Spanish, French, Japanese, and More (2025)",
+    "url": "https://www.wired.com/story/how-to-change-kindle-language/",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-17"
+  },
+  "19b4bf6169add92092c883467dd877de6a203c1c": {
+    "title": "Samsung HW-Q990F Soundbar System Review: Glorious Atmos",
+    "url": "https://www.wired.com/review/samsung-hw-q990f/",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-17"
+  },
+  "aacef4a69a2e5247d5347c583a8ef36c93c98b53": {
+    "title": "Apple iPhone 17 Pro and iPhone 17 Pro Max Review: Level Up",
+    "url": "https://www.wired.com/review/apple-iphone-17-pro-and-iphone-17-pro-max/",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-17"
+  },
+  "ffa176b76fd52d3186176cc56175009da94e5fef": {
+    "title": "Apple iPhone Air Review: Better Than Expected",
+    "url": "https://www.wired.com/review/apple-iphone-air/",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-17"
+  },
+  "a22e383143ab127f8ef033cf69792c04223b0314": {
+    "title": "WIRED’s Best E-Readers, Tested and Reviewed (2025): Kindle, Kobo, Boox",
+    "url": "https://www.wired.com/gallery/best-ereaders/",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-17"
+  },
+  "344e0cb4cd16a71fca75ffb67376ad96017f3c06": {
+    "title": "Meta Is Debuting New Smart Glasses Today. Here’s How to Watch",
+    "url": "https://www.wired.com/story/meta-connect-2025-how-to-watch/",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-17"
+  },
+  "f568b97c5d82eca3b8744178bcdf064cf7325da0": {
+    "title": "Mushroom Supplements Are the Biohackers’ Latest Fix (2025)",
+    "url": "https://www.wired.com/story/the-wired-guide-to-mushroom-supplements/",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-17"
+  },
+  "61560a162f1b32d138171e1d6d26072bfb35c07d": {
+    "title": "Canon Promo Codes: 10% Off | September 2025",
+    "url": "https://www.wired.com/story/canon-promo-code/",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-17"
+  },
+  "2f1646b5f7bb647a4c631cbe111344b477d41a63": {
+    "title": "Today's Wordle clues, hints and answer for September 18 (#1552)",
+    "url": "https://www.pcgamer.com/games/puzzle/wordle-answer-today-september-18-2025/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-18"
+  },
+  "46fe4a11aab8f1cff99baaeb69ef7c75aaf139f8": {
+    "title": "Dying Light: The Beast launch times and release date",
+    "url": "https://www.pcgamer.com/games/fps/dying-light-the-beast-launch-time-release-date/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-18"
+  },
+  "bbffb95cb25be120e55ae5b67ab0d8602d52dfbc": {
+    "title": "How to unlock Steel Soul Mode in Silksong",
+    "url": "https://www.pcgamer.com/games/action/silksong-steel-soul-mode-unlock/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-18"
+  },
+  "9e23572aa8c500899f9bbefa1564c6195438bf49": {
+    "title": "Exhausted by Silksong? This breezier twin-stick spin on old school Metroid might just be the genre's second best this year",
+    "url": "https://www.pcgamer.com/games/action/exhausted-by-silksong-this-breezier-twin-stick-spin-on-old-school-metroid-might-just-be-the-genres-second-best-this-year/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-17"
+  },
+  "06b9ccfa2a1a7931f8300e67078ad9ae604cf7d1": {
+    "title": "After disappointing fans with a time-grated grind in beta, Blizzard turned WoW Legion Remix around just in time for its October release",
+    "url": "https://www.pcgamer.com/games/world-of-warcraft/after-disappointing-fans-with-a-time-grated-grind-in-beta-blizzard-turned-wow-legion-remix-around-just-in-time-for-its-october-release/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-17"
+  },
+  "27b002ad1bc69e655e1b0fb722ac21acd470f4ae": {
+    "title": "Helldivers 2's new bugs are bugged, so Arrowhead's turning them off for 5 weeks to debug its bugged bugs' bugs",
+    "url": "https://www.pcgamer.com/games/third-person-shooter/helldivers-2s-new-bugs-are-bugged-so-arrowheads-turning-them-off-for-5-weeks-to-debug-its-bugged-bugs-bugs/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-17"
+  },
+  "b22287108f7ab0de6fb734cd45615502582632fe": {
+    "title": "Do you know Jack? Take our quiz that's all about videogame characters named (or not named) Jack!",
+    "url": "https://www.pcgamer.com/games/do-you-know-jack-take-our-quiz-thats-all-about-videogame-characters-named-or-not-named-jack/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-17"
+  },
+  "53893ab27ae8e205a8f38316c176f3f4c2bad661": {
+    "title": "Ubisoft's Saudi-funded Assassin's Creed DLC provokes staff unrest, but the publisher insists partnering with the controversial regime is A-OK: 'Talking with partners who do not share our democratic values ​​does not mean abandoning them'",
+    "url": "https://www.pcgamer.com/games/assassins-creed/ubisofts-saudi-funded-assassins-creed-dlc-provokes-staff-unrest-but-the-publisher-insists-partnering-with-the-controversial-regime-is-a-ok-talking-with-partners-who-do-not-share-our-democratic-values-does-not-mean-abandoning-them/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-17"
+  },
+  "89b5020967be29f4e5dfc974dce8611381df9ba1": {
+    "title": "Logitech has announced an affordable 8 Nm direct drive racing wheel setup with full TrueForce support, along with some fancy trick pedals I want to try for myself",
+    "url": "https://www.pcgamer.com/hardware/steering-wheels/logitech-has-announced-an-affordable-8-nm-direct-drive-racing-wheel-setup-with-full-trueforce-support-along-with-some-fancy-trick-pedals-i-want-to-try-for-myself/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-17"
+  },
+  "75c8574013da3d513064236f830efc64dc2a9adc": {
+    "title": "A more expensive rapid trigger version of Logitech's G515 gaming keyboard has just launched and it's for low-profile fans",
+    "url": "https://www.pcgamer.com/hardware/gaming-keyboards/a-more-expensive-rapid-trigger-version-of-logitechs-g515-gaming-keyboard-has-just-launched-and-its-for-low-profile-fans/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-17"
+  },
+  "69d151e34e590c59da216ee867ca54e357960b96": {
+    "title": "Cardi B’s Career Ascends to the Next Level with 31-Date Headlining Arena Tour",
+    "url": "https://www.digitalmusicnews.com/2025/09/17/cardi-b-headlining-tour-2025/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-18"
+  },
+  "f24dfe0620ea39213525d4f056f33aa5916c8ccd": {
+    "title": "Body Found In Car Registered to D4vd Identified as Missing 15-Year-Old Girl — D4vd Cooperating With Authorities",
+    "url": "https://www.digitalmusicnews.com/2025/09/17/body-found-in-d4vd-car-identified-missing/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-18"
+  },
+  "abae1ab354778ae759062f0482bdee55ff998043": {
+    "title": "Bad Bunny Residency Makes Puerto Rico’s Travel Industry Surge In Broader Economic Boost",
+    "url": "https://www.digitalmusicnews.com/2025/09/17/bad-bunny-puerto-rico-travel/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-18"
+  },
+  "dcc467abecaa100670f06e0e2a8015eb932de0a8": {
+    "title": "Settlement Talks Stall Between X and Music Publishers — Litigants ‘Will Continue Their Discussions’ As the Case Resumes",
+    "url": "https://www.digitalmusicnews.com/2025/09/17/music-publishers-x-lawsuit-settlement-update/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-17"
+  },
+  "e00e72ed847090699ea63c909c428ba86b5be644": {
+    "title": "StubHub Stock (NYSE: STUB) Slides During Its First Day of Trading — Shares Finish At $22 Apiece",
+    "url": "https://www.digitalmusicnews.com/2025/09/17/stubhub-stock-debut-performance/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-17"
+  },
+  "e7f6ff049152399a8e76e69e21b4441cd055d36b": {
+    "title": "Paramount+ Announces ‘Ozzy: No Escape From Now’ Premiering on October 7",
+    "url": "https://www.digitalmusicnews.com/2025/09/17/paramount-ozzy-no-escape-from-now/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-17"
+  },
+  "6e0c780c324c7bb76b75b89370c14c4093d4705f": {
+    "title": "iHeartRadio Snags a Doja Cat Album Preview Exclusive; New Songs Premiering Next Week",
+    "url": "https://www.digitalmusicnews.com/2025/09/17/iheartradio-doja-cat-album-preview/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-17"
+  },
+  "13da9532f2e59b195b49c1de8f64f21f48823f2a": {
+    "title": "South Korea Clocks a $560 Million Music Trade Surplus in H1 (Thanks K-Pop!)",
+    "url": "https://www.digitalmusicnews.com/2025/09/17/south-korea-h1-2025-music-trade-surplus/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-17"
+  },
+  "c36336e5bdb2fa220e6ac708fa5c2e1dddacd12d": {
+    "title": "Suspect Arrested in Beyoncé Music Theft Case—But the Music Remains Missing",
+    "url": "https://www.digitalmusicnews.com/2025/09/17/suspect-arrested-beyonce-music-theft/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-17"
+  },
+  "db5612d2d1ef51eb497ff758e473e41545707ca6": {
+    "title": "Rothschild Downgrades Live Nation Stock Amid DOJ Antitrust Suit, Broader Growth-Trajectory Concerns",
+    "url": "https://www.digitalmusicnews.com/2025/09/17/live-nation-stock-downgraded-september-2025/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-17"
   }
 }
