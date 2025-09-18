@@ -63,6 +63,8 @@ CATEGORY = os.getenv("CATEGORY", "").strip()
 SEEN_DB = ROOT / "autopost" / SEEN_DB_FILENAME
 # All autopost runs share the same "seen" store to prevent duplicates across jobs.
 
+
+MAX_PER_FEED = _env_int("MAX_PER_FEED", 2)
 MAX_PER_CAT = _env_int("MAX_PER_CAT", 15)
 MAX_TOTAL   = _env_int("MAX_TOTAL", 0)
 SUMMARY_WORDS = _env_int("SUMMARY_WORDS", 1500)  # kept for compatibility
