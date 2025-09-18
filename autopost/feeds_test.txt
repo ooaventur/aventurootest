@@ -1,14 +1,46 @@
-# === CRYPTO / REGULATION & SECURITY ===
-test|2Regulation & Security|https://cointelegraph.com/rss/tag/regulation
-test|3Regulation & Security|https://cryptoslate.com/news/policy/feed/
-test|5Regulation & Security|https://thedefiant.io/feed/    # Shpesh për regulacion & defi
-test|6Regulation & Security|https://www.financemagnates.com/cryptocurrency/feed/
-test|8Regulation & Security|https://www.complianceweek.com/rss
+# === test1 / GENERAL ===
+test|1General|https://www.indiewire.com/c/film/feed/
+test|2General|https://variety.com/v/test/feed/
+test|3General|https://www.cinemablend.com/rss/topic/test
+test|4General|https://collider.com/feed/
+test|5General|https://www.slashfilm.com/feed/
 
-# === CRYPTO / GUIDES CRYPTO ===
-test|Guides11|https://blockonomi.com/feed/
-test|Guides12|https://news.bitcoin.com/feed/
-test|Guides14|https://99bitcoins.com/feed/
-test|Guides15|https://cryptobriefing.com/feed/
-test|Guides17|https://cryptoslate.com/learn/feed/
-test|Guides20|https://cryptopotato.com/feed/
+# === test / MOVIES ===
+test|6Movies|https://screenrant.com/feed/
+test|7Movies|https://www.firstshowing.net/feed/
+test|8Movies|https://www.comingsoon.net/category/movies/feed
+test|9Movies|https://www.joblo.com/category/movies/feed/
+test|10Movies|https://www.denofgeek.com/uk/movies/rss
+test|11Movies|https://deadline.com/category/film/feed/
+
+# === test / TV & STREAMING ===
+test|12TV & Streaming|https://tvline.com/feed/
+test|13TV & Streaming|https://variety.com/v/tv/feed/
+test|14TV & Streaming|https://www.hollywoodreporter.com/topic/tv-show-news/feed/
+test|15TV & Streaming|https://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/section/arts/television/rss.xml
+test|16TV & Streaming|https://www.indiewire.com/c/tv/feed/
+test|17TV & Streaming|https://deadline.com/category/tv/feed/
+
+# === test / TRAILERS (LATEST) ===
+test|18Trailers (Latest)|https://www.slashfilm.com/category/movie-trailers/feed/
+test|19Trailers (Latest)|https://screenrant.com/movie-trailers/feed/
+test|20Trailers (Latest)|https://collider.com/trailers/feed/
+test|21Trailers (Latest)|https://www.indiewire.com/c/film/trailers/feed/
+test|22Trailers (Latest)|https://www.joblo.com/category/movie-trailers/feed/
+test|23Trailers (Latest)|https://www.firstshowing.net/category/trailers/feed/
+test|24Trailers (Latest)|https://wegotthiscovered.com/movies/feed/
+
+# === test / CINEMATOGRAPHY ===
+test|25Cinematography|https://nofilmschool.com/rss.xml
+test|26Cinematography|https://www.indiewire.com/craft/cinematography/feed/
+test|27Cinematography|https://www.cinema5d.com/feed/
+test|28Cinematography|https://ymcinema.com/feed/
+test|29Cinematography|https://www.provideocoalition.com/feed/
+test|30Cinematography|https://britishcinematographer.co.uk/feed/
+test|31Cinematography|https://www.lensrentals.com/blog/feed/
+
+# === test / HISTORY & ESSAYS ===
+test|32History & Essays|https://www.history.com/news/rss
+test|33History & Essays|https://publicdomainreview.org/feed
+test|34History & Essays|https://prologue.blogs.archives.gov/feed
+test|35History & Essays|https://www.archaeology.org/rss.xml
