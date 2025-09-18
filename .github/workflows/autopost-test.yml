@@ -1,4 +1,4 @@
-name: Autopost • Crypto
+name: Autopost • test
 on:
   workflow_dispatch: {}
   schedule:
@@ -17,8 +17,8 @@ jobs:
       HTTP_TIMEOUT: "18"
       AP_USER_AGENT: "Mozilla/5.0 (AventurOO Autoposter)"
       FALLBACK_COVER: "assets/img/cover-fallback.jpg"
-      FEEDS_FILE: autopost/feeds_crypto.txt
-      CATEGORY: Crypto          # optional but keeps the job limited to “Crypto”
+      FEEDS_FILE: autopost/feeds_test.txt
+      CATEGORY: test          # optional but keeps the job limited to “test”
 
     steps:
       - uses: actions/checkout@v4
@@ -40,8 +40,8 @@ jobs:
           [ -s autopost/seen_all.json ] || echo "{}" > autopost/seen_all.json
           [ -s data/posts.json ] || echo "[]" > data/posts.json
 
-      - name: Run Crypto autoposter
-        run: python3 autopost/pull_crypto.py
+      - name: Run test autoposter
+        run: python3 autopost/pull_test.py
 
       - name: Commit & push
         shell: bash
@@ -54,7 +54,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes."
           else
-            git commit -m "autopost(crypto): body html + attribution"
+            git commit -m "autopost(test): body html + attribution"
             # nëse ka ndryshime në remote, bëj rebase që të shmanget non-fast-forward
             git pull --rebase origin "${GITHUB_REF_NAME:-${GITHUB_HEAD_REF:-main}}" || true
             git push
