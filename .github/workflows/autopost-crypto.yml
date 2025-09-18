@@ -59,5 +59,3 @@ jobs:
             git pull --rebase origin "${GITHUB_REF_NAME:-${GITHUB_HEAD_REF:-main}}" || true
             git push
           fi
-
-
