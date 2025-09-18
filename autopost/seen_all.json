@@ -2168,5 +2168,425 @@
     "category": "tech-ai/audio-creator-tools",
     "subcategory": "Audio Creator Tools",
     "created": "2025-09-17"
+  },
+  "0b2d53229426fbe97db0252553285f225ae9b405": {
+    "title": "China tells its tech companies they can’t buy AI chips from Nivida",
+    "url": "https://techcrunch.com/2025/09/17/china-tells-its-tech-companies-they-cant-buy-ai-chips-from-nivida/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-17"
+  },
+  "33b945467a59ff12924850fec23b6b41002970ed": {
+    "title": "The iPhone Air’s real breakthrough is its battery",
+    "url": "https://techcrunch.com/2025/09/17/the-iphone-airs-real-breakthrough-is-its-battery/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-17"
+  },
+  "7c2bdf2c65a294fc33332a961c486ed3925fb9e6": {
+    "title": "Zoom launches a cross application AI notetaker, AI avatars and more in its latest update",
+    "url": "https://techcrunch.com/2025/09/17/zoom-launches-a-cross-application-ai-notetaker-ai-avatars-and-more-in-its-latest-update/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-17"
+  },
+  "a4a868d9c44ead5c39d5cc983332fbe112104ddd": {
+    "title": "Jaguar Land Rover to pause production for third week due to cyberattack",
+    "url": "https://techcrunch.com/2025/09/17/jaguar-land-rover-to-pause-production-for-third-week-due-to-cyberattack/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-17"
+  },
+  "ba06c783774e18915da9e1e1e0fbd01f32f90730": {
+    "title": "Airbuds is the music social network Apple and Spotify wish they had built",
+    "url": "https://techcrunch.com/2025/09/17/airbuds-is-the-music-social-network-apple-and-spotify-wish-they-had-built/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-17"
+  },
+  "de1e515be64bd086c1babb809d344b10aba61a45": {
+    "title": "AI and the Future of Defense: Mach Industries’ Ethan Thornton at TechCrunch Disrupt 2025",
+    "url": "https://techcrunch.com/2025/09/17/the-new-face-of-defense-tech-takes-the-ai-stage-at-techcrunch-disrupt-2025/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-17"
+  },
+  "28aec0cf68e3f331cb1d54761d4fb56d55132237": {
+    "title": "Google revamps Discover page to show content from creators",
+    "url": "https://techcrunch.com/2025/09/17/google-revamps-discover-page-to-show-content-from-creators/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-17"
+  },
+  "f15910edf3e7afdf38c498bae29ceb9d1d64e527": {
+    "title": "From Startup Battlefield to the Disrupt Stage: Discord founder Jason Citron returns to TechCrunch Disrupt 2025",
+    "url": "https://techcrunch.com/2025/09/17/from-startup-battlefield-200-to-the-disrupt-stage-discord-founder-jason-citron-returns-to-techcrunch-disrupt-2025/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-17"
+  },
+  "9f2081f6d46d97c9affdb192a94205e70f7f9465": {
+    "title": "Amazon launches AI agent to help sellers complete tasks and manage their businesses",
+    "url": "https://techcrunch.com/2025/09/17/amazon-launches-ai-agent-to-help-sellers-complete-tasks-and-manage-their-businesses/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-17"
+  },
+  "07ac5fb5367b7e38158f02a986ccf97e0c842fbc": {
+    "title": "VC firm Insight Partners says thousands of staff and limited partners had personal data stolen in a ransomware attack",
+    "url": "https://techcrunch.com/2025/09/17/vc-giant-insight-partners-notifies-staff-and-limited-partners-after-data-breach/",
+    "category": "tech-ai/big-tech",
+    "subcategory": "Big Tech",
+    "created": "2025-09-17"
+  },
+  "ff017a582e22472ce83d682e51751791b7c287b5": {
+    "title": "ICE Has Spyware Now",
+    "url": "https://www.wired.com/story/ice-has-spyware-now/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-09-06"
+  },
+  "eb8f595a31c6ab8d4e67e9d4a14c59092b137523": {
+    "title": "7 Best Password Managers (2025), Tested and Reviewed",
+    "url": "https://www.wired.com/story/best-password-managers/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-09-05"
+  },
+  "27fa4843c5f450483421c62a8cb75d3d6fc3b555": {
+    "title": "The WIRED Guide to Protecting Yourself From Government Surveillance",
+    "url": "https://www.wired.com/story/the-wired-guide-to-protecting-yourself-from-government-surveillance/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-06-16"
+  },
+  "dbecc60a5fb8da497e9a1b114b557bfe5f5f2cfa": {
+    "title": "How to Protest Safely in the Age of Surveillance",
+    "url": "https://www.wired.com/story/how-to-protest-safely-surveillance-digital-privacy/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-06-12"
+  },
+  "f3803d470f1dedc0638ea3e4b6c933b4be256ba8": {
+    "title": "Deepfake Scams Are Distorting Reality Itself",
+    "url": "https://www.wired.com/story/youre-not-ready-for-ai-powered-scams/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-06-04"
+  },
+  "9da01e0f672cd24c8fdb69bd95fabb52cdabeb2d": {
+    "title": "Russia Tests Hypersonic Missile at NATO’s Doorstep—and Shares the Video",
+    "url": "https://www.wired.com/story/russia-hypersonic-missile-test-nato-borders/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-09-15"
+  },
+  "9fdb49ba602cbbe32b2ca139e8f010885835ed6a": {
+    "title": "Here’s What to Know About Poland Shooting Down Russian Drones",
+    "url": "https://www.wired.com/story/poland-shoots-down-russian-drones/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-09-10"
+  },
+  "ddb668958eb45379246622b50b259fe48be39cbf": {
+    "title": "Defense Department Scrambles to Pretend It’s Called the War Department",
+    "url": "https://www.wired.com/story/department-of-defense-department-of-war/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-09-05"
+  },
+  "52fd9aba5b58a17373041e7a28cbd4221c9eabe3": {
+    "title": "US Congressman’s Brother Lands No-Bid Contract to Train DHS Snipers",
+    "url": "https://www.wired.com/story/us-congressmans-brother-lands-no-bid-contract-to-train-dhs-snipers/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-09-04"
+  },
+  "91fad407c00e5837305d065dcb39a8e7fa5c15eb": {
+    "title": "Charlie Kirk Shooting Suspect Identified as 22-Year-Old Utah Man",
+    "url": "https://www.wired.com/story/charlie-kirk-shooting-suspect-identified-as-22-year-old-utah-man-tyler-robinson/",
+    "category": "tech-ai/security-privacy",
+    "subcategory": "Security & Privacy",
+    "created": "2025-09-12"
+  },
+  "d210e3cf966147f1994e0a016da924a5c21ce569": {
+    "title": "Parents, don’t panic over porn! Here’s how to have an age-appropriate and shame-free talk with your kids | Jess Melendez",
+    "url": "https://www.theguardian.com/commentisfree/2025/sep/08/parents-porn-talk-kids",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-08"
+  },
+  "4d7fa773907b6fef74b8a192893346cc8c70ecb0": {
+    "title": "‘The Mother Teresa of Aussie supermarkets’: meet the woman cataloguing grocery deals on TikTok",
+    "url": "https://www.theguardian.com/culture/2025/sep/08/woman-cataloguing-grocery-deals-on-tiktok-mother-teresa-aussie-supermarkets-tennilles-deals",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-07"
+  },
+  "a8f616da2ad2558913297c2f4d6ee3924d1b553b": {
+    "title": "‘Existential crisis’: how Google’s shift to AI has upended the online news model",
+    "url": "https://www.theguardian.com/media/2025/sep/06/existential-crisis-google-use-ai-search-upended-web-publishers-models",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-06"
+  },
+  "938c0465baec7c5c465dd31a97b3dcd05109b4e7": {
+    "title": "Jaguar Land Rover staff told to stay home after cyber-attack",
+    "url": "https://www.theguardian.com/business/2025/sep/05/jaguar-land-rover-staff-stay-home-cyberattack",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-05"
+  },
+  "05dbe4cd3018836f2bbc27dd7c8e3c3f1191a628": {
+    "title": "How TikTok harms boys and girls differently – video",
+    "url": "https://www.theguardian.com/technology/video/2025/sep/04/how-tiktok-harms-boys-and-girls-differently-video",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-04"
+  },
+  "07b3984e006d4a702536ab888b71605df29d04e6": {
+    "title": "‘Slap on the wrist’: critics decry weak penalties on Google after landmark monopoly trial",
+    "url": "https://www.theguardian.com/technology/2025/sep/03/google-monopoly-case-ruling",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-03"
+  },
+  "802121b68e2bca8be8fd1ac3fda9aa1aa9f8e33c": {
+    "title": "Farage a ‘Putin-loving, free speech impostor’ says Democrat before Reform head’s US speech – UK politics as it happened",
+    "url": "https://www.theguardian.com/politics/live/2025/sep/03/farage-starmer-badenoch-pmqs-news-updates-uk-politics-live",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-03"
+  },
+  "9a2363ef3c45879b0bc920ff745e965baabef001": {
+    "title": "Jaguar Land Rover manufacturing and retail ‘severely disrupted’ by cyber incident",
+    "url": "https://www.theguardian.com/business/2025/sep/02/jaguar-land-rover-cyber-incident-manufacturing-retail",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-02"
+  },
+  "dee4ac03d981b3bde29773dded861029f13c6bc2": {
+    "title": "Dear gen Z, take a lesson from this zillennial: to be cringe is to be free | Eleanor Burnard",
+    "url": "https://www.theguardian.com/commentisfree/2025/sep/02/dear-gen-z-lesson-from-zillennial-be-cringe-be-free",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-01"
+  },
+  "b708a8ef3daeaff337100ee4b5ad6e49d876a9ba": {
+    "title": "Ready to give up social media? ‘Advice pollution’ might just get you there | Emma Beddington",
+    "url": "https://www.theguardian.com/commentisfree/2025/sep/01/ready-to-give-up-social-media-advice-pollution-might-just-get-you-there",
+    "category": "tech-ai/internet-platforms",
+    "subcategory": "Internet & Platforms",
+    "created": "2025-09-01"
+  },
+  "5be536151833356213e813e66f3885664bff2cd6": {
+    "title": "LegalZoom Promo Code: Exclusive 10% Off LLC Formations",
+    "url": "https://www.wired.com/story/legalzoom-promo-code/",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-17"
+  },
+  "b9aa6f77e5ffe47c509a62f7c4b99f3ccce968e0": {
+    "title": "Mac Mini Sale: Get Into MacOS for Less Than $500 Today",
+    "url": "https://www.wired.com/story/save-dollar100-or-more-on-a-mac-mini-today/",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-16"
+  },
+  "8fe7ca55df0e6287ff813de8b2c7358fd2d2951d": {
+    "title": "How to Clean AirPods (and Other Earbuds)",
+    "url": "https://www.wired.com/story/how-to-clean-earbuds-and-airpods/",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-16"
+  },
+  "6897215920aff7471049b54bd3c90d1301b3d5b4": {
+    "title": "The Best Ventless Fireplaces for Cozy Vibes (2025)",
+    "url": "https://www.wired.com/gallery/the-best-ventless-fireplaces/",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-16"
+  },
+  "3545585963547f5f5b574f67f52634f9c2b9995d": {
+    "title": "Apple Watch Series 11 Review: Finally, the Watch Lives Longer",
+    "url": "https://www.wired.com/review/apple-watch-series-11/",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-16"
+  },
+  "1aa6694a8e1d4e9440d5686ffb8c0bab160052ce": {
+    "title": "Up to $2,000 Off LG Promo Codes & Coupons",
+    "url": "https://www.wired.com/story/lg-promo-code/",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-16"
+  },
+  "f56295efa0b0fd0b03ff14b3948469da3e50533b": {
+    "title": "How to Shop Like a Pro During Amazon Prime Day (2025)",
+    "url": "https://www.wired.com/story/amazon-prime-day-2025-tips-to-find-best-deals/",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-16"
+  },
+  "78a300c709e320ba568cb1705797693388553ff9": {
+    "title": "Lenovo Coupon Codes and Deals: $800+ Off",
+    "url": "https://www.wired.com/story/lenovo-coupon-code/",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-16"
+  },
+  "ed188f6039dafd1964c8d7fb70e748e6bc6dd368": {
+    "title": "Purple Promo Codes and Deals: Up to 30% Off",
+    "url": "https://www.wired.com/story/purple-promo-code/",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-16"
+  },
+  "2ed241edf0e509c0d8227639ed20d5856f6b9878": {
+    "title": "The best ergonomic keyboards for 2025",
+    "url": "https://www.engadget.com/computing/accessories/best-ergonomic-keyboard-130047982.html?src=rss",
+    "category": "tech-ai/innovation-gadgets",
+    "subcategory": "Innovation & Gadgets",
+    "created": "2025-09-18"
+  },
+  "8600dee8a4929f36064677ce6fd8490cbc7d1d0e": {
+    "title": "The Logitech G Pro X2 Superstrike brings analogue tech to a gaming mouse for the first time and uses haptic feedback to replicate the feel of a mouse click",
+    "url": "https://www.pcgamer.com/hardware/gaming-mice/the-logitech-g-pro-x2-superstrike-brings-analogue-tech-to-a-gaming-mouse-for-the-first-time-and-uses-haptic-feedback-to-replicate-the-feel-of-a-mouse-click/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-17"
+  },
+  "a9825f55694c6d5cd90b523e10d3c65e66841bb1": {
+    "title": "Vampire: The Masquerade – Bloodlines 2's DLC clans are no longer DLC clans: 'Lasombra and Toreador belong in the base game, so that is what we are doing'",
+    "url": "https://www.pcgamer.com/games/rpg/vampire-the-masquerade-bloodlines-2s-dlc-clans-are-no-longer-dlc-clans-lasombra-and-toreador-belong-in-the-base-game-so-that-is-what-we-are-doing/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-17"
+  },
+  "357c85a32d46ff72cafbe5c807d7576e78ac839b": {
+    "title": "Battlefield 6 has done away with Levolution events in favour of 'tactical destruction' because all-out annihilation 'wouldn't be fun'",
+    "url": "https://www.pcgamer.com/games/fps/battlefield-6-has-done-away-with-levolution-events-in-favour-of-tactical-destruction-because-all-out-annihilation-wouldnt-be-fun/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-17"
+  },
+  "d19e9e93d726e7022829fcc8e23facb188d88a65": {
+    "title": "Microsoft announces it will automatically install the Copilot AI app alongside desktop versions of 365 products like Word, Excel and PowerPoint this October—and it seems like there's no way for personal users to opt out",
+    "url": "https://www.pcgamer.com/software/microsoft-announces-it-will-automatically-install-the-copilot-ai-app-into-ms-365-alongside-word-excel-and-powerpoint-this-october-and-it-looks-like-theres-no-way-for-personal-users-to-opt-out/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-17"
+  },
+  "aeb56d0eb016d820d348bb5d6326370893373d1b": {
+    "title": "In the 16 years I've played this series, Borderlands 4 is the first entry that's made me want to do post-game grinding—Gearbox just needs to fix its dang Wildcard Missions first",
+    "url": "https://www.pcgamer.com/games/rpg/in-the-16-years-ive-played-this-series-borderlands-4-is-the-first-entry-thats-made-me-want-to-do-post-game-grinding-gearbox-just-needs-to-fix-its-dang-wildcard-missions-first/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-17"
+  },
+  "ebcff8062702029ded2dedc11740385d6d317acf": {
+    "title": "This Frankenstein's monster of ARPG and battle royale from a studio founded by a former Blizzard chief creative officer is stitching together pieces of Diablo, Dark Souls, and PUBG into something new",
+    "url": "https://www.pcgamer.com/games/battle-royale/this-frankensteins-monster-of-arpg-and-battle-royale-from-a-studio-founded-by-a-former-blizzard-chief-creative-officer-is-stitching-together-pieces-of-diablo-dark-souls-and-pubg-into-something-new/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-17"
+  },
+  "db5c91b6633a1a17bb68d94537af6bf897fd368c": {
+    "title": "Stalker's remaster has taught me just how much of a terrible sicko I am for the pop of a Steam achievement",
+    "url": "https://www.pcgamer.com/games/fps/stalkers-remaster-has-taught-me-just-how-much-of-a-terrible-sicko-i-am-for-the-pop-of-a-steam-achievement/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-17"
+  },
+  "681eeced4f7a5e452d4e8ee1cfa1e41d0c79ecb8": {
+    "title": "Best SSD for gaming in 2025: the fastest and the best value solid state drives to perk up your PC",
+    "url": "https://www.pcgamer.com/best-ssd-for-gaming/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-17"
+  },
+  "68a23b6fc182198ecc21b929c3d50c40a4d990bb": {
+    "title": "Yakuza fans smell blood in the water as RGG studio accidentally puts the words 'Kiwami 3' on its website",
+    "url": "https://www.pcgamer.com/games/action/yakuza-fans-smell-blood-in-the-water-as-rgg-studio-accidentally-puts-the-words-kiwami-3-on-its-website/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-17"
+  },
+  "7e7d5a68b678c010bf7e8a99637f70743db11c34": {
+    "title": "Researchers argue that 'at least 40%' of the bloated x86 ISA could be removed and emulated to improve CPU efficiency",
+    "url": "https://www.pcgamer.com/hardware/processors/researchers-argue-that-at-least-40-percent-of-the-bloated-x86-isa-could-be-removed-and-emulated-to-improve-cpu-efficiency/",
+    "category": "tech-ai/gaming-tech",
+    "subcategory": "Gaming Tech / AI Gaming",
+    "created": "2025-09-17"
+  },
+  "4b48ffcc65a3d98056a8f14ba9711202a4662754": {
+    "title": "UK Creators Demand Prime Minister Recognize Creators’ Human Rights and Protect Copyright",
+    "url": "https://www.digitalmusicnews.com/2025/09/16/uk-creators-pm-creators-human-rights/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-17"
+  },
+  "14ac1422534161473daa57372f9332ac2d5638a5": {
+    "title": "Amazon Emerges as Exclusive Streaming Partner for All Things Go 2025 — With Amazon Music, Prime Video, and Twitch Included In the Action",
+    "url": "https://www.digitalmusicnews.com/2025/09/16/amazon-music-exclusive-streaming-partner-for-all-things-go-2025/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-17"
+  },
+  "18d781216e6888d5de7d762230b007f620ea2864": {
+    "title": "Spanish Recorded Music Industry Bucks the Global Trend with 10.4% H1 Growth",
+    "url": "https://www.digitalmusicnews.com/2025/09/16/spanish-recorded-music-industry-h1-2025/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-17"
+  },
+  "e5c644fc8fbdbcaa34a9e46bdf08cc251e0658b9": {
+    "title": "LimeWire Acquires Fyre Festival Brand for $245,000, Plots ‘Bold, Self-Aware, and Impossible to Ignore’ Revival",
+    "url": "https://www.digitalmusicnews.com/2025/09/16/limewire-fyre-festival-acquisition/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-16"
+  },
+  "f77d791fb03caf5f35326fbff6c5dda8745a95d7": {
+    "title": "Major Labels Settle Long-Running Internet Archive Copyright Infringement Battle Over the Great 78 Project",
+    "url": "https://www.digitalmusicnews.com/2025/09/16/great-78-project-lawsuit-settlement/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-16"
+  },
+  "f68b7fe107f0152a2ac3b7d50b2b3307fe98e2f1": {
+    "title": "Amazon Bags a Big Bad Bunny Streaming Exclusive",
+    "url": "https://www.digitalmusicnews.com/2025/09/16/amazon-bags-a-big-bad-bunny-streaming-exclusive/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-16"
+  },
+  "b29fdc8a3c5b31b247ab0fbbd99272f1cef421d4": {
+    "title": "TikTok Deal Terms Leak: Andreessen Horowitz, Oracle, Silver Lake, Likely to Control Substantial Stake in US Version",
+    "url": "https://www.digitalmusicnews.com/2025/09/16/tiktok-deal-terms-leak-stake/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-16"
+  },
+  "470c19b7e2c0c56c742a9ed9e76c71c69624c27c": {
+    "title": "Fiverr Is Struggling—Stock Down, Layoffs, and a Pivot to AI",
+    "url": "https://www.digitalmusicnews.com/2025/09/16/fiverr-is-struggling-layoffs/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-16"
+  },
+  "5dace68827b1cc8af8bf31bc6b2ba571731279b7": {
+    "title": "Too Soon? 35-Year-Old Hardy Sells ‘Select Compositions’ to Spirit Music Group",
+    "url": "https://www.digitalmusicnews.com/2025/09/16/hardy-catalog-sale-september-2025/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-16"
+  },
+  "545583f40d024f5083a4236f0633ac9b321f2b7c": {
+    "title": "YouTube Music Launches New Fan Engagement Features — As DSP ‘Superfan’ Perks Continue to Emerge",
+    "url": "https://www.digitalmusicnews.com/2025/09/16/youtube-music-new-fan-engagement-features/",
+    "category": "tech-ai/audio-creator-tools",
+    "subcategory": "Audio Creator Tools",
+    "created": "2025-09-16"
   }
 }
