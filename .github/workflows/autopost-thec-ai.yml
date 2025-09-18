@@ -40,7 +40,7 @@ jobs:
           [ -s data/posts.json ] || echo "[]" > data/posts.json
 
       - name: Run Tech & Ai autoposter
-        run: python3 autopost/pull_Tech & Ai.py
+        run: python3 autopost/pull_tech-ai.py
 
       - name: Commit & push
         shell: bash
