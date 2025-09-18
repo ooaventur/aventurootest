@@ -34,10 +34,6 @@ if __package__ in (None, ""):
 from autopost import SEEN_DB_FILENAME
 from autopost.common import limit_words_html
 
-from autopost import SEEN_DB_FILENAME
-from autopost.common import limit_words_html
-
-
 def _env_int(name: str, default: int) -> int:
     """Return an integer from the environment or ``default`` on failure."""
 
