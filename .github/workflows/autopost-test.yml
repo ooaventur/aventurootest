@@ -13,12 +13,16 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SUMMARY_WORDS: "900"
+      MAX_PER_FEED: "2"
       MAX_PER_CAT: "10"
       HTTP_TIMEOUT: "18"
       AP_USER_AGENT: "Mozilla/5.0 (AventurOO Autoposter)"
       FALLBACK_COVER: "assets/img/cover-fallback.jpg"
       FEEDS_FILE: autopost/feeds_test.txt
       CATEGORY: test          # optional but keeps the job limited to “test”
+
+
+
 
     steps:
       - uses: actions/checkout@v4
