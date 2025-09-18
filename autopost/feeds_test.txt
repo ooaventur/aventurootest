@@ -8,15 +8,3 @@ test|AI News7|https://thegradient.pub/feed/
 test|AI News8|https://becominghuman.ai/feed/                                         
 test|AI News9|https://science.sciencemag.org/rss/news_current.xml                    
 test|AI News10|https://www.aiwire.net/rss-feeds/                                     
-
-test|Big Tech11|https://thenextweb.com/feed/                                          
-test|Big Tech12|https://techcrunch.com/feed/                                         
-test|Big Tech13|https://www.theverge.com/tech/rss/index.xml                          
-test|Big Tech14|https://arstechnica.com/feeds/                                          
-test|Big Tech15|https://www.wired.com/rss/business/                                   
-test|Big Tech16|https://www.zdnet.com/feed/                                           
-test|Big Tech17|https://gizmodo.com/rss                                              
-test|Big Tech18|https://blogs.microsoft.com/feed/                                   
-test|Big Tech19|https://www.apple.com/newsroom/rss-feed.rss                         
-test|Big Tech20|https://www.forbes.com/tech/feed/                                    
-
