@@ -1,43 +1,14 @@
-test|AI News1|https://www.technologyreview.com/feed/                                     
-test|AI News5|https://machinelearningmastery.com/blog/feed/                          
-test|AI News6|https://blogs.nvidia.com/rss/                                         
-test|AI News7|https://thegradient.pub/feed/                                          
-test|AI News8|https://becominghuman.ai/feed/                                         
-test|AI News9|https://science.sciencemag.org/rss/news_current.xml                    
+# === CRYPTO / REGULATION & SECURITY ===
+test|2Regulation & Security|https://cointelegraph.com/rss/tag/regulation
+test|3Regulation & Security|https://cryptoslate.com/news/policy/feed/
+test|5Regulation & Security|https://thedefiant.io/feed/    # Shpesh për regulacion & defi
+test|6Regulation & Security|https://www.financemagnates.com/cryptocurrency/feed/
+test|8Regulation & Security|https://www.complianceweek.com/rss
 
-test|Big Tech11|https://thenextweb.com/feed/                                          
-test|Big Tech12|https://techcrunch.com/feed/                                         
-test|Big Tech17|https://gizmodo.com/rss                                              
-test|Big Tech18|https://blogs.microsoft.com/feed/                                   
-test|Big Tech19|https://www.apple.com/newsroom/rss-feed.rss                         
-test|Big Tech20|https://www.forbes.com/tech/feed/                                    
-
-test|Security & Privacy21|https://www.theregister.com/security/headlines.rss          
-test|Security & Privacy22|https://krebsonsecurity.com/feed/                          
-test|Security & Privacy24|https://www.welivesecurity.com/en/rss/feed                 
-test|Security & Privacy28|https://www.securitymagazine.com/rss                      
-
-test|Internet & Platforms32|https://techcrunch.com/tag/internet/feed/                
-test|Internet & Platforms34|https://arstechnica.com/information-technology/rss/      
-test|Internet & Platforms35|https://blog.mozilla.org/feed/                          
-test|Internet & Platforms36|https://www.microsoft.com/en-us/microsoft-365/blog/feed
-test|Internet & Platforms37|https://developer.apple.com/news/rss/news.rss            
-test|Internet & Platforms38|https://aws.amazon.com/blogs/aws/feed/                 
-test|Internet & Platforms39|https://blog.cloudflare.com/rss/                        
-test|Internet & Platforms40|https://news.ycombinator.com/rss                       
-
-test|Innovation & Gadgets41|https://www.engadget.com/rss.xml                         
-test|Innovation & Gadgets42|https://www.gizmodo.com/rss                            
-test|Innovation & Gadgets46|https://www.digitaltrends.com/feed/                     
-test|Innovation & Gadgets49|https://9to5mac.com/feed/                             
-
-test|Gaming Tech / AI Gaming50|https://www.pcgamer.com/rss/                         
-test|Gaming Tech / AI Gaming52|https://www.gamespot.com/feeds/news/                
-test|Gaming Tech / AI Gaming53|https://www.polygon.com/rss/index.xml               
-test|Gaming Tech / AI Gaming55|https://www.eurogamer.net/?format=rss               
-test|Gaming Tech / AI Gaming57|https://kotaku.com/rss                                
-
-test|Audio & Creator Tools60|https://fstoppers.com/feed/                         
-test|Audio & Creator Tools62|https://designboom.com/rss/tag/audio/               
-test|Audio & Creator Tools64|https://cdm.link/feed/                              
-test|Audio & Creator Tools65|https://producelikeapro.com/feed/                 
+# === CRYPTO / GUIDES CRYPTO ===
+test|Guides11|https://blockonomi.com/feed/
+test|Guides12|https://news.bitcoin.com/feed/
+test|Guides14|https://99bitcoins.com/feed/
+test|Guides15|https://cryptobriefing.com/feed/
+test|Guides17|https://cryptoslate.com/learn/feed/
+test|Guides20|https://cryptopotato.com/feed/
