@@ -23,7 +23,8 @@ Env knobs (optional):
 """
 
 import os, re, json, hashlib, datetime, pathlib, urllib.request, urllib.error, socket, sys
-from html import unescape
+from html import unescape, escape
+from html.parser import HTMLParser
 from email.utils import parsedate_to_datetime
 from urllib.parse import urlparse, urljoin, urlunparse, parse_qsl, urlencode
 from xml.etree import ElementTree as ET
@@ -197,6 +198,75 @@ def absolutize(html: str, base: str) -> str:
     html = re.sub(r'href=["\']([^"\']+)["\']', rep_href, html, flags=re.I)
     html = re.sub(r'src=["\']([^"\']+)["\']', rep_src, html, flags=re.I)
     return html
+IMG_ALLOWED_ATTRS = {
+    "src",
+    "alt",
+    "title",
+    "width",
+    "height",
+    "srcset",
+    "sizes",
+    "loading",
+    "decoding",
+}
+
+
+class _ImgTagParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.attrs = []
+        self.self_closing = False
+
+    def handle_starttag(self, tag, attrs):
+        if tag.lower() == "img":
+            self.attrs = attrs
+
+    def handle_startendtag(self, tag, attrs):
+        if tag.lower() == "img":
+            self.attrs = attrs
+            self.self_closing = True
+
+
+def _sanitize_img_tag(match: re.Match) -> str:
+    raw = match.group(0)
+    parser = _ImgTagParser()
+    try:
+        parser.feed(raw)
+        parser.close()
+    except Exception:
+        return ""
+
+    sanitized_attrs = []
+    has_src = False
+    for name, value in parser.attrs:
+        if not name:
+            continue
+        lname = name.lower()
+        if lname.startswith("on"):
+            continue
+        if lname not in IMG_ALLOWED_ATTRS:
+            continue
+        value = (value or "").strip()
+        if lname == "src":
+            if not value:
+                return ""
+            lower_value = value.lower()
+            if lower_value.startswith("javascript:"):
+                return ""
+            if lower_value.startswith("data:") and not lower_value.startswith("data:image/"):
+                return ""
+            has_src = True
+        sanitized_attrs.append((lname, value))
+
+    if not has_src:
+        return ""
+
+    attr_str = "".join(
+        f' {name}="{escape(val, quote=True)}"'
+        for name, val in sanitized_attrs
+    )
+    closing = " />" if parser.self_closing or raw.rstrip().endswith("/>") else ">"
+    return f"<img{attr_str}{closing}"
 
 def sanitize_article_html(html: str) -> str:
     if not html:
@@ -210,6 +280,7 @@ def sanitize_article_html(html: str) -> str:
     BAD = r"(share|related|promo|newsletter|advert|ads?|sponsor(ed)?|outbrain|taboola|recirculation|recommend(ed)?)"
     html = re.sub(rf'(?is)<(aside|figure|div|section)[^>]*class="[^"]*{BAD}[^"]*"[^>]*>.*?</\1>', "", html)
     html = re.sub(rf'(?is)<(div|section)[^>]*(id|data-)[^>]*{BAD}[^>]*>.*?</\1>', "", html)
+    html = re.sub(r"(?is)<img\b[^>]*>", _sanitize_img_tag, html)
     return html.strip()
 
 # ---- Link normalization helpers ----
@@ -1080,10 +1151,7 @@ def main():
             if len(excerpt) > 280:
                 excerpt = excerpt[:277] + "…"
 
-            # 6) Remove inline images from body (we show cover separately)
-            body_html = re.sub(r'<img\b[^>]*>', '', body_html or "", flags=re.I)
 
-            # 7) Footer source link
             body_final = (body_html or "") + f"""
 <p class="small text-muted mt-4">
   Source: <a href="{link}" target="_blank" rel="nofollow noopener noreferrer">Read the full article</a>
