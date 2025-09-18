@@ -1,4 +1,4 @@
 
-test|General|https://thedefiant.io/feed/
+test|General|https://coinjournal.net/feeds/
 
 
