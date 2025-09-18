@@ -68,6 +68,24 @@ function resolvePathPrefix() {
 }
 
 module.exports = function(eleventyConfig) {
+  eleventyConfig.addFilter("toAbsoluteUrl", function(path, base) {
+    if (!path) {
+      return base || "";
+    }
+
+    if (/^https?:\/\//i.test(path)) {
+      return path;
+    }
+
+    var normalizedBase = String(base || "").replace(/\/+$/, "");
+    var normalizedPath = String(path);
+    if (!normalizedPath.startsWith("/")) {
+      normalizedPath = "/" + normalizedPath;
+    }
+
+    return normalizedBase + normalizedPath;
+  });
+
   eleventyConfig.addPassthroughCopy("css");
   eleventyConfig.addPassthroughCopy("js");
   eleventyConfig.addPassthroughCopy("scripts");
