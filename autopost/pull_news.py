@@ -849,8 +849,16 @@ def run_pull_news(config: PullNewsConfig) -> PullNewsResult:
 
     added_total = 0
     per_cat = {}
-    per_feed_added: dict[str, int] = {}
-    new_entries = []
+    limit_slug_source = category_slug_value or cat_slug
+    top_level_limit_slug = split_category_slug(limit_slug_source)[0]
+    if not top_level_limit_slug:
+        top_level_limit_slug = cat_slug or slugify_taxonomy(category_label)
+        category_limit_key = (
+        top_level_limit_slug
+        or slugify_taxonomy(category_label)
+        or (category_label or "_")
+            )
+            if per_cat.get(category_limit_key, 0) >= max_per_cat:
 
     current_sub_label = ""
     current_sub_slug = ""
@@ -1070,7 +1078,9 @@ def run_pull_news(config: PullNewsConfig) -> PullNewsResult:
                 "subcategory": normalized_subcategory_label,
                 "created": date,
             }
-            limit_key_final = normalized_category_slug or key_limit
+            limit_key_final = split_category_slug(normalized_category_slug)[0] or category_limit_key
+            if not limit_key_final:
+            limit_key_final = slugify_taxonomy(normalized_category_label) or category_limit_key
             per_cat[limit_key_final] = per_cat.get(limit_key_final, 0) + 1
             per_feed_added[feed_url] = per_feed_added.get(feed_url, 0) + 1
             added_total += 1
