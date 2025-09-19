@@ -16,26 +16,260 @@
 
   var DEFAULT_IMAGE = basePath.resolve ? basePath.resolve('/images/logo.png') : '/images/logo.png';
   var HOME_URL = basePath.resolve ? basePath.resolve('/') : '/';
-  var POSTS_SOURCES = ['/data/posts.json', 'data/posts.json'];
+  var POSTS_MANIFEST_SOURCES = ['/data/posts/manifest.json', 'data/posts/manifest.json'];
+  var LEGACY_POSTS_SOURCES = ['/data/posts.json', 'data/posts.json'];
 
   var TAXONOMY_SOURCES = ['/data/taxonomy.json', 'data/taxonomy.json'];
-
-
-
-
-
-
-
-
-
-
-
+  var SITE_WIDE_TARGET_COUNT = 200;
+  var CATEGORY_TARGET_COUNT = 200;
 
   function fetchSequential(urls) {
     if (!window.AventurOODataLoader || typeof window.AventurOODataLoader.fetchSequential !== 'function') {
       return Promise.reject(new Error('Data loader is not available'));
     }
     return window.AventurOODataLoader.fetchSequential(urls);
+  }
+  function manifestCategoryEntry(manifest, slug) {
+    if (!manifest || typeof manifest !== 'object') return null;
+    var categories = manifest.categories;
+    if (!categories || typeof categories !== 'object') return null;
+
+    var normalizedSlug = slugify(slug);
+    var entry = categories[normalizedSlug] || categories[slug];
+    if (!entry) return null;
+
+    if (Array.isArray(entry)) {
+      return { months: entry.slice(), count: entry.length };
+    }
+
+    var months = [];
+    if (entry && Array.isArray(entry.months)) {
+      months = entry.months.slice();
+    }
+
+    var count = 0;
+    if (entry && typeof entry.count === 'number') {
+      count = entry.count;
+    } else if (entry && typeof entry.post_count === 'number') {
+      count = entry.post_count;
+    } else if (entry && typeof entry.total === 'number') {
+      count = entry.total;
+    }
+
+    return { months: months, count: count };
+  }
+
+  function manifestMonthsFor(manifest, slug) {
+    var entry = manifestCategoryEntry(manifest, slug);
+    if (!entry) return [];
+
+    var months = Array.isArray(entry.months) ? entry.months.slice() : [];
+    var seen = Object.create(null);
+    var sanitized = [];
+    months
+      .map(function (value) { return value == null ? '' : String(value).trim(); })
+      .forEach(function (value) {
+        if (!value) return;
+        var normalized = value.slice(0, 7);
+        if (!/^\d{4}-\d{2}$/.test(normalized)) return;
+        if (seen[normalized]) return;
+        seen[normalized] = true;
+        sanitized.push(normalized);
+      });
+
+    return sanitized;
+  }
+
+  function manifestHasCategory(manifest, slug) {
+    return manifestMonthsFor(manifest, slug).length > 0;
+  }
+
+  function resolveManifestCategorySlug(manifest, slug) {
+    var normalized = resolveKnownCategorySlug(slug);
+    if (!normalized) return '';
+    if (manifestHasCategory(manifest, normalized)) {
+      return normalized;
+    }
+
+    var visited = Object.create(null);
+    var current = normalized;
+    while (current && !visited[current]) {
+      visited[current] = true;
+      var parent = CATEGORY_PARENT_LOOKUP[current];
+      if (!parent) break;
+      var parentNormalized = slugify(parent);
+      if (!parentNormalized) break;
+      if (manifestHasCategory(manifest, parentNormalized)) {
+        return parentNormalized;
+      }
+      current = parentNormalized;
+    }
+
+    return normalized;
+  }
+
+  function buildCategorySourceList(slug, monthKey) {
+    var normalizedSlug = slugify(slug);
+    var month = monthKey == null ? '' : String(monthKey).trim();
+    if (!normalizedSlug || !month) return [];
+
+    var safeMonth = month.replace(/[^0-9-]/g, '').slice(0, 7);
+    if (!/^\d{4}-\d{2}$/.test(safeMonth)) return [];
+
+    var primary = '/data/posts/' + normalizedSlug + '/' + safeMonth + '.json';
+    var secondary = 'data/posts/' + normalizedSlug + '/' + safeMonth + '.json';
+    return [primary, secondary];
+  }
+
+  function loadCategoryMonth(slug, monthKey) {
+    var normalizedSlug = slugify(slug);
+    var month = monthKey == null ? '' : String(monthKey).trim();
+    if (!normalizedSlug || !month) {
+      return Promise.resolve([]);
+    }
+
+    var cacheKey = normalizedSlug + '|' + month;
+    if (CATEGORY_MONTH_CACHE[cacheKey]) {
+      return CATEGORY_MONTH_CACHE[cacheKey];
+    }
+
+    var sources = buildCategorySourceList(normalizedSlug, month);
+    if (!sources.length) {
+      var empty = Promise.resolve([]);
+      CATEGORY_MONTH_CACHE[cacheKey] = empty;
+      return empty;
+    }
+
+    var promise = fetchSequential(sources)
+      .then(function (items) {
+        return Array.isArray(items) ? items : [];
+      })
+      .catch(function (err) {
+        console.warn('category month load error', normalizedSlug, month, err);
+        return [];
+      });
+
+    CATEGORY_MONTH_CACHE[cacheKey] = promise;
+    return promise;
+  }
+
+  function fetchCategoryData(manifest, slug, desiredCount) {
+    var months = manifestMonthsFor(manifest, slug);
+    if (!months.length) {
+      return Promise.resolve([]);
+    }
+
+    var limit = typeof desiredCount === 'number' && desiredCount > 0 ? desiredCount : 0;
+    var collected = [];
+
+    function loadNext(index) {
+      if (index >= months.length) {
+        return Promise.resolve();
+      }
+      if (limit && collected.length >= limit) {
+        return Promise.resolve();
+      }
+
+      var monthKey = months[index];
+      return loadCategoryMonth(slug, monthKey)
+        .then(function (items) {
+          if (Array.isArray(items) && items.length) {
+            Array.prototype.push.apply(collected, items);
+          }
+        })
+        .catch(function (err) {
+          console.warn('category data fetch error', slug, monthKey, err);
+        })
+        .then(function () {
+          return loadNext(index + 1);
+        });
+    }
+
+    return loadNext(0).then(function () {
+      if (limit && collected.length > limit) {
+        collected.length = limit;
+      }
+      return collected;
+    });
+  }
+
+  function loadLegacyPosts() {
+    return fetchSequential(LEGACY_POSTS_SOURCES)
+      .then(function (all) {
+        var list = Array.isArray(all) ? all : [];
+        return { siteWide: list.slice(), page: list.slice() };
+      })
+      .catch(function (err) {
+        console.warn('legacy posts load error', err);
+        return { siteWide: [], page: [] };
+      });
+  }
+
+  function loadPostsFromManifest(manifest, ctx) {
+    if (!manifest || typeof manifest !== 'object' || !manifest.categories) {
+      return loadLegacyPosts();
+    }
+
+    var siteWideSlug = manifestHasCategory(manifest, 'all') ? 'all' : '';
+    var siteWidePromise = siteWideSlug
+      ? fetchCategoryData(manifest, siteWideSlug, SITE_WIDE_TARGET_COUNT)
+      : Promise.resolve([]);
+
+    var categorySlug = '';
+    if (ctx && ctx.cat) {
+      categorySlug = resolveManifestCategorySlug(manifest, ctx.cat);
+    } else if (siteWideSlug) {
+      categorySlug = siteWideSlug;
+    }
+
+    if (!categorySlug) {
+      var categories = manifest.categories || {};
+      var keys = Object.keys(categories);
+      if (keys.length) {
+        categorySlug = keys[0];
+      }
+    }
+
+    var categoryPromise;
+    if (categorySlug && siteWideSlug && categorySlug === siteWideSlug) {
+      categoryPromise = siteWidePromise;
+    } else if (categorySlug) {
+      categoryPromise = fetchCategoryData(manifest, categorySlug, CATEGORY_TARGET_COUNT);
+    } else {
+      categoryPromise = Promise.resolve([]);
+    }
+
+    return Promise.all([siteWidePromise, categoryPromise]).then(function (results) {
+      var siteWide = Array.isArray(results[0]) ? results[0] : [];
+      var categoryList = Array.isArray(results[1]) ? results[1] : [];
+
+      if (ctx && !ctx.cat) {
+        if (!categoryList.length && siteWide.length) {
+          categoryList = siteWide.slice();
+        } else if (!siteWide.length && categoryList.length) {
+          siteWide = categoryList.slice();
+        }
+      }
+
+      if (ctx && ctx.cat && !categoryList.length && siteWide.length) {
+        categoryList = siteWide.slice();
+      }
+
+      if (!siteWide.length && siteWideSlug && categoryList.length) {
+        siteWide = categoryList.slice();
+      }
+
+      return { siteWide: siteWide, page: categoryList };
+    });
+  }
+
+  function loadPosts(manifest, ctx) {
+    return loadPostsFromManifest(manifest, ctx).then(function (data) {
+      if (data && ((data.siteWide && data.siteWide.length) || (data.page && data.page.length))) {
+        return data;
+      }
+      return loadLegacyPosts();
+    });
   }
 
   function slugify(s) {
@@ -53,18 +287,6 @@
 
     var slugs = [];
     var seen = Object.create(null);
-
-
-
-
-
-
-
-
-
-
-
-
 
     function appendSlug(value) {
       if (value == null) return;
@@ -184,19 +406,29 @@
   }
   var CATEGORY_TITLE_LOOKUP = Object.create(null);
 
+  function populateCategoryLookup(data) {
+    if (!data || typeof data !== 'object') return;
+    var categories = Array.isArray(data.categories) ? data.categories : [];
+    categories.forEach(function (entry) {
+      if (!entry || typeof entry !== 'object') return;
+      var slug = slugify(entry.slug);
+      if (!slug) return;
+      var title = entry.title != null ? String(entry.title).trim() : '';
+      if (!title) {
+        title = titleize(slug);
+      }
+    var CATEGORY_TITLE_LOOKUP = Object.create(null);
+  var CATEGORY_PARENT_LOOKUP = Object.create(null);
+  var CATEGORY_MONTH_CACHE = Object.create(null);
 
-
-
-
-
-
-
-
-
-
-
-
-
+    function registerCategoryParent(childSlug, parentSlug) {
+    var child = slugify(childSlug);
+    var parent = slugify(parentSlug);
+    if (!child || !parent || child === parent) return;
+    if (!CATEGORY_PARENT_LOOKUP[child]) {
+      CATEGORY_PARENT_LOOKUP[child] = parent;
+    }
+  }
 
   function populateCategoryLookup(data) {
     if (!data || typeof data !== 'object') return;
@@ -211,27 +443,34 @@
       }
       CATEGORY_TITLE_LOOKUP[slug] = title;
 
+      var parent = entry.group;
+      if (Array.isArray(parent)) {
+        if (parent.length) {
+          registerCategoryParent(slug, parent[0]);
+        }
+      } else if (parent != null) {
+        registerCategoryParent(slug, parent);
+      }
+    });
+  }
 
+  function resolveKnownCategorySlug(slug) {
+    var normalized = slugify(slug);
+    if (!normalized) return '';
+    if (CATEGORY_TITLE_LOOKUP[normalized]) {
+      return normalized;
+    }
 
+    var segments = normalized.split('-');
+    for (var i = segments.length - 1; i >= 0; i--) {
+      var candidate = segments.slice(i).join('-');
+      if (candidate && CATEGORY_TITLE_LOOKUP[candidate]) {
+        return candidate;
+      }
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return normalized;
+  }
     });
   }
 
@@ -595,6 +834,12 @@
 
   var ctx = getCatSub();
   patchHeader(ctx);
+  
+  var manifestPromise = fetchSequential(POSTS_MANIFEST_SOURCES)
+    .catch(function (err) {
+      console.warn('posts manifest load error', err);
+      return null;
+    });
 
   var taxonomyPromise = fetchSequential(TAXONOMY_SOURCES)
     .then(function (taxonomy) {
@@ -613,19 +858,36 @@
 
   taxonomyPromise
     .then(function () {
-      return fetchSequential(POSTS_SOURCES);
+      return manifestPromise;
     })
-    .then(function (all) {
-      all = Array.isArray(all) ? all : [];
-      var allSorted = all.slice().sort(function (a, b) {
+    .then(function (manifest) {
+      return loadPosts(manifest, ctx);
+    })
+    .then(function (data) {
+      var siteWidePosts = data && Array.isArray(data.siteWide) ? data.siteWide : [];
+      var pagePosts = data && Array.isArray(data.page) ? data.page : [];
+
+      if (!siteWidePosts.length && pagePosts.length) {
+        siteWidePosts = pagePosts.slice();
+      }
+
+      if (!ctx.cat) {
+        pagePosts = siteWidePosts.slice();
+      } else if (!pagePosts.length && siteWidePosts.length) {
+        pagePosts = siteWidePosts.slice();
+      }
+
+      var recentSource = siteWidePosts.length ? siteWidePosts : pagePosts;
+      var allSorted = recentSource.slice().sort(function (a, b) {
         return getPostTimestamp(b) - getPostTimestamp(a);
       });
+
       var filtered = ctx.cat
-        ? all.filter(function (p) {
+        ? pagePosts.filter(function (p) {
           var slugs = resolvePostCategorySlugs(p);
           return slugs.indexOf(ctx.cat) !== -1;
         })
-        : all.slice();
+        : pagePosts.slice();
 
       if (ctx.cat && filtered.length) {
         var bestLabelInfo = null;
@@ -648,10 +910,6 @@
           }
         }
       }
-
-      var sortedByDate = filtered.slice().sort(function (a, b) {
-        return getPostTimestamp(b) - getPostTimestamp(a);
-      });
 
       renderRecentSidebar(allSorted.slice(0, 3));
       var additionalPosts = allSorted.slice(3, 13);
