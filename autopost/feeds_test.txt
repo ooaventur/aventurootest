@@ -1,24 +1,55 @@
-# === FOOD & 1DRINK1 / GENERAL ===
-test|1General|https://www.eater.com/rss/index.xml
-test|2General|https://www.saveur.com/feed/
-test|3General|https://www.delish.com/rss/all.xml/
-test|4General|https://www.tasteofhome.com/feed/
+# === TRAVEL / GENERAL ===
+test|3General|https://www.cntraveler.com/feed/rss
+test|5General|https://www.independent.co.uk/travel/rss
+test|6General|https://www.theguardian.com/travel/rss
+test|7General|https://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/section/travel/rss.xml
 
-# === FOOD ===
-test|5Food|https://www.bonappetit.com/feed/rss
-test|6Food|https://www.thekitchn.com/main.rss
-test|7Food|https://smittenkitchen.com/feed/
-test|8Food|https://www.chowhound.com/rss/all
-test|9Food|https://cookieandkate.com/feed/
-test|10Food|https://pinchofyum.com/feed
+# === TRIP IDEAS ===
+test|11Trip Ideas|https://www.intrepidtravel.com/adventures/feed/
+test|13Trip Ideas|https://www.atlasobscura.com/feeds/latest
+test|14Trip Ideas|https://www.adventure.com/feed/
+test|15Trip Ideas|https://www.nomadicmatt.com/feed/
+test|16Trip Ideas|https://www.tourradar.com/days-to-come/feed
+test|19Trip Ideas|https://www.thebrokebackpacker.com/feed/
+test|20Trip Ideas|https://www.outsideonline.com/feed/
 
-# === DRINK ===
-test|11Drink|https://imbibemagazine.com/feed/
-test|12Drink|https://vinepair.com/feed/
-test|13Drink|https://punchdrink.com/feed/
-test|14Drink|https://www.thedrinksbusiness.com/feed/
-test|15Drink|https://www.winemag.com/feed/
-test|16Drink|https://www.cocktailenthusiast.com/feed/
-test|17Drink|https://brewbound.com/feed/
+# === DESTINATIONS ===
+test|24Destinations|https://www.telegraph.co.uk/travel/rss.xml
+test|26Destinations|https://admin.travelpulse.com/Content/rss/default.ashx?ptgpk=58561577&requrl=%2frss%2fnews.rss&preview=1
+test|28Destinations|https://matadornetwork.com/feed/
+test|29Destinations|https://www.globaltravelerusa.com/feed/
 
+# === TIPS & PLANNING ===
+test|31Tips & Planning|https://www.smartertravel.com/feed/
+test|32Tips & Planning|https://www.thepointsguy.com/feed/
+test|33Tips & Planning|https://upgradedpoints.com/feed/
+test|36Tips & Planning|https://millionmilesecrets.com/feed/
+test|37Tips & Planning|https://www.traveloffpath.com/feed/
+test|39Tips & Planning|https://boardingarea.com/feed/
 
+# === STAYS (HOTELS) ===
+test|43Stays (Hotels)|https://www.hotelmanagement.net/rss.xml
+test|46Stays (Hotels)|https://boutiquehotelnews.com/feed/
+test|47Stays (Hotels)|https://www.oyster.com/rss/
+
+# === EXPERIENCES ===
+test|54Experiences|https://www.intrepidtravel.com/adventures/feed/
+test|55Experiences|https://www.atlasobscura.com/feeds/latest
+test|57Experiences|https://www.tourradar.com/days-to-come/feed
+test|59Experiences|https://www.adventure.com/feed/
+test|60Experiences|https://matadornetwork.com/feed/
+
+# === TRANSPORT ===
+test|62Transport|https://simpleflying.com/feed/
+test|64Transport|https://www.cruiseindustrynews.com/feed
+test|66Transport|https://www.railjournal.com/feed/
+test|67Transport|https://www.airlineweekly.com/feed/
+test|68Transport|https://skift.com/transport/feed/
+test|70Transport|https://www.flyingmag.com/feed/
+
+# === THINGS TO DO ===
+test|71Things To Do|https://www.atlasobscura.com/feeds/latest
+test|77Things To Do|https://www.wanderlustmagazine.com/rss
+test|78Things To Do|https://matadornetwork.com/feed/
+test|79Things To Do|https://www.fodors.com/feed
+test|80Things To Do|https://www.cntraveler.com/feed/rss
