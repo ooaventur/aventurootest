@@ -34,47 +34,38 @@ class ResolveCoverUrlTests(unittest.TestCase):
 
 class FeedUrlParsingTests(unittest.TestCase):
     def test_inline_comment_in_feed_url_stripped(self):
-        original_feeds = pull_news.FEEDS
-        original_posts_json = pull_news.POSTS_JSON
-        original_seen_db = pull_news.SEEN_DB
-        original_data_dir = pull_news.DATA_DIR
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = pathlib.Path(tmpdir)
+            feed_file = tmp_path / "feeds.txt"
+            feed_file.write_text(
+                "Test|Sub|https://example.com/feed/   # comment\n",
+                encoding="utf-8",
+            )
 
-        try:
-            with tempfile.TemporaryDirectory() as tmpdir:
-                tmp_path = pathlib.Path(tmpdir)
-                feed_file = tmp_path / "feeds.txt"
-                feed_file.write_text(
-                    "Test|Sub|https://example.com/feed/   # comment\n",
-                    encoding="utf-8",
-                )
+            config = pull_news.PullNewsConfig(
+                feeds=feed_file,
+                data_dir=tmp_path,
+                posts_json=tmp_path / "posts.json",
+                seen_db=tmp_path / "seen.json",
+            )
 
-                pull_news.FEEDS = feed_file
-                pull_news.DATA_DIR = tmp_path
-                pull_news.POSTS_JSON = tmp_path / "posts.json"
-                pull_news.SEEN_DB = tmp_path / "seen.json"
+            fetched_urls = []
 
-                fetched_urls = []
+            def fake_fetch_bytes(url):
+                fetched_urls.append(url)
+                return b"<xml>"
 
-                def fake_fetch_bytes(url):
-                    fetched_urls.append(url)
-                    return b"<xml>"
+            patchers = [
+                mock.patch.object(pull_news, "fetch_bytes", side_effect=fake_fetch_bytes),
+                mock.patch.object(pull_news, "parse_feed", return_value=[]),
+            ]
 
-                patchers = [
-                    mock.patch.object(pull_news, "fetch_bytes", side_effect=fake_fetch_bytes),
-                    mock.patch.object(pull_news, "parse_feed", return_value=[]),
-                ]
+            with contextlib.ExitStack() as stack:
+                for patcher in patchers:
+                    stack.enter_context(patcher)
+                pull_news.run_pull_news(config)
 
-                with contextlib.ExitStack() as stack:
-                    for patcher in patchers:
-                        stack.enter_context(patcher)
-                    pull_news.main()
-
-                self.assertEqual(fetched_urls, ["https://example.com/feed/"])
-        finally:
-            pull_news.FEEDS = original_feeds
-            pull_news.POSTS_JSON = original_posts_json
-            pull_news.SEEN_DB = original_seen_db
-            pull_news.DATA_DIR = original_data_dir
+            self.assertEqual(fetched_urls, ["https://example.com/feed/"])
 
 
 class MaxPerFeedLimitTests(unittest.TestCase):
@@ -84,43 +75,97 @@ class MaxPerFeedLimitTests(unittest.TestCase):
             for idx in range(3)
         ]
 
-        original_feeds = pull_news.FEEDS
-        original_posts_json = pull_news.POSTS_JSON
-        original_seen_db = pull_news.SEEN_DB
-        original_data_dir = pull_news.DATA_DIR
-        original_max_per_feed = pull_news.MAX_PER_FEED
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = pathlib.Path(tmpdir)
+            feed_file = tmp_path / "feeds.txt"
+            feed_file.write_text("Test|Sub|https://example.com/feed\n", encoding="utf-8")
 
-        try:
-            with tempfile.TemporaryDirectory() as tmpdir:
-                tmp_path = pathlib.Path(tmpdir)
-                feed_file = tmp_path / "feeds.txt"
-                feed_file.write_text("Test|Sub|https://example.com/feed\n", encoding="utf-8")
+            config = pull_news.PullNewsConfig(
+                feeds=feed_file,
+                data_dir=tmp_path,
+                posts_json=tmp_path / "posts.json",
+                seen_db=tmp_path / "seen.json",
+                max_per_feed=2,
+            )
 
-                pull_news.FEEDS = feed_file
-                pull_news.DATA_DIR = tmp_path
-                pull_news.POSTS_JSON = tmp_path / "posts.json"
-                pull_news.SEEN_DB = tmp_path / "seen.json"
-                pull_news.MAX_PER_FEED = 2
+            patchers = [
+                mock.patch.object(pull_news, "fetch_bytes", return_value=b"<xml>"),
+                mock.patch.object(pull_news, "parse_feed", return_value=items),
+                mock.patch.object(pull_news, "extract_body_html", return_value=("<p>Body</p>", "")),
+                mock.patch.object(pull_news, "find_cover_from_item", return_value=""),
+            ]
+            with contextlib.ExitStack() as stack:
+                for patcher in patchers:
+                    stack.enter_context(patcher)
+                pull_news.run_pull_news(config)
 
-                patchers = [
-                    mock.patch.object(pull_news, "fetch_bytes", return_value=b"<xml>"),
-                    mock.patch.object(pull_news, "parse_feed", return_value=items),
-                    mock.patch.object(pull_news, "extract_body_html", return_value=("<p>Body</p>", "")),
-                    mock.patch.object(pull_news, "find_cover_from_item", return_value=""),
-                ]
-                with contextlib.ExitStack() as stack:
-                    for patcher in patchers:
-                        stack.enter_context(patcher)
-                    pull_news.main()
+            data = json.loads(config.posts_json.read_text(encoding="utf-8"))
+            self.assertEqual(len(data), 2)
 
-                data = json.loads(pull_news.POSTS_JSON.read_text(encoding="utf-8"))
-                self.assertEqual(len(data), 2)
-        finally:
-            pull_news.FEEDS = original_feeds
-            pull_news.POSTS_JSON = original_posts_json
-            pull_news.SEEN_DB = original_seen_db
-            pull_news.DATA_DIR = original_data_dir
-            pull_news.MAX_PER_FEED = original_max_per_feed
+
+class MaxPerCategoryLimitTests(unittest.TestCase):
+    def test_top_level_category_limit_shared_across_subcategories(self):
+        politics_items = [
+            {
+                "title": f"Politics {idx}",
+                "link": f"https://example.com/politics-{idx}",
+                "summary": "",
+                "element": None,
+            }
+            for idx in range(2)
+        ]
+        world_items = [
+            {
+                "title": f"World {idx}",
+                "link": f"https://example.com/world-{idx}",
+                "summary": "",
+                "element": None,
+            }
+            for idx in range(2)
+        ]
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = pathlib.Path(tmpdir)
+            feed_file = tmp_path / "feeds.txt"
+            feed_file.write_text(
+                "News|Politics|https://example.com/politics-feed\n"
+                "News|World|https://example.com/world-feed\n",
+                encoding="utf-8",
+            )
+
+            config = pull_news.PullNewsConfig(
+                feeds=feed_file,
+                data_dir=tmp_path,
+                posts_json=tmp_path / "posts.json",
+                seen_db=tmp_path / "seen.json",
+                max_per_feed=10,
+                max_per_category=2,
+                max_total=0,
+            )
+
+            patchers = [
+                mock.patch.object(pull_news, "fetch_bytes", return_value=b"<xml>"),
+                mock.patch.object(
+                    pull_news,
+                    "parse_feed",
+                    side_effect=[politics_items, world_items],
+                ),
+                mock.patch.object(
+                    pull_news,
+                    "extract_body_html",
+                    return_value=("<p>Body</p>", ""),
+                ),
+                mock.patch.object(pull_news, "find_cover_from_item", return_value=""),
+            ]
+
+            with contextlib.ExitStack() as stack:
+                for patcher in patchers:
+                    stack.enter_context(patcher)
+                pull_news.run_pull_news(config)
+
+            data = json.loads(config.posts_json.read_text(encoding="utf-8"))
+            self.assertEqual(len(data), 2)
+            self.assertFalse(any(entry.get("subcategory") == "World" for entry in data))
 
 if __name__ == "__main__":
     unittest.main()
