@@ -5,19 +5,20 @@ test|3General|https://www.delish.com/rss/all.xml/
 test|4General|https://www.tasteofhome.com/feed/
 
 # === FOOD ===
-Food|5Food|https://www.bonappetit.com/feed/rss
-Food|6Food|https://www.thekitchn.com/main.rss
-Food|7Food|https://smittenkitchen.com/feed/
-Food|8Food|https://www.chowhound.com/rss/all
-Food|9Food|https://cookieandkate.com/feed/
-Food|10Food|https://pinchofyum.com/feed
+test|5Food|https://www.bonappetit.com/feed/rss
+test|6Food|https://www.thekitchn.com/main.rss
+test|7Food|https://smittenkitchen.com/feed/
+test|8Food|https://www.chowhound.com/rss/all
+test|9Food|https://cookieandkate.com/feed/
+test|10Food|https://pinchofyum.com/feed
 
 # === DRINK ===
-Drink|11Drink|https://imbibemagazine.com/feed/
-Drink|12Drink|https://vinepair.com/feed/
-Drink|13Drink|https://punchdrink.com/feed/
-Drink|14Drink|https://www.thedrinksbusiness.com/feed/
-Drink|15Drink|https://www.winemag.com/feed/
-Drink|16Drink|https://www.cocktailenthusiast.com/feed/
-Drink|17Drink|https://brewbound.com/feed/
+test|11Drink|https://imbibemagazine.com/feed/
+test|12Drink|https://vinepair.com/feed/
+test|13Drink|https://punchdrink.com/feed/
+test|14Drink|https://www.thedrinksbusiness.com/feed/
+test|15Drink|https://www.winemag.com/feed/
+test|16Drink|https://www.cocktailenthusiast.com/feed/
+test|17Drink|https://brewbound.com/feed/
+
 
