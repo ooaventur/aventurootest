@@ -1,1 +1,520 @@
-
+{
+  "9ee01414d306eb1c04038e8b4f939d7f43aa01b4": {
+    "title": "9 Best Galapagos Cruises for Adventure, Wildlife, & Luxury",
+    "url": "https://www.cntraveler.com/story/best-galapagos-cruises",
+    "category": "test/3general",
+    "subcategory": "3General",
+    "created": "2025-09-18"
+  },
+  "27c8131ffabd3f93e9b36827c8b6890979957be4": {
+    "title": "The Best Greek Islands to Visit in 2025",
+    "url": "https://www.cntraveler.com/gallery/best-greek-islands-to-visit",
+    "category": "test/3general",
+    "subcategory": "3General",
+    "created": "2025-09-18"
+  },
+  "c19b904eea78c1407b25a114892443877a9527d1": {
+    "title": "A city of two halves: how I fell for frenetic Istanbul",
+    "url": "https://www.independent.co.uk/travel/europe/turkey/istanbul/istanbul-city-break-b2829238.html",
+    "category": "test/5general",
+    "subcategory": "5General",
+    "created": "2025-09-19"
+  },
+  "ccac2b669eeab4abcf9ed84d2ba4642d7f48f354": {
+    "title": "Ultimate autumn adventures by train",
+    "url": "https://www.independent.co.uk/travel/ultimate-autumn-adventures-by-train-b2826710.html",
+    "category": "test/5general",
+    "subcategory": "5General",
+    "created": "2025-09-19"
+  },
+  "d8b8e13f7be79f7350a352c0e81d9a0e1f782ddd": {
+    "title": "A local’s travel guide to Austin: what to eat, see and do in three days",
+    "url": "https://www.theguardian.com/travel/2024/apr/26/austin-texas-three-day-travel-guide",
+    "category": "test/6general",
+    "subcategory": "6General",
+    "created": "2024-04-26"
+  },
+  "1f05b1a6311a46bcc23a6ec4ba726eeaff79b437": {
+    "title": "A local’s travel guide to New York City: what to eat, see and do in three days",
+    "url": "https://www.theguardian.com/travel/2024/mar/22/nyc-three-day-travel-guide",
+    "category": "test/6general",
+    "subcategory": "6General",
+    "created": "2024-03-22"
+  },
+  "546ffd780707dd02115baeaff748e4ace4c341b7": {
+    "title": "With Amex’s Platinum Refresh, an Even More Exclusive Card Emerges",
+    "url": "https://www.nytimes.com/2025/09/18/travel/amexs-platinum-card-benefits.html",
+    "category": "test/7general",
+    "subcategory": "7General",
+    "created": "2025-09-18"
+  },
+  "18660f9fb73071a2ed0ba704f3b36f2893d97d8a": {
+    "title": "Help! Aer Lingus Wouldn’t Let Me Fly Because of a Visa I Didn’t Need.",
+    "url": "https://www.nytimes.com/2025/09/18/travel/aer-lingus-uganda-visa.html",
+    "category": "test/7general",
+    "subcategory": "7General",
+    "created": "2025-09-18"
+  },
+  "8136f8eba0bf12e5497b5abebc9c07e5222fc17b": {
+    "title": "Surf’s up in Taghazout: How this Moroccan surf town stays true to its roots",
+    "url": "https://www.intrepidtravel.com/adventures/surfing-in-taghazout-morocco/",
+    "category": "test/11trip-ideas",
+    "subcategory": "11Trip Ideas",
+    "created": "2025-09-01"
+  },
+  "bf04557f552b7a2733fc91d2f4eb8ad66d0a79c6": {
+    "title": "Set-jetting: 10 film and TV locations worth travelling for",
+    "url": "https://www.intrepidtravel.com/adventures/set-jetting-film-and-tv-travel-locations/",
+    "category": "test/11trip-ideas",
+    "subcategory": "11Trip Ideas",
+    "created": "2025-08-28"
+  },
+  "e5e634b008e07b58d24271653bc67f9e29eaca03": {
+    "title": "The Palmer House Hotel in Sauk Centre, Minnesota",
+    "url": "https://www.atlasobscura.com/places/the-palmer-house-hotel",
+    "category": "test/13trip-ideas",
+    "subcategory": "13Trip Ideas",
+    "created": "2025-09-18"
+  },
+  "82ed9b8bd893ae0fb4ebc8ecf23f7fbd386c6c10": {
+    "title": "Charleston Light in Sullivan's Island, South Carolina",
+    "url": "https://www.atlasobscura.com/places/charleston-light",
+    "category": "test/13trip-ideas",
+    "subcategory": "13Trip Ideas",
+    "created": "2025-09-18"
+  },
+  "64f745a6b1320ca99e44db8f1bae82ee9cc976ea": {
+    "title": "Is this pocket-sized Fuji the perfect travel camera, or an overpriced gimmick?",
+    "url": "https://adventure.com/fuji-x-half-travel-camera-review/",
+    "category": "test/14trip-ideas",
+    "subcategory": "14Trip Ideas",
+    "created": "2025-09-19"
+  },
+  "7d731cef4eab21dc7bca0161dde359dee24b49f1": {
+    "title": "Would you take the train to your vacation if your boss gave you more time off?",
+    "url": "https://adventure.com/climate-perks-extra-vacatio-clean-travel/",
+    "category": "test/14trip-ideas",
+    "subcategory": "14Trip Ideas",
+    "created": "2025-09-17"
+  },
+  "eb354d566059a7301e4a5df1910e7f0c3b7c36c8": {
+    "title": "Beyond the Beaten Path: Spain’s Hidden Villages and Untamed Landscapes",
+    "url": "https://www.nomadicmatt.com/travel-blogs/off-beaten-path-spain/",
+    "category": "test/15trip-ideas",
+    "subcategory": "15Trip Ideas",
+    "created": "2025-09-18"
+  },
+  "3b24a5245c4aa6b925c4156047f818b2963af6f1": {
+    "title": "A 10 Day Itinerary Down Sweden’s Coast",
+    "url": "https://www.nomadicmatt.com/travel-blogs/sweden-coast-itinerary/",
+    "category": "test/15trip-ideas",
+    "subcategory": "15Trip Ideas",
+    "created": "2025-09-16"
+  },
+  "e848bc858f578daf3b04826f1bfa8dce58e5612d": {
+    "title": "Denali Returns to McKinley and the Gulf Gets a Patriotic Makeover",
+    "url": "https://www.tourradar.com/days-to-come/patriotic-makeover-usa/",
+    "category": "test/16trip-ideas",
+    "subcategory": "16Trip Ideas",
+    "created": "2025-01-22"
+  },
+  "03a1734d336be6d3b3c2e5aa5ea015ff1d839ce4": {
+    "title": "Iceland and the (Somewhat Elusive) Northern Lights",
+    "url": "https://www.tourradar.com/days-to-come/iceland-and-the-somewhat-elusive-northern-lights/",
+    "category": "test/16trip-ideas",
+    "subcategory": "16Trip Ideas",
+    "created": "2024-09-03"
+  },
+  "1df7573464fdb21e52abfebcffe40259935529c4": {
+    "title": "Two Missing Elk Hunters Have Been Found Dead in Colorado",
+    "url": "https://www.outsideonline.com/outdoor-adventure/exploration-survival/bodies-of-two-experienced-elk-hunters-reportedly-found-in-colorado/",
+    "category": "test/20trip-ideas",
+    "subcategory": "20Trip Ideas",
+    "created": "2025-09-18"
+  },
+  "d27574276841916093a2ecdcbfc08dc429b072dc": {
+    "title": "REI Is Letting Its Members Stack Savings on Savings This Weekend",
+    "url": "https://www.outsideonline.com/outdoor-gear/gear-news/rei-member-days-sale/",
+    "category": "test/20trip-ideas",
+    "subcategory": "20Trip Ideas",
+    "created": "2025-09-18"
+  },
+  "9e50bbdfe857a971c94d4da5f55f9675a304fc04": {
+    "title": "Britain's best indoor snow centres and dry ski slopes",
+    "url": "https://www.telegraph.co.uk/travel/ski/advice/best-indoor-skiing-snow-centres-dry-ski-slopes-uk-2023/",
+    "category": "test/24destinations",
+    "subcategory": "24Destinations",
+    "created": "2025-09-09"
+  },
+  "17f486e809a5c51fe8b2a0bd4bbcf06ef6db9244": {
+    "title": "The best beach hotels in Sri Lanka",
+    "url": "https://www.telegraph.co.uk/travel/destinations/asia/sri-lanka/articles/best-beach-hotels-in-sri-lanka/",
+    "category": "test/24destinations",
+    "subcategory": "24Destinations",
+    "created": "2025-09-05"
+  },
+  "c3b9e0b47cb0affc323d8005312b9afb46e07083": {
+    "title": "Top Trends in Family Holiday Vacations for 2025",
+    "url": "https://www.travelpulse.com/agent-at-home/top-trends-in-family-holiday-vacations-for-2025?utm_source=eNewsletter&utm_medium=email&utm_campaign=eltr",
+    "category": "test/26destinations",
+    "subcategory": "26Destinations",
+    "created": "2025-09-19"
+  },
+  "8cade698ea45ce603a18b9b25524f8dfb45a0fb0": {
+    "title": "Daly Dish: Travel Advisors, Think You’re Not in Sales? Think Again.",
+    "url": "https://www.travelpulse.com/agent-at-home/daly-dish-travel-advisors-think-you-re-not-in-sales-think-again?utm_source=eNewsletter&utm_medium=email&utm_campaign=eltr",
+    "category": "test/26destinations",
+    "subcategory": "26Destinations",
+    "created": "2025-09-19"
+  },
+  "23d43cffedc39a04ee0e45d1414c8aaae060af0a": {
+    "title": "Can a Hotel Make Travel Better for the Planet? This Seattle Boutique Thinks So",
+    "url": "https://matadornetwork.com/read/populus-seattle-review/",
+    "category": "test/28destinations",
+    "subcategory": "28Destinations",
+    "created": "2025-09-18"
+  },
+  "1663f4cb46996d8662ceb0f529e2ffde03de0c5d": {
+    "title": "I’m a Female Mountain Biker. Here’s the Protective Gear and Clothing I Actually Use.",
+    "url": "https://matadornetwork.com/read/mountain-bike-protective-gear-women/",
+    "category": "test/28destinations",
+    "subcategory": "28Destinations",
+    "created": "2025-09-18"
+  },
+  "eec2322847652f5c020d4a0bdab71299626e2dd1": {
+    "title": "7 Fall and Winter Hotel Openings to Look Out for from IHG Hotels & Resorts",
+    "url": "https://www.globaltravelerusa.com/7-fall-and-winter-hotel-openings-to-look-out-for-from-ihg-hotels-resorts/",
+    "category": "test/29destinations",
+    "subcategory": "29Destinations",
+    "created": "2025-09-18"
+  },
+  "4f8f009b9bf573c28bab2de7e135968d7d0f932b": {
+    "title": "Combine a Corporate Meeting with Idyllic Island Life in Saint Lucia",
+    "url": "https://www.globaltravelerusa.com/combine-a-corporate-meeting-with-idyllic-island-life-in-saint-lucia/",
+    "category": "test/29destinations",
+    "subcategory": "29Destinations",
+    "created": "2025-09-18"
+  },
+  "bd62bf9974c1738edcbe05fdf307d838b01eb807": {
+    "title": "How to Make Your Home Smell Like a Hotel",
+    "url": "https://www.smartertravel.com/how-to-make-your-home-smell-like-a-hotel-spa/",
+    "category": "test/31tips-planning",
+    "subcategory": "31Tips Planning",
+    "created": "2025-05-13"
+  },
+  "7cb55e769df02d65a21ec69135c909f9ac525589": {
+    "title": "The Best Travel Gear for Fitness-Focused Trips",
+    "url": "https://www.smartertravel.com/travel-gear-for-fitness-focused-trips/",
+    "category": "test/31tips-planning",
+    "subcategory": "31Tips Planning",
+    "created": "2025-05-06"
+  },
+  "0eebdba2406b8a8a114ed7937198604c8a9924e8": {
+    "title": "American Express Platinum: Valuable new benefits and an offer as high as 175,000 bonus points",
+    "url": "https://thepointsguy.com/credit-cards/amex-platinum-current-offer/",
+    "category": "test/32tips-planning",
+    "subcategory": "32Tips Planning",
+    "created": "2025-09-18"
+  },
+  "3262714103eb48437450f23bd3b683aea7eff740": {
+    "title": "Highest-ever offer: Earn 200,000 points with the newly refreshed Amex Business Platinum",
+    "url": "https://thepointsguy.com/credit-cards/amex-business-platinum-current-offer/",
+    "category": "test/32tips-planning",
+    "subcategory": "32Tips Planning",
+    "created": "2025-09-18"
+  },
+  "d5be7e1c48647f4c8aa37e42541ddc4cff0df656": {
+    "title": "Amex Schwab Platinum Card Raises the Bar With 125K Point Bonus",
+    "url": "https://upgradedpoints.com/news/amex-schwab-platinum-125k-offer/",
+    "category": "test/33tips-planning",
+    "subcategory": "33Tips Planning",
+    "created": "2025-09-18"
+  },
+  "1dfda8dd125d4e93070de4dea42ed6b38dd9708e": {
+    "title": "Amex Business Platinum Relaunches With a Huge 200K Welcome Bonus Offer",
+    "url": "https://upgradedpoints.com/news/amex-business-platinum-new-200k-sign-up-bonus/",
+    "category": "test/33tips-planning",
+    "subcategory": "33Tips Planning",
+    "created": "2025-09-18"
+  },
+  "f4edfdce4b688d4113f7d6a298735f0266299f5f": {
+    "title": "Explore American Express Hilton Credit Cards and Hilton Hotel Brands",
+    "url": "https://millionmilesecrets.com/uncategorized/explore-american-express-hilton-credit-cards-and-hilton-hotel-brands/",
+    "category": "test/36tips-planning",
+    "subcategory": "36Tips Planning",
+    "created": "2024-07-25"
+  },
+  "281efda31757a4e1056fdcfee1b6632ed7582b6d": {
+    "title": "Unlock the Value of Marriott Bonvoy Points: A Comprehensive Guide",
+    "url": "https://millionmilesecrets.com/uncategorized/unlocking-the-value-of-marriott-bonvoy-points-a-comprehensive-guide/",
+    "category": "test/36tips-planning",
+    "subcategory": "36Tips Planning",
+    "created": "2024-07-25"
+  },
+  "d96ce5b9c54abe000d008117e9e21b587e7174a4": {
+    "title": "Americans Can Fly Nonstop To This Beautiful European Island For The First Time In 25 Years",
+    "url": "https://www.traveloffpath.com/americans-can-fly-nonstop-to-this-beautiful-european-island-for-the-first-time-in-25-years/",
+    "category": "test/37tips-planning",
+    "subcategory": "37Tips Planning",
+    "created": "2025-09-18"
+  },
+  "6bae1b61cf95896267105d6290aa6113d3511e6d": {
+    "title": "Hilton Names Unknown Lake Town As The Midwest’s Most Stunning Fall Getaway",
+    "url": "https://www.traveloffpath.com/hilton-names-unknown-lake-town-as-the-midwests-most-stunning-fall-getaway/",
+    "category": "test/37tips-planning",
+    "subcategory": "37Tips Planning",
+    "created": "2025-09-18"
+  },
+  "0e15662f852c5f1b9f8144cf6c8f371633b9b4f5": {
+    "title": "CRED’s Centurion Moment: The Sovereign",
+    "url": "https://boardingarea.com/?blog-post=creds-centurion-moment-the-sovereign",
+    "category": "test/39tips-planning",
+    "subcategory": "39Tips Planning",
+    "created": "2025-09-19"
+  },
+  "d9d02208060e44d00791fce13c9019ae2521de9e": {
+    "title": "United Airlines Flight Attendant Challenges Carrier Over Being Forced To ‘Work For Free’",
+    "url": "https://boardingarea.com/?blog-post=united-airlines-flight-attendant-challenges-carrier-over-being-forced-to-work-for-free",
+    "category": "test/39tips-planning",
+    "subcategory": "39Tips Planning",
+    "created": "2025-09-19"
+  },
+  "4af469abce634331e985ab3a8413b035d9957dfe": {
+    "title": "Hotel AP in 2025: Why Embedded Payments Are the Control, Cost & Security Upgrade Finance Leaders Need",
+    "url": "https://www.hotelmanagement.net/resource/hotel-ap-2025-why-embedded-payments-are-control-cost-security-upgrade-finance-leaders-need",
+    "category": "test/43stays-hotels",
+    "subcategory": "43Stays Hotels",
+    "created": "2025-09-15"
+  },
+  "49692079bcd94b30affe9883023b402411e75aa1": {
+    "title": "Get Hooked On Luxury",
+    "url": "https://www.hotelmanagement.net/resource/get-hooked-luxury",
+    "category": "test/43stays-hotels",
+    "subcategory": "43Stays Hotels",
+    "created": "2025-09-12"
+  },
+  "02237baf40b2ca19250ac5bba4f887e944618265": {
+    "title": "Zedwell unveils world’s largest capsule hotel at London Pavilion",
+    "url": "https://boutiquehotelnews.com/news/hotel/zedwell-london-pavilion/?utm_source=rss&utm_medium=rss&utm_campaign=zedwell-london-pavilion",
+    "category": "test/46stays-hotels",
+    "subcategory": "46Stays Hotels",
+    "created": "2025-09-18"
+  },
+  "0df1e118d8a06e89eef7537c90c09680a29a37ed": {
+    "title": "Global Mutual enters hotel investment with platform launch",
+    "url": "https://boutiquehotelnews.com/news/finance-and-investment/global-mutual-hotel-launch/?utm_source=rss&utm_medium=rss&utm_campaign=global-mutual-hotel-launch",
+    "category": "test/46stays-hotels",
+    "subcategory": "46Stays Hotels",
+    "created": "2025-09-18"
+  },
+  "7c9ef2982ce6c2e02fed4687d5ecc564a496b45a": {
+    "title": "Are All-Inclusive Resorts Worth The Money?",
+    "url": "https://www.oyster.com/articles/all-inclusive-vs-non-all-inclusive-resort-price-breakdown/",
+    "category": "test/47stays-hotels",
+    "subcategory": "47Stays Hotels",
+    "created": "2024-10-07"
+  },
+  "9355e357003e759546ba1f5f223f2430b3b20f32": {
+    "title": "The Ultimate Cheat Sheet on Where to Go in the Caribbean",
+    "url": "https://www.oyster.com/articles/where-to-go-in-the-caribbean-a-cheat-sheet-to-the-top-destinations/",
+    "category": "test/47stays-hotels",
+    "subcategory": "47Stays Hotels",
+    "created": "2024-10-03"
+  },
+  "f325d98fa4ff6a710a7f34611f02911d6acf06ff": {
+    "title": "After long Covid, I thought I’d never travel again. Luckily, my legs proved me wrong",
+    "url": "https://www.intrepidtravel.com/adventures/travel-after-long-covid/",
+    "category": "test/54experiences",
+    "subcategory": "54Experiences",
+    "created": "2025-08-28"
+  },
+  "7ffd6d1af996aff0a211e901ec93f420b4a798d1": {
+    "title": "Crying over baklava: An afternoon in a stranger’s cave home in Turkey",
+    "url": "https://www.intrepidtravel.com/adventures/baklava-cave-home-turkey/",
+    "category": "test/54experiences",
+    "subcategory": "54Experiences",
+    "created": "2025-08-21"
+  },
+  "c9e1bf73dbf7d20949a905b99269f74349e81db1": {
+    "title": "Founding Fathers Pub in Buffalo, New York",
+    "url": "https://www.atlasobscura.com/places/founding-fathers-pub",
+    "category": "test/55experiences",
+    "subcategory": "55Experiences",
+    "created": "2025-09-17"
+  },
+  "c16579aaa260d3aee79d8240d33cf37c9ac4d925": {
+    "title": "Hermitage of Saint Anthony of Guaibê in Guarujá, Brazil",
+    "url": "https://www.atlasobscura.com/places/hermitage-of-saint-anthony-of-guaibe",
+    "category": "test/55experiences",
+    "subcategory": "55Experiences",
+    "created": "2025-09-17"
+  },
+  "ef4033b51eb4cffc19f68ee80a1efcea57abab34": {
+    "title": "Visit These Gloomy Destinations for a Great Time",
+    "url": "https://www.tourradar.com/days-to-come/visit-these-gloomy-destinations-for-a-great-time/",
+    "category": "test/57experiences",
+    "subcategory": "57Experiences",
+    "created": "2024-08-06"
+  },
+  "2dd7c174aa18d20fb83574c3d3434c2a5a2e63a2": {
+    "title": "Top Countries You Haven’t Been (Yet!)",
+    "url": "https://www.tourradar.com/days-to-come/where-to-travel-2/",
+    "category": "test/57experiences",
+    "subcategory": "57Experiences",
+    "created": "2024-07-01"
+  },
+  "f3acf4f0499dbd086025b03c6503101f6738891e": {
+    "title": "For Leah Thomas, there is no activism without craft club, self-care and community",
+    "url": "https://adventure.com/leah-thomas-intersectional-environmentalist-craft-profile/",
+    "category": "test/59experiences",
+    "subcategory": "59Experiences",
+    "created": "2025-09-16"
+  },
+  "fde5fe6254d662b47a057912eb1dfedfb79225d8": {
+    "title": "The last dams are gone, the salmon are back, and there’s rafting on this born-again Oregon river",
+    "url": "https://adventure.com/oregon-undammed-rafting-the-klamath-river/",
+    "category": "test/59experiences",
+    "subcategory": "59Experiences",
+    "created": "2025-09-12"
+  },
+  "f842c65bb691f4ca03936de1d4c22762d98b989a": {
+    "title": "29 Hours, 12,200 Miles: the New Longest Direct Flight in the World",
+    "url": "https://matadornetwork.com/read/longest-direct-flight-china-eastern/",
+    "category": "test/60experiences",
+    "subcategory": "60Experiences",
+    "created": "2025-09-17"
+  },
+  "926f152a9bde315b8c16682fc85ef74d80afac00": {
+    "title": "Stay Like Bad Bunny or Sinatra at This Iconic Luxury Resort in Puerto Rico",
+    "url": "https://matadornetwork.com/read/fairmont-el-san-juan-hotel/",
+    "category": "test/60experiences",
+    "subcategory": "60Experiences",
+    "created": "2025-09-17"
+  },
+  "fbc3601803134746c0b7816632836107dec1a0a7": {
+    "title": "A Closer Look At Turkish Airlines' Strategic Investment In Air Europa",
+    "url": "https://simpleflying.com/closer-look-turkish-airlines-strategic-investment-air-europa/",
+    "category": "test/62transport",
+    "subcategory": "62Transport",
+    "created": "2025-09-19"
+  },
+  "327e1407fc87351edafa319f383d3ab6386da120": {
+    "title": "American Airlines’ Longest Nonstop Routes With The Boeing 787-9 Dreamliner In 2025",
+    "url": "https://simpleflying.com/american-airlines-longest-nonstop-routes-boeing-787-9-dreamliner-2025/",
+    "category": "test/62transport",
+    "subcategory": "62Transport",
+    "created": "2025-09-19"
+  },
+  "e5ef5cc71a86aefbd02bae4c117dc2f1577f1337": {
+    "title": "Viva Cruises Unveils 2027 Plans for Viva Unique in Italy",
+    "url": "https://cruiseindustrynews.com/cruise-news/2025/09/viva-cruises-unveils-2027-plans-for-viva-unique-in-italy/",
+    "category": "test/64transport",
+    "subcategory": "64Transport",
+    "created": "2025-09-18"
+  },
+  "797fc5eca7b1f38ca828cfc5fac1a87d3c469426": {
+    "title": "Aroya Transits Suez Canal on Way Back to Red Sea",
+    "url": "https://cruiseindustrynews.com/cruise-news/2025/09/aroya-transits-suez-canal-on-way-back-to-red-sea/",
+    "category": "test/64transport",
+    "subcategory": "64Transport",
+    "created": "2025-09-18"
+  },
+  "b267d5c856b397a439d93889d2759d6dc6bad297": {
+    "title": "Rock Rail finances German BEMUs",
+    "url": "https://www.railjournal.com/financial/rock-rail-finances-german-bemus/",
+    "category": "test/66transport",
+    "subcategory": "66Transport",
+    "created": "2025-09-18"
+  },
+  "a1d299f7a9b9673e414ccfa141193ab2fe53d073": {
+    "title": "First hydrogen passenger train enters service in the United States",
+    "url": "https://www.railjournal.com/fleet/first-hydrogen-passenger-train-enters-service-in-the-united-states/",
+    "category": "test/66transport",
+    "subcategory": "66Transport",
+    "created": "2025-09-18"
+  },
+  "2476fe493f00ced6d75d14f1426d80f8c2c4b236": {
+    "title": "Airline Leaders Descend on Washington D.C.",
+    "url": "https://airlineweekly.skift.com/2025/09/airline-leaders-descend-on-washington-d-c/",
+    "category": "test/67transport",
+    "subcategory": "67Transport",
+    "created": "2025-09-18"
+  },
+  "863b00d238c6a9138c52c6bf7d3e5a21238db565": {
+    "title": "8 Origins of Spirit’s Downfall",
+    "url": "https://airlineweekly.skift.com/issues/8-origins-of-spirits-downfall/",
+    "category": "test/67transport",
+    "subcategory": "67Transport",
+    "created": "2025-09-15"
+  },
+  "76991c3055f4ab1fb2bd9a8d96e900b34eeb8467": {
+    "title": "Uber Eats Invests in Drone Delivery",
+    "url": "https://www.flyingmag.com/uber-eats-flytrex-drone-delivery/",
+    "category": "test/70transport",
+    "subcategory": "70Transport",
+    "created": "2025-09-18"
+  },
+  "623f768fc9f262a70dd9e31c32e3b07ea958945a": {
+    "title": "Piedmont Airlines Donates Passenger Aircraft to University of Maryland Eastern Shore",
+    "url": "https://www.flyingmag.com/piedmont-airlines-donates-passenger-aircraft-to-university-of-maryland-eastern-shore/",
+    "category": "test/70transport",
+    "subcategory": "70Transport",
+    "created": "2025-09-18"
+  },
+  "5162f4dff1bec09d82e4c4ab0746a7a0916c2a76": {
+    "title": "Stitch Buffalo in Buffalo, New York",
+    "url": "https://www.atlasobscura.com/places/stitch-buffalo",
+    "category": "test/71things-to-do",
+    "subcategory": "71Things To Do",
+    "created": "2025-09-17"
+  },
+  "f0e83246174d3c07895bc72d07b555756dde38c7": {
+    "title": "The Mark Twain Room in Buffalo, New York",
+    "url": "https://www.atlasobscura.com/places/the-mark-twain-room",
+    "category": "test/71things-to-do",
+    "subcategory": "71Things To Do",
+    "created": "2025-09-17"
+  },
+  "e658dca2a77320a669d5a9e3774043b095a12f32": {
+    "title": "Protected: A culinary guide to South Africa",
+    "url": "https://www.wanderlustmagazine.com/inspiration/culinary-guide-to-south-africa/",
+    "category": "test/77things-to-do",
+    "subcategory": "77Things To Do",
+    "created": "2025-09-17"
+  },
+  "0d18b02c01fd281bd668e715086b29dad5bce669": {
+    "title": "Protected: 10 ways to experience Johannesburg like a local",
+    "url": "https://www.wanderlustmagazine.com/inspiration/experience-johannesburg-like-a-local/",
+    "category": "test/77things-to-do",
+    "subcategory": "77Things To Do",
+    "created": "2025-09-17"
+  },
+  "c02bc6ab3463a3f7c9ba9dfeec98329d0ef2f573": {
+    "title": "Wine Country 2 Ways: Find Your Style at These Sonoma County Sister Properties",
+    "url": "https://matadornetwork.com/read/where-to-stay-in-sonoma-county/",
+    "category": "test/78things-to-do",
+    "subcategory": "78Things To Do",
+    "created": "2025-09-17"
+  },
+  "61cca6312f064c13c170968bb705396ea898f1f3": {
+    "title": "To Go All-In on a New York City Trip, There’s No Better Basecamp Than the New York Marriott Marquis",
+    "url": "https://matadornetwork.com/read/new-york-marriott-marquis-review/",
+    "category": "test/78things-to-do",
+    "subcategory": "78Things To Do",
+    "created": "2025-09-17"
+  },
+  "20a37b09be3bae39ff7b351e2070d89a188aad77": {
+    "title": "The Colorful and Complex World of Omani Cuisine",
+    "url": "https://www.cntraveler.com/story/the-colorful-and-complex-world-of-omani-cuisine",
+    "category": "test/80things-to-do",
+    "subcategory": "80Things To Do",
+    "created": "2025-09-18"
+  },
+  "4bc6198417f96d4138fee5553e45dc99f61c26bd": {
+    "title": "Women Who Travel Podcast: An Old Friend Returns",
+    "url": "https://www.cntraveler.com/story/women-who-travel-podcast-an-old-friend-returns",
+    "category": "test/80things-to-do",
+    "subcategory": "80Things To Do",
+    "created": "2025-09-18"
+  }
+}
