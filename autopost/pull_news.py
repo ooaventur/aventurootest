@@ -23,8 +23,10 @@ Env knobs (optional):
 """
 
 import os, re, json, hashlib, datetime, pathlib, sys
+from dataclasses import dataclass
 from email.utils import parsedate_to_datetime
 from urllib.parse import urlparse, urlunparse, parse_qsl, urlencode
+from typing import Optional
 
 if __package__ in (None, ""):
     sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
@@ -107,6 +109,37 @@ FORCE_PROXY = os.getenv("FORCE_PROXY", "0")  # "1" => route every cover via prox
 MAX_POSTS_PERSIST = _env_int("MAX_POSTS_PERSIST", 3000)
 FALLBACK_COVER = os.getenv("FALLBACK_COVER", "assets/img/cover-fallback.jpg")
 DEFAULT_AUTHOR = os.getenv("DEFAULT_AUTHOR", "AventurOO Editorial")
+# ---- Runtime configuration objects ----
+
+
+@dataclass
+class PullNewsConfig:
+    """Configuration for :func:`run_pull_news`.
+
+    The defaults mirror the environment-driven module constants so callers can
+    either rely on the process environment (``PullNewsConfig()``) or override
+    specific knobs programmatically.
+    """
+
+    feeds: pathlib.Path = FEEDS
+    data_dir: pathlib.Path = DATA_DIR
+    posts_json: pathlib.Path = POSTS_JSON
+    seen_db: pathlib.Path = SEEN_DB
+    category: str = CATEGORY
+    max_per_feed: int = MAX_PER_FEED
+    max_per_category: int = MAX_PER_CAT
+    max_total: int = MAX_TOTAL
+    target_words: Optional[int] = TARGET_WORDS
+    max_posts_persist: int = MAX_POSTS_PERSIST
+
+
+@dataclass
+class PullNewsResult:
+    """Summary returned by :func:`run_pull_news`."""
+
+    added_count: int
+    new_entries: list[dict]
+    posts_index: list[dict]
 # ---- Link normalization helpers ----
 
 def is_tracking_param(name: str) -> bool:
@@ -741,15 +774,50 @@ def _entry_sort_key(entry) -> str:
 def today_iso() -> str:
     return datetime.datetime.utcnow().strftime("%Y-%m-%d")
 
-# ------------------ Main ------------------
-def main():
-    DATA_DIR.mkdir(exist_ok=True, parents=True)
-    SEEN_DB.parent.mkdir(exist_ok=True, parents=True)
+def run_pull_news(config: PullNewsConfig) -> PullNewsResult:
+    """Execute the pull-news workflow with an explicit configuration.
 
-    # seen
-    if SEEN_DB.exists():
+    ``autopost/pull_project.py`` can import this helper to drive the pipeline
+    with project-specific command-line arguments instead of relying solely on
+    environment variables.
+    """
+
+    data_dir = pathlib.Path(config.data_dir)
+    posts_json_path = pathlib.Path(config.posts_json)
+    seen_db_path = pathlib.Path(config.seen_db)
+    feeds_file = pathlib.Path(config.feeds)
+    category_filter = (config.category or "").strip()
+    try:
+        max_per_feed = int(config.max_per_feed)
+    except (TypeError, ValueError):
+        max_per_feed = MAX_PER_FEED
+    try:
+        max_per_cat = int(config.max_per_category)
+    except (TypeError, ValueError):
+        max_per_cat = MAX_PER_CAT
+    try:
+        max_total = int(config.max_total)
+    except (TypeError, ValueError):
+        max_total = MAX_TOTAL
+    target_words = config.target_words
+    if not isinstance(target_words, int):
         try:
-            seen = json.loads(SEEN_DB.read_text(encoding="utf-8"))
+            target_words = int(target_words)
+        except (TypeError, ValueError):
+            target_words = 0
+    if target_words <= 0:
+        target_words = SUMMARY_WORDS
+    try:
+        max_posts_persist = int(config.max_posts_persist)
+    except (TypeError, ValueError):
+        max_posts_persist = MAX_POSTS_PERSIST
+
+    data_dir.mkdir(exist_ok=True, parents=True)
+    seen_db_path.parent.mkdir(exist_ok=True, parents=True)
+
+    if seen_db_path.exists():
+        try:
+            seen = json.loads(seen_db_path.read_text(encoding="utf-8"))
             if not isinstance(seen, dict):
                 seen = {}
         except json.JSONDecodeError:
@@ -757,10 +825,9 @@ def main():
     else:
         seen = {}
 
-    # posts index
-    if POSTS_JSON.exists():
+    if posts_json_path.exists():
         try:
-            posts_idx = json.loads(POSTS_JSON.read_text(encoding="utf-8"))
+            posts_idx = json.loads(posts_json_path.read_text(encoding="utf-8"))
             if not isinstance(posts_idx, list):
                 posts_idx = []
         except json.JSONDecodeError:
@@ -775,21 +842,19 @@ def main():
         if normalized is not None
     ]
 
-    if not FEEDS.exists():
-        print("ERROR: feeds file not found:", FEEDS)
-        return
+    if not feeds_file.exists():
+        print("ERROR: feeds file not found:", feeds_file)
+        return PullNewsResult(added_count=0, new_entries=[], posts_index=posts_idx)
 
     added_total = 0
-    target_words = globals().get("TARGET_WORDS")
-    if not isinstance(target_words, int) or target_words <= 0:
-        target_words = SUMMARY_WORDS
     per_cat = {}
+    per_feed_added: dict[str, int] = {}
     new_entries = []
 
     current_sub_label = ""
     current_sub_slug = ""
 
-    for raw in FEEDS.read_text(encoding="utf-8").splitlines():
+    for raw in feeds_file.read_text(encoding="utf-8").splitlines():
         raw = raw.strip()
         if not raw:
             continue
@@ -870,7 +935,7 @@ def main():
             category_slug_value = (category_slug_value or "").strip().strip("/")
 
         # Optional filter by env CATEGORY (leave empty to accept all)
-        if CATEGORY and category_label != CATEGORY:
+        if category_filter and category_label != category_filter:
             continue
 
         print(f"[FEED] {category_label} / {subcategory_label or '-'} -> {feed_url}")
@@ -880,11 +945,14 @@ def main():
             continue
 
         for it in parse_feed(xml):
-            if MAX_TOTAL > 0 and added_total >= MAX_TOTAL:
+            if max_total > 0 and added_total >= max_total:
                 break
 
             key_limit = category_slug_value or cat_slug or (category_label or "_")
-            if per_cat.get(key_limit, 0) >= MAX_PER_CAT:
+            if per_cat.get(key_limit, 0) >= max_per_cat:
+                continue
+
+            if max_per_feed > 0 and per_feed_added.get(feed_url, 0) >= max_per_feed:
                 continue
 
             title = (it.get("title") or "").strip()
@@ -1003,6 +1071,44 @@ def main():
             }
             limit_key_final = normalized_category_slug or key_limit
             per_cat[limit_key_final] = per_cat.get(limit_key_final, 0) + 1
+            per_feed_added[feed_url] = per_feed_added.get(feed_url, 0) + 1
+            added_total += 1
+            print(f"[{normalized_category_label}/{normalized_subcategory_label or '-'}] + {title}")
+
+    if not new_entries:
+        print("New posts this run: 0")
+        seen_db_path.write_text(json.dumps(seen, ensure_ascii=False, indent=2), encoding="utf-8")
+        return PullNewsResult(added_count=0, new_entries=[], posts_index=posts_idx)
+
+    posts_idx = new_entries + posts_idx
+    posts_idx.sort(key=_entry_sort_key, reverse=True)
+    if max_posts_persist > 0:
+        posts_idx = posts_idx[:max_posts_persist]
+
+    posts_idx = [
+        normalized for normalized in (
+            _normalize_post_entry(item) for item in posts_idx
+        )
+        if normalized is not None
+    ]
+
+    posts_json_path.write_text(json.dumps(posts_idx, ensure_ascii=False, indent=2), encoding="utf-8")
+    seen_db_path.write_text(json.dumps(seen, ensure_ascii=False, indent=2), encoding="utf-8")
+    print("New posts this run:", len(new_entries))
+
+    return PullNewsResult(
+        added_count=len(new_entries),
+        new_entries=new_entries,
+        posts_index=posts_idx,
+    )
+
+
+def main():
+    """CLI entry point that uses environment driven defaults."""
+
+    return run_pull_news(PullNewsConfig())
+
+if __name__ =
             added_total += 1
             print(f"[{normalized_category_label}/{normalized_subcategory_label or '-'}] + {title}")
 
