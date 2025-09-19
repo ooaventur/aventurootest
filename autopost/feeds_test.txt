@@ -1,1 +1,65 @@
 
+# === NEWS / GENERAL ===
+test|News2|https://www.theguardian.com/world/rss
+test|News3|https://feeds.bbci.co.uk/news/rss.xml
+test|News5|https://www.aljazeera.com/xml/rss/all.xml
+test|News6|https://www.ft.com/?format=rss
+test|News8|https://www.npr.org/rss/rss.php?id=1001
+test|News9|https://www.politico.com/rss/congress.xml
+
+# === TOP STORIES ===
+test|TopStories11|https://feeds.bbci.co.uk/news/rss.xml?edition=uk
+test|TopStories14|https://abcnews.go.com/abcnews/topstories
+test|TopStories15|https://www.theguardian.com/uk/rss
+test|TopStories16|https://www.cbsnews.com/latest/rss/main
+test|TopStories17|https://time.com/feed/
+test|TopStories18|https://www.nbcnews.com/rss
+test|TopStories19|https://www.nytimes.com/services/xml/rss/nyt/MostViewed.xml
+
+# === POLITICS ===
+test|Politics21|https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml
+test|Politics22|https://www.theguardian.com/politics/rss
+test|Politics24|https://feeds.bbci.co.uk/news/politics/rss.xml
+test|Politics25|https://rss.politico.com/politics-news.xml
+test|Politics29|https://abcnews.go.com/abcnews/politicsheadlines
+
+# === ECONOMY ===
+test|Economy31|https://www.economist.com/latest/rss.xml
+test|Economy33|https://feeds.bbci.co.uk/news/business/economy/rss.xml
+test|Economy34|https://www.ft.com/economy?format=rss
+test|Economy35|https://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/section/business/economy/rss.xml
+test|Economy36|https://www.theguardian.com/business/economics/rss
+test|Economy37|https://feeds.content.dowjones.io/public/rss/socialeconomyfeed
+test|Economy39|https://www.npr.org/rss/rss.php?id=1006
+test|Economy40|https://www.marketwatch.com/rss/topstories
+
+# === BUSINESS & FINANCE ===
+test|Business41|https://www.ft.com/business?format=rss
+test|Business42|https://feeds.bbci.co.uk/news/business/rss.xml
+test|Business44|https://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/section/business/rss.xml
+test|Business45|https://feeds.content.dowjones.io/public/rss/WSJcomUSBusiness
+test|Business47|https://www.theguardian.com/uk/business/rss
+test|Business48|https://www.cnbc.com/id/10001147/device/rss/rss.html
+test|Business49|https://www.forbes.com/business/feed/
+test|Business50|https://www.inc.com/rss
+
+# === MARKETS & ECONOMY ===
+test|Markets52|https://www.ft.com/markets?format=rss
+test|Markets53|https://feeds.content.dowjones.io/public/rss/latestnewsrealestate
+test|Markets54|https://www.marketwatch.com/rss/topstories
+test|Markets56|https://www.cnbc.com/id/10001147/device/rss/rss.html
+test|Markets57|https://www.nasdaq.com/feed/rssoutbound
+test|Markets58|https://www.investing.com/rss/news_25.rss
+
+# === COMPANIES & STARTUPS ===
+test|Companies61|https://techcrunch.com/startups/feed/
+test|Companies65|https://www.forbes.com/startups/feed/
+test|Companies69|https://news.ycombinator.com/rss
+
+# === PERSONAL FINANCE ===
+test|Finance71|https://www.nerdwallet.com/blog/feed/
+test|Finance74|https://www.money.com/feed/
+test|Finance75|https://www.cnbc.com/id/100646281/device/rss/rss.html
+test|Finance76|https://feeds.content.dowjones.io/public/rss/RSSPersonalFinance
+
+
