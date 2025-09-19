@@ -1,1 +1,408 @@
-
+{
+  "ff3eaab1732c7b19b171618965881d853ae1b66b": {
+    "title": "Gianmarco Soresi Thrives Where Theater Kid and Club Comic Meet",
+    "url": "https://www.nytimes.com/2025/09/19/arts/television/gianmarco-soresi-thief-of-joy-review.html",
+    "category": "test/1general",
+    "subcategory": "1General",
+    "created": "2025-09-19"
+  },
+  "0ff7c37310a2f0496f3ac08df4af7199a67ef68d": {
+    "title": "Sylvester Stallone Takes ‘Tulsa King’ Co-Star Jay Will Under His Wing",
+    "url": "https://www.nytimes.com/2025/09/19/arts/television/tulsa-king-jay-will-stallone.html",
+    "category": "test/1general",
+    "subcategory": "1General",
+    "created": "2025-09-19"
+  },
+  "518d5a4f0a3d8d77ab3a905b7a59515620445ba4": {
+    "title": "Swiped review – breezy drama gives dating apps the origins treatment",
+    "url": "https://www.theguardian.com/film/2025/sep/18/swiped-review-tinder-bumble-movie",
+    "category": "test/2general",
+    "subcategory": "2General",
+    "created": "2025-09-18"
+  },
+  "97c9aedc23b7831720c7a74af2243e7e705a14f5": {
+    "title": "In Whose Name? review – Kanye’s descent makes for grimly compelling watch",
+    "url": "https://www.theguardian.com/film/2025/sep/18/in-whose-name-review-kanye-west",
+    "category": "test/2general",
+    "subcategory": "2General",
+    "created": "2025-09-18"
+  },
+  "23550dd8fb8ab7e335fcdf6c1dd6d037249b83ac": {
+    "title": "Charlie Kirk and Tyler Robinson Came from the Same Warped Online Worlds",
+    "url": "https://www.newyorker.com/culture/infinite-scroll/charlie-kirk-and-tyler-robinson-came-from-the-same-warped-online-worlds",
+    "category": "test/3general",
+    "subcategory": "3General",
+    "created": "2025-09-17"
+  },
+  "673e8dbdc9aab051aa15bb8bf8980941c0b7a69b": {
+    "title": "How Samin Nosrat Learned to Love the Recipe",
+    "url": "https://www.newyorker.com/culture/persons-of-interest/how-samin-nosrat-learned-to-love-the-recipe",
+    "category": "test/3general",
+    "subcategory": "3General",
+    "created": "2025-09-17"
+  },
+  "2f74f80d5ab42ea22f309a637c37a4820b9bc3e5": {
+    "title": "Lola Young: I’m Only F***ing Myself review – Facing down her monsters in typically bold and blatant style",
+    "url": "https://www.the-independent.com/arts-entertainment/music/reviews/lola-young-review-only-fucking-myself-b2828921.html",
+    "category": "test/4general",
+    "subcategory": "4General",
+    "created": "2025-09-19"
+  },
+  "0ff6758b15936e4b9dfb2e9dd0f0e3a4578eff7c": {
+    "title": "Brett James death: Grammy award-winning singer-songwriter dies in plane crash, aged 57",
+    "url": "https://www.the-independent.com/arts-entertainment/music/news/brett-james-death-plane-crash-b2829631.html",
+    "category": "test/4general",
+    "subcategory": "4General",
+    "created": "2025-09-19"
+  },
+  "d59477c4f618a38628a7d44a22dbeca47ad5283d": {
+    "title": "Friendship",
+    "url": "http://www.bbc.co.uk/programmes/p0lppkfn",
+    "category": "test/5general",
+    "subcategory": "5General",
+    "created": "2025-07-11"
+  },
+  "035a91fa95391a89d0e013e5c685ce0b7eb1783f": {
+    "title": "Censorship, editing and self-censorship",
+    "url": "http://www.bbc.co.uk/programmes/p0ln90sh",
+    "category": "test/5general",
+    "subcategory": "5General",
+    "created": "2025-07-04"
+  },
+  "6f4de78ef517fe9d15cb7263fb5528f611a8732f": {
+    "title": "The Colorful, Scandalous, True History of the Machine That Created American Pop",
+    "url": "https://www.smithsonianmag.com/arts-culture/colorful-scandalous-true-history-machine-created-american-pop-180987173/",
+    "category": "test/6general",
+    "subcategory": "6General",
+    "created": "2025-09-04"
+  },
+  "4299c09ea56ea7aaf220de7ee4f0df19b3aef4d0": {
+    "title": "A New Exhibit in Toronto Reexamines the Works of the Baroque Masters",
+    "url": "https://www.smithsonianmag.com/arts-culture/new-exhibit-toronto-reexamines-works-baroque-masters-180987147/",
+    "category": "test/6general",
+    "subcategory": "6General",
+    "created": "2025-09-03"
+  },
+  "4a562d47f92c095d0a5eec98034e8b98fbd041cb": {
+    "title": "12 Art Books to Read This Fall",
+    "url": "https://hyperallergic.com/1043154/12-art-books-to-read-this-fall-2025/",
+    "category": "test/7general",
+    "subcategory": "7General",
+    "created": "2025-09-18"
+  },
+  "d9ef2650ef24c5aabd1346f53593cf660713b868": {
+    "title": "Fire Tears Through Iconic Artist Building in Brooklyn",
+    "url": "https://hyperallergic.com/1043096/fire-tears-through-iconic-artist-building-in-brooklyn/",
+    "category": "test/7general",
+    "subcategory": "7General",
+    "created": "2025-09-18"
+  },
+  "01dc55a11563086f7bdf2f03106df0f6679796e7": {
+    "title": "The Universe in motion",
+    "url": "https://aeon.co/videos/visualisations-explore-what-the-deep-future-holds-for-our-night-sky?utm_source=rss-feed",
+    "category": "test/8culture",
+    "subcategory": "8Culture",
+    "created": "2025-09-18"
+  },
+  "7982350c8956196f23d34e5ba8ab2399a4909840": {
+    "title": "Divine dividends",
+    "url": "https://aeon.co/essays/how-chinese-religious-traditions-shape-corporate-generosity?utm_source=rss-feed",
+    "category": "test/8culture",
+    "subcategory": "8Culture",
+    "created": "2025-09-18"
+  },
+  "a9406f79088362d47928a1bd2caffb0c507724c6": {
+    "title": "What Should You Read Next? Here Are the Best Reviewed Books of the Week",
+    "url": "https://lithub.com/what-should-you-read-next-here-are-the-best-reviewed-books-of-the-week-9-19-2025/",
+    "category": "test/9culture",
+    "subcategory": "9Culture",
+    "created": "2025-09-19"
+  },
+  "f27e4521e805bb9d39d2fa093f9d69a89e22b9ca": {
+    "title": "Christianity and Comedy: On Finding the Funny Side of Faith",
+    "url": "https://lithub.com/christianity-and-comedy-on-finding-the-funny-side-of-faith/",
+    "category": "test/9culture",
+    "subcategory": "9Culture",
+    "created": "2025-09-19"
+  },
+  "f78b62a2705885b2b10104f5776a217bf9015121": {
+    "title": "One Vigilante, 22 Cell Tower Fires, and a World of Conspiracies",
+    "url": "https://longreads.com/2025/09/18/one-vigilante-22-cell-tower-fires-and-a-world-of-conspiracies/",
+    "category": "test/10culture",
+    "subcategory": "10Culture",
+    "created": "2025-09-18"
+  },
+  "c6d6522b0f300c71de22b0825e797d3fc5a91dae": {
+    "title": "The H-2A Visa Trap",
+    "url": "https://longreads.com/2025/09/18/operation-blooming-onion-farmworkers-visa/",
+    "category": "test/10culture",
+    "subcategory": "10Culture",
+    "created": "2025-09-18"
+  },
+  "1f7ab21b67a81a93d531f95353ea1485106ee7d8": {
+    "title": "An Emptiness Yet to Come",
+    "url": "https://www.guernicamag.com/an-emptiness-yet-to-come/",
+    "category": "test/11culture",
+    "subcategory": "11Culture",
+    "created": "2025-09-17"
+  },
+  "ca5cf650c61b514a3c831625b55fbef5386bbae2": {
+    "title": "The Sad Ballad of Wyckoff",
+    "url": "https://www.guernicamag.com/the-sad-ballad-of-wyckoff/",
+    "category": "test/11culture",
+    "subcategory": "11Culture",
+    "created": "2025-09-17"
+  },
+  "54e40857f55150416263e626dd5fa41af2312690": {
+    "title": "12 brand new books we can't wait to read this fall",
+    "url": "https://www.npr.org/2025/09/18/nx-s1-5534120/what-to-read-best-books-fiction-nonfiction",
+    "category": "test/12culture",
+    "subcategory": "12Culture",
+    "created": "2025-09-18"
+  },
+  "30c60680c420dfbbd33d8cc044268adf802ecdfd": {
+    "title": "'Why Fascists Fear Teachers' explores how attacks on education undermine democracy",
+    "url": "https://www.npr.org/2025/09/18/nx-s1-5484236/why-fascists-fear-teachers-explores-how-attacks-on-education-undermine-democracy",
+    "category": "test/12culture",
+    "subcategory": "12Culture",
+    "created": "2025-09-18"
+  },
+  "b63e03563e23022d60258fd96d725fd65aa57850": {
+    "title": "Weekly Review",
+    "url": "https://harpers.org/2025/09/weekly-review-poland-drone-gaza-strip-uighur-brazil-charlie-kirk-assassination-kafka-land-gen-z-discord-tunnelling-barbie-jeep-happy-as-a-clam/",
+    "category": "test/13culture",
+    "subcategory": "13Culture",
+    "created": "2025-09-16"
+  },
+  "d589e5ea875b4c19d60ccfa122dda42f64c3e16d": {
+    "title": "Weekly Review",
+    "url": "https://harpers.org/2025/09/russian-drone-strike-navy-seal-sting-gone-wrong-thousands-of-bees-swarm-department-of-war-immortal-leaders-astronaut-scam-drunk-raccoon-thirsty-for-blood-psychedelic-mushroom-trip-flight/",
+    "category": "test/13culture",
+    "subcategory": "13Culture",
+    "created": "2025-09-09"
+  },
+  "2d48a2764914462f5c759793b739d247208d6d47": {
+    "title": "The Heart of the Andes and the Invention of Virtual Reality: Frederic Edwin Church’s Immersive 19th-century Paintings of Natural Wonders",
+    "url": "https://www.themarginalian.org/2025/09/16/frederic-edwin-church-the-heart-of-the-andes/",
+    "category": "test/14culture",
+    "subcategory": "14Culture",
+    "created": "2025-09-16"
+  },
+  "332f69a082708f07a7ee68b97b2e5a590e4052b1": {
+    "title": "The Coziest Place on the Moon: An Illustrated Fable about How to Live with Loneliness and What It Means to Love, Inspired by a Real NASA Discovery",
+    "url": "https://www.themarginalian.org/2025/09/12/the-coziest-place-on-the-moon/",
+    "category": "test/14culture",
+    "subcategory": "14Culture",
+    "created": "2025-09-13"
+  },
+  "974e377480964a5a3b0ec978eda72c365daf530c": {
+    "title": "The Best Booths at Untitled Art, Houston, Where Quiet Art Shines Brightly",
+    "url": "https://www.artnews.com/list/art-news/news/best-booths-untitled-art-houston-1234752768/",
+    "category": "test/15arts",
+    "subcategory": "15Arts",
+    "created": "2025-09-19"
+  },
+  "d2fd8651b604173da8a27586e9b85fed2490515b": {
+    "title": "Rope Hung Outside Atlanta Black History Museum Under Investigation",
+    "url": "https://www.artnews.com/art-news/news/rope-atlanta-black-history-apex-museum-1234752704/",
+    "category": "test/15arts",
+    "subcategory": "15Arts",
+    "created": "2025-09-18"
+  },
+  "3b65351309f8e02f3e8637624504c6f8e292a3c0": {
+    "title": "Elmgreen & Dragset’s Uncanny Sculptures Make Reality Feel Like ‘Alice in Wonderland’",
+    "url": "https://www.thisiscolossal.com/2025/09/elmgreen-dragset-alice-in-wonderland/",
+    "category": "test/16arts",
+    "subcategory": "16Arts",
+    "created": "2025-09-18"
+  },
+  "5ca351e1ad46cee191103f9d93aa27abd90bb8af": {
+    "title": "Cosmic Wonders Abound in the ZWO Astronomy Photographer of the Year Contest",
+    "url": "https://www.thisiscolossal.com/2025/09/zwo-astronomy-photographer-of-the-year-17-winners/",
+    "category": "test/16arts",
+    "subcategory": "16Arts",
+    "created": "2025-09-18"
+  },
+  "5e682d47ccab36a86f52ea5ea0a362a567f4f969": {
+    "title": "Lisa Smith named new President of D&AD",
+    "url": "https://www.creativeboom.com/news/lisa-smith-named-new-president-of-dad/",
+    "category": "test/17arts",
+    "subcategory": "17Arts",
+    "created": "2025-09-18"
+  },
+  "bb8c32069f472e55ac2121649f19f973fc7b54cc": {
+    "title": "50 fonts that will be popular with designers in 2026",
+    "url": "https://www.creativeboom.com/resources/top-50-fonts-in-2026/",
+    "category": "test/17arts",
+    "subcategory": "17Arts",
+    "created": "2025-09-18"
+  },
+  "9df88c4287d8d448a0b65ad00d26e73ed17c2897": {
+    "title": "Cj hendry’s flower market returns to NYC, this time at rockefeller center",
+    "url": "https://www.designboom.com/art/cj-hendry-flower-market-return-nyc-rockefeller-center-installation-07-29-2025/",
+    "category": "test/18arts",
+    "subcategory": "18Arts",
+    "created": "2025-09-19"
+  },
+  "9530b029a4a1c5b1671bc7440b1a2dd97a2eec5d": {
+    "title": "concrete sculptures surface from the pond of mies van der rohe’s barcelona pavilion",
+    "url": "https://www.designboom.com/art/concrete-sculptures-surface-pond-mies-van-der-rohe-barcelona-pavilion-09-18-2025/",
+    "category": "test/18arts",
+    "subcategory": "18Arts",
+    "created": "2025-09-18"
+  },
+  "972736d8e0eb145cd7a86d00f4fdf7224cba80c5": {
+    "title": "How the Great Wall of China Still Defies Scale, Time, and Myth",
+    "url": "https://news.artnet.com/art-world/huge-great-wall-of-china-2675830",
+    "category": "test/19arts",
+    "subcategory": "19Arts",
+    "created": "2025-09-19"
+  },
+  "eccddb9c94f0ca60f09d480f57f082a170ef42b6": {
+    "title": "In Emily Ponsonby’s Beeswax Canvases, Connection and Comfort ‘Bubble to the Surface’",
+    "url": "https://news.artnet.com/art-world/in-emily-ponsonbys-beeswax-canvases-connection-and-comfort-bubble-to-the-surface-2688980",
+    "category": "test/19arts",
+    "subcategory": "19Arts",
+    "created": "2025-09-18"
+  },
+  "3935a9a2fdcb33bcefbe4eaa9596d6a003e62736": {
+    "title": "Saint Augustine: An African in the City of God",
+    "url": "https://www.historytoday.com/archive/feature/saint-augustine-african-city-god",
+    "category": "test/21history",
+    "subcategory": "21History",
+    "created": "2025-09-19"
+  },
+  "4379be35ec41b5bed211d8feda6c48db99ab979f": {
+    "title": "Doctor Chamberlen’s Forceps",
+    "url": "https://www.historytoday.com/archive/feature/doctor-chamberlens-forceps",
+    "category": "test/21history",
+    "subcategory": "21History",
+    "created": "2025-09-18"
+  },
+  "8b481d1822960083e9fb8901067e3c44a6d00aab": {
+    "title": "The conqueror’s queen: meet the real Matilda of Flanders",
+    "url": "https://www.historyextra.com/period/norman/real-matilda-of-flanders-william-the-conqueror-wife-life-legacy/",
+    "category": "test/22history",
+    "subcategory": "22History",
+    "created": "2025-09-18"
+  },
+  "79bcc9e3d76e41e178013f66f313ff5219525df2": {
+    "title": "\"Violence and American politics have gone hand in hand right from the beginning\": a history of political violence",
+    "url": "https://www.historyextra.com/period/modern/political-violence-us-history/",
+    "category": "test/22history",
+    "subcategory": "22History",
+    "created": "2025-09-18"
+  },
+  "edc24bfde822e4523e30009548bcc298fa6ddfd7": {
+    "title": "Celebrating the Legacy of the Office of Strategic Services 82 Years On",
+    "url": "https://www.historynet.com/celebrating-the-legacy-of-the-office-of-strategic-services-82-years-on/",
+    "category": "test/23history",
+    "subcategory": "23History",
+    "created": "2024-06-21"
+  },
+  "e715c2a270b3f6ba2b8bd3c8a872b2f2dc158dc8": {
+    "title": "Seminoles Taught American Soldiers a Thing or Two About Guerrilla Warfare",
+    "url": "https://www.historynet.com/seminole-warrior-vs-us-soldier-book-review-2/",
+    "category": "test/23history",
+    "subcategory": "23History",
+    "created": "2024-04-12"
+  },
+  "57b97bc654de6316a36f9536d6c0932b2b7cd5cc": {
+    "title": "The Groundbreaking History Of Lilith Fair, The 1990s Music Tour That Featured Only Female Artists",
+    "url": "https://allthatsinteresting.com/lilith-fair",
+    "category": "test/25history",
+    "subcategory": "25History",
+    "created": "2025-09-19"
+  },
+  "1a86b6d482c7519d3855a3ce43f197155821f427": {
+    "title": "The Incredible Story Of Tadeusz Pietrzykowski, The Polish Man Who Survived Auschwitz By Winning Boxing Matches",
+    "url": "https://allthatsinteresting.com/tadeusz-pietrzykowski",
+    "category": "test/25history",
+    "subcategory": "25History",
+    "created": "2025-09-18"
+  },
+  "b500e66c258d3b02e55ed9519776e35ebfe2a72c": {
+    "title": "New York’s Art Stars of the ’80s, Curated by One of Their Own",
+    "url": "https://www.nytimes.com/2025/09/18/arts/design/new-york-art-80s-levy-gorvy-dayan.html",
+    "category": "test/26columns",
+    "subcategory": "26Columns",
+    "created": "2025-09-19"
+  },
+  "9a106e042eae37ef953d7072f78dd882af08a3a9": {
+    "title": "He’s Left MoMA Smarter, Richer and at a Crossroads",
+    "url": "https://www.nytimes.com/2025/09/17/arts/design/glenn-lowry-moma-director-steps-down.html",
+    "category": "test/26columns",
+    "subcategory": "26Columns",
+    "created": "2025-09-17"
+  },
+  "3450c1e86690abfb82ac0b088f0aa8d320fafecb": {
+    "title": "Adam Thirlwell: Devotion to the Cut",
+    "url": "https://www.lrb.co.uk/the-paper/v47/n17/adam-thirlwell/devotion-to-the-cut",
+    "category": "test/27columns",
+    "subcategory": "27Columns",
+    "created": "2025-09-19"
+  },
+  "fd969c1e08170794a7ca1dc1e8f0d2b410eeea47": {
+    "title": "Tom Johnson: Supereffable",
+    "url": "https://www.lrb.co.uk/the-paper/v47/n17/tom-johnson/supereffable",
+    "category": "test/27columns",
+    "subcategory": "27Columns",
+    "created": "2025-09-19"
+  },
+  "4d7162b85d5147f5082555fcf97c288f5a26ca07": {
+    "title": "A Document of Complicity",
+    "url": "https://www.nplusonemag.com/online-only/online-only/a-document-of-complicity/",
+    "category": "test/28columns",
+    "subcategory": "28Columns",
+    "created": "2025-09-11"
+  },
+  "2cafe5df06c0ed5379983180c11386beebe90f54": {
+    "title": "Philip Connors and Nina MacLaughlin in conversation",
+    "url": "https://www.nplusonemag.com/online-only/events/philip-connors-and-nina-maclaughlin-in-conversation/",
+    "category": "test/28columns",
+    "subcategory": "28Columns",
+    "created": "2025-09-10"
+  },
+  "0002ba86227af3a93328f3a61ffb3378713f1d8e": {
+    "title": "Speaking of Pierre Nora",
+    "url": "https://harpers.org/2025/09/speaking-of-pierre-nora-john-r-macarthur-publishers-note/",
+    "category": "test/29columns",
+    "subcategory": "29Columns",
+    "created": "2025-09-05"
+  },
+  "dcdd1747101ff3b1376af0ae359aa46c67a463b5": {
+    "title": "Weekly Review",
+    "url": "https://harpers.org/2025/09/putin-understandings-major-military-engagement-poland-reparations-bees-and-drones-in-schools-public-prayer-ban-church-move/",
+    "category": "test/29columns",
+    "subcategory": "29Columns",
+    "created": "2025-09-03"
+  },
+  "019bef9bed920914ee0ad2c9248bfceec92d99e0": {
+    "title": "Brick by brick",
+    "url": "https://aeon.co/videos/like-a-cheery-sisyphus-fred-dismantles-an-industrial-chimney-one-brick-at-a-time?utm_source=rss-feed",
+    "category": "test/30columns",
+    "subcategory": "30Columns",
+    "created": "2025-09-17"
+  },
+  "73c59f49007f34afdea4708f60c78a7b60e33eb8": {
+    "title": "In the glow of the candle",
+    "url": "https://aeon.co/essays/joseph-wright-of-derby-put-science-at-the-centre-of-his-art?utm_source=rss-feed",
+    "category": "test/30columns",
+    "subcategory": "30Columns",
+    "created": "2025-09-16"
+  },
+  "41ee7983d8b7f13d1f3d4d294031cedec0c029da": {
+    "title": "Have We Been Measuring Mountains All Wrong?",
+    "url": "https://longreads.com/2025/09/18/measuring-mountains/",
+    "category": "test/31columns",
+    "subcategory": "31Columns",
+    "created": "2025-09-18"
+  },
+  "128683ab09b531b99a19f15ce276db3ec908f779": {
+    "title": "Charlie Kirk, Redeemed: A Political Class Finds Its Lost Cause",
+    "url": "https://longreads.com/2025/09/17/charlie-kirk-redeemed-a-political-class-finds-its-lost-cause/",
+    "category": "test/31columns",
+    "subcategory": "31Columns",
+    "created": "2025-09-17"
+  }
+}
