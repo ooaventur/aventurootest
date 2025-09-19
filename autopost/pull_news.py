@@ -65,10 +65,10 @@ SEEN_DB = ROOT / "autopost" / SEEN_DB_FILENAME
 # All autopost runs share the same "seen" store to prevent duplicates across jobs.
 
 
-MAX_PER_FEED = _env_int("MAX_PER_FEED", 2)
-MAX_PER_CAT = _env_int("MAX_PER_CAT", 15)
+MAX_PER_FEED = _env_int("MAX_PER_FEED", 5)
+MAX_PER_CAT = _env_int("MAX_PER_CAT", 5)
 MAX_TOTAL   = _env_int("MAX_TOTAL", 0)
-SUMMARY_WORDS = _env_int("SUMMARY_WORDS", 1500)  # kept for compatibility
+SUMMARY_WORDS = _env_int("SUMMARY_WORDS", 900)  # kept for compatibility
 TARGET_WORDS = _env_int("TARGET_WORDS", SUMMARY_WORDS)
 MAX_POSTS_PERSIST = _env_int("MAX_POSTS_PERSIST", 3000)
 HTTP_TIMEOUT = _env_int("HTTP_TIMEOUT", 18)
