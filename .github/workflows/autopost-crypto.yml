@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SUMMARY_WORDS: "900"
-      MAX_PER_CAT: "10"
+      MAX_PER_CAT: "5"
       HTTP_TIMEOUT: "18"
       AP_USER_AGENT: "Mozilla/5.0 (AventurOO Autoposter)"
       FALLBACK_COVER: "assets/img/cover-fallback.jpg"
@@ -59,4 +59,5 @@ jobs:
             git pull --rebase origin "${GITHUB_REF_NAME:-${GITHUB_HEAD_REF:-main}}" || true
             git push
           fi
+
 
