@@ -8,13 +8,87 @@ import datetime
 import urllib.request
 import urllib.error
 import socket
-from html import unescape
+from html import unescape, escape
+from html.parser import HTMLParser
+from typing import List, Optional, Tuple
 from urllib.parse import urljoin
 from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
 from xml.etree import ElementTree as ET
 
 HTTP_TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "18"))
 UA = os.getenv("AP_USER_AGENT", "Mozilla/5.0 (AventurOO Autoposter)")
+
+IMG_ALLOWED_ATTRS = {
+    "src",
+    "alt",
+    "title",
+    "width",
+    "height",
+    "srcset",
+    "sizes",
+    "loading",
+    "decoding",
+}
+
+
+class _ImgTagParser(HTMLParser):
+    """Minimal HTML parser used to sanitize ``<img>`` tags."""
+
+    def __init__(self):
+        super().__init__()
+        self.attrs: List[Tuple[str, Optional[str]]] = []
+        self.self_closing = False
+
+    def handle_starttag(self, tag, attrs):  # pragma: no cover - HTMLParser API
+        if tag.lower() == "img":
+            self.attrs = attrs
+
+    def handle_startendtag(self, tag, attrs):  # pragma: no cover - HTMLParser API
+        if tag.lower() == "img":
+            self.attrs = attrs
+            self.self_closing = True
+
+
+def _sanitize_img_tag(match: re.Match) -> str:
+    raw = match.group(0)
+    parser = _ImgTagParser()
+    try:
+        parser.feed(raw)
+        parser.close()
+    except Exception:
+        return ""
+
+    sanitized_attrs: List[Tuple[str, str]] = []
+    has_src = False
+    for name, value in parser.attrs:
+        if not name:
+            continue
+        lname = name.lower()
+        if lname.startswith("on"):
+            continue
+        if lname not in IMG_ALLOWED_ATTRS:
+            continue
+        value = (value or "").strip()
+        if lname == "src":
+            if not value:
+                return ""
+            lower_value = value.lower()
+            if lower_value.startswith("javascript:"):
+                return ""
+            if lower_value.startswith("data:") and not lower_value.startswith("data:image/"):
+                return ""
+            has_src = True
+        sanitized_attrs.append((lname, value))
+
+    if not has_src:
+        return ""
+
+    attr_str = "".join(
+        f' {name}="{escape(val, quote=True)}"'
+        for name, val in sanitized_attrs
+    )
+    closing = " />" if parser.self_closing or raw.rstrip().endswith("/>") else ">"
+    return f"<img{attr_str}{closing}"
 
 try:
     import trafilatura
@@ -294,13 +368,28 @@ def absolutize(html: str, base: str) -> str:
 
 
 def sanitize_article_html(html: str) -> str:
+    """Clean up article HTML by removing scripts, ads and unsafe ``<img>`` tags."""
+
     if not html:
         return ""
+
     html = re.sub(r"(?is)<script.*?</script>", "", html)
     html = re.sub(r"(?is)<style.*?</style>", "", html)
     html = re.sub(r"(?is)<noscript.*?</noscript>", "", html)
     html = re.sub(r"(?is)<iframe.*?</iframe>", "", html)
-    html = re.sub(r'(?is)<(aside|figure)[^>]*class="[^"]*(share|related|promo|newsletter)[^"]*"[^>]*>.*?</\1>', "", html)
+
+    bad = r"(share|related|promo|newsletter|advert|ads?|sponsor(ed)?|outbrain|taboola|recirculation|recommend(ed)?)"
+    html = re.sub(
+        rf'(?is)<(aside|figure|div|section)[^>]*class="[^"]*{bad}[^"]*"[^>]*>.*?</\1>',
+        "",
+        html,
+    )
+    html = re.sub(
+        rf'(?is)<(div|section)[^>]*(id|data-)[^>]*{bad}[^>]*>.*?</\1>',
+        "",
+        html,
+    )
+    html = re.sub(r"(?is)<img\b[^>]*>", _sanitize_img_tag, html)
     return html.strip()
 
 def extract_body_html(url: str) -> tuple[str, str]:
