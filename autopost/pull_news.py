@@ -22,18 +22,24 @@ Env knobs (optional):
   IMG_TARGET_WIDTH, IMG_PROXY, FORCE_PROXY, TARGET_WORDS
 """
 
-import os, re, json, hashlib, datetime, pathlib, urllib.request, urllib.error, socket, sys
-from html import unescape, escape
-from html.parser import HTMLParser
+import os, re, json, hashlib, datetime, pathlib, sys
 from email.utils import parsedate_to_datetime
-from urllib.parse import urlparse, urljoin, urlunparse, parse_qsl, urlencode
-from xml.etree import ElementTree as ET
+from urllib.parse import urlparse, urlunparse, parse_qsl, urlencode
 
 if __package__ in (None, ""):
     sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
 
 from autopost import SEEN_DB_FILENAME
-from autopost.common import limit_words_html
+from autopost.common import (
+    absolutize,
+    extract_body_html,
+    fetch_bytes,
+    find_cover_from_item,
+    limit_words_html,
+    parse_feed,
+    sanitize_article_html,
+    strip_text,
+)
 
 def _env_int(name: str, default: int) -> int:
     """Return an integer from the environment or ``default`` on failure."""
@@ -71,8 +77,6 @@ MAX_TOTAL   = _env_int("MAX_TOTAL", 0)
 SUMMARY_WORDS = _env_int("SUMMARY_WORDS", 900)  # kept for compatibility
 TARGET_WORDS = _env_int("TARGET_WORDS", SUMMARY_WORDS)
 MAX_POSTS_PERSIST = _env_int("MAX_POSTS_PERSIST", 3000)
-HTTP_TIMEOUT = _env_int("HTTP_TIMEOUT", 18)
-UA = os.getenv("AP_USER_AGENT", "Mozilla/5.0 (AventurOO Autoposter)")
 FALLBACK_COVER = os.getenv("FALLBACK_COVER", "assets/img/cover-fallback.jpg")
 DEFAULT_AUTHOR = os.getenv("DEFAULT_AUTHOR", "AventurOO Editorial")
 
@@ -100,189 +104,9 @@ IMG_TARGET_WIDTH = int(os.getenv("IMG_TARGET_WIDTH", "1600"))
 IMG_PROXY = os.getenv("IMG_PROXY", "https://images.weserv.nl/?url=")  # "" if you don’t want a proxy
 FORCE_PROXY = os.getenv("FORCE_PROXY", "0")  # "1" => route every cover via proxy
 
-try:
-    import trafilatura
-except Exception:
-    trafilatura = None
-
-try:
-    from readability import Document
-except Exception:
-    Document = None
-
-# ------------------ HTTP/HTML utils ------------------
-def http_get(url: str) -> str:
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT) as r:
-        raw = r.read()
-    for enc in ("utf-8", "utf-16", "iso-8859-1"):
-        try:
-            return raw.decode(enc)
-        except Exception:
-            continue
-    return raw.decode("utf-8", "ignore")
-
-def fetch_bytes(url: str) -> bytes:
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
-    try:
-        with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT) as r:
-            return r.read()
-    except (urllib.error.HTTPError, urllib.error.URLError, socket.timeout) as e:
-        print("Fetch error:", url, "->", e)
-        return b""
-
-def strip_text(s: str) -> str:
-    s = unescape(s or "")
-    s = re.sub(r"(?is)<script.*?</script>|<style.*?</style>|<!--.*?-->", " ", s)
-    s = re.sub(r"<[^>]+>", " ", s)
-    s = re.sub(r"\s+", " ", s).strip()
-    return s
-
-def parse_feed(xml_bytes: bytes):
-    if not xml_bytes:
-        return []
-    try:
-        root = ET.fromstring(xml_bytes)
-    except ET.ParseError:
-        return []
-    items = []
-    # RSS 2.0
-    for it in root.findall(".//item"):
-        title = (it.findtext("title") or "").strip()
-        link = (it.findtext("link") or "").strip()
-        desc = (it.findtext("description") or "").strip()
-        if title and link:
-            items.append({"title": title, "link": link, "summary": desc, "element": it})
-    # Atom
-    ns = {"atom": "http://www.w3.org/2005/Atom"}
-    for e in root.findall(".//atom:entry", ns):
-        title = (e.findtext("atom:title", default="") or "").strip()
-        link_el = e.find("atom:link[@rel='alternate']", ns) or e.find("atom:link", ns)
-        link = (link_el.attrib.get("href") if link_el is not None else "").strip()
-        summary = (e.findtext("atom:summary", default="") or e.findtext("atom:content", default="") or "").strip()
-        if title and link:
-            items.append({"title": title, "link": link, "summary": summary, "element": e})
-    return items
-
-def find_cover_from_item(it_elem, page_url: str = "") -> str:
-    if it_elem is not None:
-        enc = it_elem.find("enclosure")
-        if enc is not None and str(enc.attrib.get("type","")).startswith("image"):
-            u = enc.attrib.get("url", "")
-            if u: return u
-        ns = {"media":"http://search.yahoo.com/mrss/"}
-        m = it_elem.find("media:content", ns) or it_elem.find("media:thumbnail", ns)
-        if m is not None and m.attrib.get("url"):
-            return m.attrib.get("url")
-    # og:image as fallback
-    if page_url:
-        try:
-            html = http_get(page_url)
-            m = re.search(r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)["\']', html, re.I)
-            if m: return m.group(1)
-        except Exception:
-            pass
-    return ""
-
-def absolutize(html: str, base: str) -> str:
-    def rep_href(m):
-        url = m.group(1)
-        if url.startswith(("http://", "https://", "mailto:", "#", "//")):
-            return f'href="{url}"'
-        return f'href="{urljoin(base, url)}"'
-    def rep_src(m):
-        url = m.group(1)
-        if url.startswith(("http://", "https://", "data:", "//")):
-            return f'src="{url}"'
-        return f'src="{urljoin(base, url)}"'
-    html = re.sub(r'href=["\']([^"\']+)["\']', rep_href, html, flags=re.I)
-    html = re.sub(r'src=["\']([^"\']+)["\']', rep_src, html, flags=re.I)
-    return html
-IMG_ALLOWED_ATTRS = {
-    "src",
-    "alt",
-    "title",
-    "width",
-    "height",
-    "srcset",
-    "sizes",
-    "loading",
-    "decoding",
-}
-
-
-class _ImgTagParser(HTMLParser):
-    def __init__(self):
-        super().__init__()
-        self.attrs = []
-        self.self_closing = False
-
-    def handle_starttag(self, tag, attrs):
-        if tag.lower() == "img":
-            self.attrs = attrs
-
-    def handle_startendtag(self, tag, attrs):
-        if tag.lower() == "img":
-            self.attrs = attrs
-            self.self_closing = True
-
-
-def _sanitize_img_tag(match: re.Match) -> str:
-    raw = match.group(0)
-    parser = _ImgTagParser()
-    try:
-        parser.feed(raw)
-        parser.close()
-    except Exception:
-        return ""
-
-    sanitized_attrs = []
-    has_src = False
-    for name, value in parser.attrs:
-        if not name:
-            continue
-        lname = name.lower()
-        if lname.startswith("on"):
-            continue
-        if lname not in IMG_ALLOWED_ATTRS:
-            continue
-        value = (value or "").strip()
-        if lname == "src":
-            if not value:
-                return ""
-            lower_value = value.lower()
-            if lower_value.startswith("javascript:"):
-                return ""
-            if lower_value.startswith("data:") and not lower_value.startswith("data:image/"):
-                return ""
-            has_src = True
-        sanitized_attrs.append((lname, value))
-
-    if not has_src:
-        return ""
-
-    attr_str = "".join(
-        f' {name}="{escape(val, quote=True)}"'
-        for name, val in sanitized_attrs
-    )
-    closing = " />" if parser.self_closing or raw.rstrip().endswith("/>") else ">"
-    return f"<img{attr_str}{closing}"
-
-def sanitize_article_html(html: str) -> str:
-    if not html:
-        return ""
-    # Remove scripts/styles/iframes/noscript
-    html = re.sub(r"(?is)<script.*?</script>", "", html)
-    html = re.sub(r"(?is)<style.*?</style>", "", html)
-    html = re.sub(r"(?is)<noscript.*?</noscript>", "", html)
-    html = re.sub(r"(?is)<iframe.*?</iframe>", "", html)
-    # Remove common ad/sponsored/related/newsletter blocks
-    BAD = r"(share|related|promo|newsletter|advert|ads?|sponsor(ed)?|outbrain|taboola|recirculation|recommend(ed)?)"
-    html = re.sub(rf'(?is)<(aside|figure|div|section)[^>]*class="[^"]*{BAD}[^"]*"[^>]*>.*?</\1>', "", html)
-    html = re.sub(rf'(?is)<(div|section)[^>]*(id|data-)[^>]*{BAD}[^>]*>.*?</\1>', "", html)
-    html = re.sub(r"(?is)<img\b[^>]*>", _sanitize_img_tag, html)
-    return html.strip()
-
+MAX_POSTS_PERSIST = _env_int("MAX_POSTS_PERSIST", 3000)
+FALLBACK_COVER = os.getenv("FALLBACK_COVER", "assets/img/cover-fallback.jpg")
+DEFAULT_AUTHOR = os.getenv("DEFAULT_AUTHOR", "AventurOO Editorial")
 # ---- Link normalization helpers ----
 
 def is_tracking_param(name: str) -> bool:
@@ -576,52 +400,6 @@ def resolve_cover_url(u: str) -> str:
 
     return sanitized
     
-# ---- Body extractors ----
-def extract_body_html(url: str) -> tuple[str, str]:
-    """Return (body_html, first_img_in_body) trying trafilatura → readability → fallback text."""
-    body_html = ""
-    first_img = ""
-    # 1) trafilatura
-    if trafilatura is not None:
-        try:
-            downloaded = trafilatura.fetch_url(url)
-            if downloaded:
-                th = trafilatura.extract(
-                    downloaded,
-                    output_format="html",
-                    include_images=True,
-                    include_links=True,
-                    include_formatting=True
-                )
-                if th:
-                    body_html = th
-                    m = re.search(r'<img[^>]+src=["\'](http[^"\']+)["\']', th, flags=re.I)
-                    if m:
-                        first_img = m.group(1)
-        except Exception as e:
-            print("trafilatura error:", e)
-    # 2) readability-lxml
-    if not body_html and Document is not None:
-        try:
-            raw = http_get(url)
-            doc = Document(raw)
-            body_html = doc.summary(html_partial=True)
-            if body_html and not first_img:
-                m = re.search(r'<img[^>]+src=["\'](http[^"\']+)["\']', body_html, flags=re.I)
-                if m:
-                    first_img = m.group(1)
-        except Exception as e:
-            print("readability error:", e)
-    # 3) Fallback total
-    if not body_html:
-        try:
-            raw = http_get(url)
-            txt = strip_text(raw)
-            return f"<p>{txt}</p>", ""
-        except Exception:
-            return "", ""
-    return body_html, first_img
-
 def slugify(s: str) -> str:
     s = (s or "").lower()
     s = re.sub(r"[^a-z0-9]+", "-", s)
