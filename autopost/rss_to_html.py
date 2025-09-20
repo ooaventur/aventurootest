@@ -12,6 +12,7 @@ from email.utils import parsedate_to_datetime
 if __package__ in (None, ""):
     sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
 
+from autopost.archive_utils import append_entries_to_archive
 from autopost.common import (
     fetch_bytes,
     http_get,
@@ -383,11 +384,19 @@ def main():
         print("New posts this run: 0"); return
 
     posts_idx = new_entries + posts_idx
-    if MAX_POSTS_PERSIST > 0:
+    dropped_entries = []
+    if MAX_POSTS_PERSIST > 0 and len(posts_idx) > MAX_POSTS_PERSIST:
+        dropped_entries = posts_idx[MAX_POSTS_PERSIST:]
         posts_idx = posts_idx[:MAX_POSTS_PERSIST]
 
     POSTS_JSON.write_text(json.dumps(posts_idx, ensure_ascii=False, indent=2), encoding="utf-8")
     SEEN_DB.write_text(json.dumps(seen, ensure_ascii=False, indent=2), encoding="utf-8")
+    append_entries_to_archive(
+        DATA_DIR / "archive",
+        dropped_entries,
+        normalize_date=_normalize_date_string,
+        default_month=today_iso()[:7],
+    )
     print("New posts this run:", len(new_entries))
 
 if __name__ == "__main__":
