@@ -30,7 +30,20 @@ class ResolveCoverUrlTests(unittest.TestCase):
     def test_wordpress_date_path_unchanged(self):
         url = "https://example.com/2023/09/01/photo.jpg"
         self.assertEqual(pull_news.sanitize_img_url(url), url)
+  
+    def test_force_proxy_preserves_query_https(self):
+        url = "https://example.com/image.jpg?next=https://othersite.com/path"
+        proxy = "https://proxy.example/?url="
+        with mock.patch.object(pull_news, "FORCE_PROXY", "1"), mock.patch.object(
+            pull_news, "IMG_PROXY", proxy
+        ):
+            sanitized = pull_news.sanitize_img_url(url)
 
+        expected = (
+            "https://proxy.example/?url="
+            "example.com/image.jpg?next=https://othersite.com/path"
+        )
+        self.assertEqual(sanitized, expected)
 
 class FeedUrlParsingTests(unittest.TestCase):
     def test_inline_comment_in_feed_url_stripped(self):
