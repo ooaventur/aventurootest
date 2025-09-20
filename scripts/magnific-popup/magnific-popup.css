@@ -1,0 +1,220 @@
+/*!
+ * Minimal Magnific Popup styles for AventurOO
+ * Provides overlay, animation, and gallery controls compatible with jquery.magnific-popup options used in the project.
+ */
+.mfp-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1042;
+  background: rgba(17, 17, 17, 0.9);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.mfp-bg.mfp-ready {
+  opacity: 1;
+}
+
+.mfp-bg.mfp-removing {
+  opacity: 0;
+}
+
+.mfp-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1043;
+  outline: none !important;
+  display: none;
+}
+
+.mfp-wrap.mfp-open {
+  display: block;
+}
+
+.mfp-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.mfp-content {
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0 auto;
+}
+
+.mfp-iframe-holder .mfp-content,
+.mfp-inline-holder .mfp-content {
+  width: 100%;
+}
+
+.mfp-iframe-scaler {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+}
+
+.mfp-iframe-scaler iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.mfp-close {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #222;
+  font-size: 0;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mfp-close:before {
+  content: '\u00d7';
+  font-size: 24px;
+  line-height: 1;
+}
+
+.mfp-close:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.mfp-image-holder .mfp-content {
+  max-width: 90vw;
+}
+
+img.mfp-img {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 120px);
+  border-radius: 6px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+}
+
+.mfp-figure {
+  position: relative;
+  margin: 0;
+}
+
+.mfp-figure:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -20px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.mfp-preloader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: none;
+}
+
+.mfp-loading .mfp-preloader {
+  display: block;
+}
+
+.mfp-arrow {
+  position: absolute;
+  top: 50%;
+  width: 44px;
+  height: 44px;
+  margin-top: -22px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.mfp-arrow:hover {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.mfp-arrow:before {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.mfp-arrow-left {
+  left: 24px;
+}
+
+.mfp-arrow-left:before {
+  content: '\u2039';
+}
+
+.mfp-arrow-right {
+  right: 24px;
+}
+
+.mfp-arrow-right:before {
+  content: '\u203a';
+}
+
+.mfp-s-ready .mfp-preloader,
+.mfp-s-error .mfp-preloader {
+  display: none;
+}
+
+body.mfp-open {
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .mfp-container {
+    padding: 12px;
+  }
+  .mfp-close {
+    top: -10px;
+    right: -10px;
+  }
+  .mfp-arrow {
+    width: 36px;
+    height: 36px;
+    margin-top: -18px;
+  }
+  .mfp-arrow-left {
+    left: 12px;
+  }
+  .mfp-arrow-right {
+    right: 12px;
+  }
+}
