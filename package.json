@@ -12,6 +12,7 @@
   "license": "MIT",
   "type": "commonjs",
   "devDependencies": {
-    "@11ty/eleventy": "^2.0.1"
+    "@11ty/eleventy": "^2.0.1",
+    "@aventuroo/eleventy-minify": "file:local-packages/eleventy-minify"
   }
 }
