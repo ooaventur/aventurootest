@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    if: ${{ github.event_name != 'pull_request' || (github.event.pull_request && !startsWith(github.event.pull_request.title, 'Autopost: ')) }}
+    if: ${{ github.event_name != 'pull_request' || (github.event.pull_request && !startsWith(github.event.pull_request.title, 'Autopost ')) }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
