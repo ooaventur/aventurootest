@@ -115,14 +115,30 @@ function resolvePathPrefix() {
 module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("assets");
   eleventyConfig.addPassthroughCopy("data"); // që /data/posts.json të dalë në prod
-  return { dir: { input: ".", output: "_site" } };
-}
-
+  eleventyConfig.addFilter("prependBasePath", function(path, base) {
     if (/^https?:\/\//i.test(path)) {
       return path;
     }
 
     var normalizedBase = String(base || "").replace(/\/+$/, "");
+    var normalizedPath = String(path);
+    if (!normalizedPath.startsWith("/")) {
+      normalizedPath = "/" + normalizedPath;
+    }
+
+    return normalizedBase + normalizedPath;
+  });
+
+  eleventyConfig.addFilter("toAbsoluteUrl", function(path, base) {
+    if (!base) {
+      return path;
+    }
+
+    if (/^https?:\/\//i.test(path)) {
+      return path;
+    }
+
+    var normalizedBase = String(base).replace(/\/+$/, "");
     var normalizedPath = String(path);
     if (!normalizedPath.startsWith("/")) {
       normalizedPath = "/" + normalizedPath;
