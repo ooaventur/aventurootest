@@ -29,5 +29,5 @@ tech-ai/gaming tech / AI gaming|https://www.pcgamer.com/rss/
 tech-ai/gaming tech / AI gaming|https://www.polygon.com/rss/index.xml               
 tech-ai/gaming tech / AI gaming|https://kotaku.com/rss                                
 
-tech-ai/audio-creator-tools|https://fstoppers.com/feed/                         
-tech-ai/audio-creator-tools|https://cdm.link/feed/                              
+tech-ai/audio-creator|https://fstoppers.com/feed/
+tech-ai/audio-creator|https://cdm.link/feed/                           
