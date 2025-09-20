@@ -78,10 +78,10 @@ SEEN_DB = ROOT / "autopost" / SEEN_DB_FILENAME
 MAX_PER_FEED = _env_int("MAX_PER_FEED", 5)
 MAX_PER_CAT = _env_int("MAX_PER_CAT", 5)
 MAX_TOTAL   = _env_int("MAX_TOTAL", 0)
-SUMMARY_WORDS = _env_int("SUMMARY_WORDS", 900)  # kept for compatibility
+SUMMARY_WORDS = _env_int("SUMMARY_WORDS", 750)  # kept for compatibility
 TARGET_WORDS = _env_int("TARGET_WORDS", SUMMARY_WORDS)
 MAX_POSTS_PERSIST = _env_int("MAX_POSTS_PERSIST", 3000)
-FALLBACK_COVER = os.getenv("FALLBACK_COVER", "assets/img/cover-fallback.jpg")
+FALLBACK_COVER = os.getenv("FALLBACK_COVER", "images/cover-fallback.jpg")
 DEFAULT_AUTHOR = os.getenv("DEFAULT_AUTHOR", "AventurOO Editorial")
 
 
@@ -109,7 +109,7 @@ IMG_PROXY = os.getenv("IMG_PROXY", "https://images.weserv.nl/?url=")  # "" if yo
 FORCE_PROXY = os.getenv("FORCE_PROXY", "0")  # "1" => route every cover via proxy
 
 MAX_POSTS_PERSIST = _env_int("MAX_POSTS_PERSIST", 3000)
-FALLBACK_COVER = os.getenv("FALLBACK_COVER", "assets/img/cover-fallback.jpg")
+FALLBACK_COVER = os.getenv("FALLBACK_COVER", "images/cover-fallback.jpg")
 DEFAULT_AUTHOR = os.getenv("DEFAULT_AUTHOR", "AventurOO Editorial")
 # ---- Runtime configuration objects ----
 
