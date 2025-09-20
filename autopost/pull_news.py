@@ -81,7 +81,7 @@ MAX_TOTAL   = _env_int("MAX_TOTAL", 0)
 SUMMARY_WORDS = _env_int("SUMMARY_WORDS", 750)  # kept for compatibility
 TARGET_WORDS = _env_int("TARGET_WORDS", SUMMARY_WORDS)
 MAX_POSTS_PERSIST = _env_int("MAX_POSTS_PERSIST", 3000)
-FALLBACK_COVER = os.getenv("FALLBACK_COVER", "images/cover-fallback.jpg")
+FALLBACK_COVER = os.getenv("FALLBACK_COVER", "assets/img/cover-fallback.jpg")
 DEFAULT_AUTHOR = os.getenv("DEFAULT_AUTHOR", "AventurOO Editorial")
 
 
@@ -109,7 +109,7 @@ IMG_PROXY = os.getenv("IMG_PROXY", "https://images.weserv.nl/?url=")  # "" if yo
 FORCE_PROXY = os.getenv("FORCE_PROXY", "0")  # "1" => route every cover via proxy
 
 MAX_POSTS_PERSIST = _env_int("MAX_POSTS_PERSIST", 3000)
-FALLBACK_COVER = os.getenv("FALLBACK_COVER", "images/cover-fallback.jpg")
+FALLBACK_COVER = os.getenv("FALLBACK_COVER", "assets/img/cover-fallback.jpg")
 DEFAULT_AUTHOR = os.getenv("DEFAULT_AUTHOR", "AventurOO Editorial")
 # ---- Runtime configuration objects ----
 
@@ -990,6 +990,13 @@ def run_pull_news(config: PullNewsConfig) -> PullNewsResult:
             base = f"{parsed.scheme}://{parsed.netloc}"
             body_html = absolutize(body_html, base)
             body_html = sanitize_article_html(body_html)
+            
+            # 2.5) Neutralize layout-breaking container tags that may escape the card
+            # Remove opening/closing of layout containers but keep inner text
+            body_html = re.sub(r'(?is)</?(?:aside|section|header|footer|main)[^>]*>', '', body_html)
+            # Extra safety: drop stray closing html/body tags if any
+            body_html = re.sub(r'(?is)</?(?:html|body)[^>]*>', '', body_html)
+            
 
             # 3) Trim to target word count while keeping whole blocks when possible
             body_html = limit_words_html(body_html, target_words)
