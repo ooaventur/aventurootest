@@ -112,11 +112,11 @@ function resolvePathPrefix() {
   return "/";
 }
 
-module.exports = function(eleventyConfig) {
-  eleventyConfig.addFilter("toAbsoluteUrl", function(path, base) {
-    if (!path) {
-      return base || "";
-    }
+module.exports = function (eleventyConfig) {
+  eleventyConfig.addPassthroughCopy("assets");
+  eleventyConfig.addPassthroughCopy("data"); // që /data/posts.json të dalë në prod
+  return { dir: { input: ".", output: "_site" } };
+}
 
     if (/^https?:\/\//i.test(path)) {
       return path;
