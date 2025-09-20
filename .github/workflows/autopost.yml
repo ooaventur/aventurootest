@@ -127,7 +127,7 @@ jobs:
         with:
           branch: autopost/${{ matrix.slug }}
           base: main
-          commit-message: autopost(${{ matrix.slug }}): refresh content
+          commit-message: "autopost(${{ matrix.slug }}): refresh content"
           title: "Autopost: ${{ matrix.category }} updates"
           body: |
             Automated content refresh for **${{ matrix.category }}**.
