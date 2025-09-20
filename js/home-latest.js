@@ -171,13 +171,14 @@
 
   function createBannerElement(banner, index) {
     var href = banner.href ? (basePath.resolve ? basePath.resolve(banner.href) : banner.href) : '#';
-    var resolvedImage = banner.image ? (basePath.resolve ? basePath.resolve(banner.image) : banner.image) : DEFAULT_BANNER_IMAGE;
+    var image = banner.image ? (basePath.resolve ? basePath.resolve(banner.image) : banner.image) : DEFAULT_BANNER_IMAGE;
+    var image = banner.image ? String(banner.image) : DEFAULT_BANNER_IMAGE;
     var alt = banner.alt ? String(banner.alt) : 'Advertisement';
     var bannerWrapper = document.createElement('div');
     bannerWrapper.className = 'banner latest-news-banner';
     bannerWrapper.innerHTML =
       '<a href="' + escapeHtml(href) + '" target="_blank" rel="noopener noreferrer">' +
-        '<img src="' + escapeHtml(resolvedImage) + '" alt="' + escapeHtml(alt) + '">' +
+        '<img src="' + escapeHtml(image) + '" alt="' + escapeHtml(alt) + '">' +
       '</a>';
     return bannerWrapper;
   }
