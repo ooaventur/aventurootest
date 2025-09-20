@@ -74,6 +74,22 @@ Environment variables recognised by the scripts include:
 All autopost runs reuse `autopost/seen_all.json` to avoid duplicates. Removing
 that file forces a full refresh.
 
+## Autopost CI workflow
+
+The scheduled **Autopost** GitHub Actions workflow still runs every few hours
+per category, but it no longer commits straight to `main`. When a script
+produces new stories it stages the generated files and updates a draft pull
+request on a category-specific branch (`autopost/<slug>`). Each draft PR is
+titled `Autopost: <Category> updates` and is continuously refreshed on
+subsequent runs until it is merged or closed.
+
+Maintainers promote the curated output to production by reviewing the draft,
+marking it “Ready for review” when appropriate, and merging it into `main`.
+That merge triggers the normal Eleventy build once, rather than on every
+scheduled autopost refresh. The Eleventy CI workflow is configured to ignore
+these draft `Autopost:` pull requests, keeping the build queue clear while the
+automation runs in the background.
+
 ## Testing
 
 The Python tests validate the shared autopost utilities. Run the full suite
