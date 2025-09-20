@@ -844,6 +844,8 @@ def run_pull_news(config: PullNewsConfig) -> PullNewsResult:
         if normalized is not None
     ]
 
+    new_entries: list[dict] = []
+    
     if not feeds_file.exists():
         print("ERROR: feeds file not found:", feeds_file)
         return PullNewsResult(added_count=0, new_entries=[], posts_index=posts_idx)
