@@ -25,7 +25,6 @@ async function optimizeCssFile(filePath) {
 async function optimizeCssDirectory(directory) {
   try {
     const entries = await fs.readdir(directory, { withFileTypes: true });
-
     for (const entry of entries) {
       const entryPath = path.join(directory, entry.name);
       if (entry.isDirectory()) {
@@ -35,126 +34,77 @@ async function optimizeCssDirectory(directory) {
       }
     }
   } catch (error) {
-    if (error && error.code === "ENOENT") {
-      return;
-    }
-
+    if (error && error.code === "ENOENT") return;
     throw error;
   }
 }
 
 function sanitizePathPrefix(raw) {
-  if (!raw) {
-    return "/";
-  }
-
-  var prefix = String(raw).trim();
-  if (!prefix || prefix === "." || prefix === "./") {
-    return "/";
-  }
-
-  // Allow overriding with a full URL (Netlify style).
+  if (!raw) return "/";
+  let prefix = String(raw).trim();
+  if (!prefix || prefix === "." || prefix === "./") return "/";
   try {
-    var url = new URL(prefix);
+    const url = new URL(prefix);
     prefix = url.pathname || "/";
-  } catch (err) {
-    // ignore – raw value was not an absolute URL
-  }
-
-  if (!prefix.startsWith("/")) {
-    prefix = "/" + prefix;
-  }
-
-  // Collapse duplicate slashes and ensure a trailing slash.
+  } catch {}
+  if (!prefix.startsWith("/")) prefix = "/" + prefix;
   prefix = prefix.replace(/\/+/g, "/");
-  if (!prefix.endsWith("/")) {
-    prefix += "/";
-  }
-
+  if (!prefix.endsWith("/")) prefix += "/";
   return prefix === "//" ? "/" : prefix;
 }
 
 function detectGitHubPagesPrefix() {
-  var repository = process.env.GITHUB_REPOSITORY || "";
-  if (!repository) {
-    return null;
-  }
+  const repository = process.env.GITHUB_REPOSITORY || "";
+  if (!repository) return null;
+  const parts = repository.split("/");
+  if (parts.length < 2) return null;
 
-  var parts = repository.split("/");
-  if (parts.length < 2) {
-    return null;
-  }
+  const owner = parts[0].toLowerCase();
+  const repo = parts[1];
+  if (!repo) return null;
 
-  var owner = parts[0].toLowerCase();
-  var repo = parts[1];
-  if (!repo) {
-    return null;
-  }
-
-  if (repo.toLowerCase() === owner + ".github.io") {
-    return "/";
-  }
-
+  if (repo.toLowerCase() === owner + ".github.io") return "/";
   return "/" + repo + "/";
 }
 
 function resolvePathPrefix() {
-  var explicit = process.env.ELEVENTY_PATH_PREFIX || process.env.BASE_PATH || process.env.PUBLIC_URL;
-  if (explicit) {
-    return sanitizePathPrefix(explicit);
-  }
-
-  var githubPrefix = detectGitHubPagesPrefix();
-  if (githubPrefix) {
-    return sanitizePathPrefix(githubPrefix);
-  }
-
+  const explicit = process.env.ELEVENTY_PATH_PREFIX || process.env.BASE_PATH || process.env.PUBLIC_URL;
+  if (explicit) return sanitizePathPrefix(explicit);
+  const githubPrefix = detectGitHubPagesPrefix();
+  if (githubPrefix) return sanitizePathPrefix(githubPrefix);
   return "/";
 }
 
 module.exports = function (eleventyConfig) {
+  // Passthroughs
   eleventyConfig.addPassthroughCopy("assets");
   eleventyConfig.addPassthroughCopy("data"); // që /data/posts.json të dalë në prod
-  eleventyConfig.addFilter("prependBasePath", function(path, base) {
-    if (/^https?:\/\//i.test(path)) {
-      return path;
-    }
-
-    var normalizedBase = String(base || "").replace(/\/+$/, "");
-    var normalizedPath = String(path);
-    if (!normalizedPath.startsWith("/")) {
-      normalizedPath = "/" + normalizedPath;
-    }
-
-    return normalizedBase + normalizedPath;
-  });
-
-  eleventyConfig.addFilter("toAbsoluteUrl", function(path, base) {
-    if (!base) {
-      return path;
-    }
-
-    if (/^https?:\/\//i.test(path)) {
-      return path;
-    }
-
-    var normalizedBase = String(base).replace(/\/+$/, "");
-    var normalizedPath = String(path);
-    if (!normalizedPath.startsWith("/")) {
-      normalizedPath = "/" + normalizedPath;
-    }
-
-    return normalizedBase + normalizedPath;
-  });
-
   eleventyConfig.addPassthroughCopy("css");
   eleventyConfig.addPassthroughCopy("js");
   eleventyConfig.addPassthroughCopy("scripts");
   eleventyConfig.addPassthroughCopy("images");
   eleventyConfig.addPassthroughCopy("fonts");
-  eleventyConfig.addPassthroughCopy("data");
   eleventyConfig.addPassthroughCopy("_redirects");
 
+  // Filters (parametri 'p' për të shmangur shadowing me modulën 'path')
+  eleventyConfig.addFilter("prependBasePath", function(p, base) {
+    if (/^https?:\/\//i.test(p)) return p;
+    const normalizedBase = String(base || "").replace(/\/+$/, "");
+    let normalizedPath = String(p);
+    if (!normalizedPath.startsWith("/")) normalizedPath = "/" + normalizedPath;
+    return normalizedBase + normalizedPath;
+  });
+
+  eleventyConfig.addFilter("toAbsoluteUrl", function(p, base) {
+    if (!base) return p;
+    if (/^https?:\/\//i.test(p)) return p;
+    const normalizedBase = String(base).replace(/\/+$/, "");
+    let normalizedPath = String(p);
+    if (!normalizedPath.startsWith("/")) normalizedPath = "/" + normalizedPath;
+    return normalizedBase + normalizedPath;
+  });
+
+  // HTML transform
   eleventyConfig.addTransform("html-minify", function(content, outputPath) {
     if (outputPath && outputPath.endsWith(".html")) {
       try {
@@ -163,23 +113,24 @@ module.exports = function (eleventyConfig) {
         console.warn("HTML minification failed for", outputPath, error);
       }
     }
-
     return content;
   });
 
-  var pathPrefix = resolvePathPrefix();
-  var basePath = pathPrefix === "/" ? "" : pathPrefix.replace(/\/+$/, "");
-
+  // Path prefix & globals
+  const pathPrefix = resolvePathPrefix();
+  const basePath = pathPrefix === "/" ? "" : pathPrefix.replace(/\/+$/, "");
   eleventyConfig.addGlobalData("pathPrefix", pathPrefix);
   eleventyConfig.addGlobalData("basePath", basePath);
 
+  // After build: optimize CSS
   eleventyConfig.on("afterBuild", async function() {
     await optimizeCssDirectory(path.join("_site", "css"));
   });
 
   return {
     dir: {
-      input: "src/site",
+      // NDËRROJE NË "src/site" nëse dosjet janë aty:
+      input: ".",
       includes: "_includes",
       data: "_data",
       output: "_site"
@@ -187,6 +138,6 @@ module.exports = function (eleventyConfig) {
     templateFormats: ["njk", "html", "md"],
     htmlTemplateEngine: "njk",
     markdownTemplateEngine: "njk",
-    pathPrefix: pathPrefix
+    pathPrefix
   };
 };
