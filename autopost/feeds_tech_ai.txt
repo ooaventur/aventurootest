@@ -1,1 +1,33 @@
 
+
+tech-ai/AI-news|https://www.technologyreview.com/feed/                                     
+tech-ai/AI-news|https://machinelearningmastery.com/blog/feed/                          
+tech-ai/AI-news|https://blogs.nvidia.com/rss/                                         
+tech-ai/AI-news|https://thegradient.pub/feed/                                          
+tech-ai/AI-news|https://becominghuman.ai/feed/                                         
+
+tech-ai/big-tech|https://thenextweb.com/feed/                                          
+tech-ai/big-tech|https://techcrunch.com/feed/                                         
+tech-ai/big-tech|https://gizmodo.com/rss                                              
+tech-ai/big-tech|https://blogs.microsoft.com/feed/                                   
+
+tech-ai/security-privacy|https://www.theregister.com/security/headlines.rss          
+
+tech-ai/internet-platforms|https://techcrunch.com/tag/internet/feed/                
+tech-ai/internet-platforms|https://arstechnica.com/information-technology/rss/      
+tech-ai/internet-platforms|https://blog.mozilla.org/feed/                          
+tech-ai/internet-platforms|https://www.microsoft.com/en-us/microsoft-365/blog/feed
+tech-ai/internet-platforms|https://developer.apple.com/news/rss/news.rss            
+tech-ai/internet-platforms|https://aws.amazon.com/blogs/aws/feed/                 
+tech-ai/internet-platforms|https://blog.cloudflare.com/rss/                        
+
+tech-ai/innovation-gadgets|https://www.engadget.com/rss.xml                         
+tech-ai/innovation-gadgets|https://www.gizmodo.com/rss                            
+tech-ai/innovation-gadgets|https://9to5mac.com/feed/                             
+
+tech-ai/gaming tech / AI gaming|https://www.pcgamer.com/rss/                         
+tech-ai/gaming tech / AI gaming|https://www.polygon.com/rss/index.xml               
+tech-ai/gaming tech / AI gaming|https://kotaku.com/rss                                
+
+tech-ai/audio-creator-tools|https://fstoppers.com/feed/                         
+tech-ai/audio-creator-tools|https://cdm.link/feed/                              
