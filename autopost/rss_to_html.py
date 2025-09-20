@@ -33,7 +33,9 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
 POSTS_JSON = DATA_DIR / "posts.json"
 SEEN_DB = ROOT / "autopost" / SEEN_DB_FILENAME
-FEEDS = ROOT / "autopost" / "data" / "feeds.txt"
+FEEDS = pathlib.Path(
+    os.getenv("FEEDS_FILE") or (ROOT / "autopost" / "feeds_news.txt")
+)
 
 # ---- Env / Defaults ----
 MAX_PER_CAT = int(os.getenv("MAX_PER_CAT", "6"))
@@ -110,12 +112,14 @@ def parse_item_date(it_elem) -> str:
 
     ns_atom = {"atom": "http://www.w3.org/2005/Atom"}
     for tag in ("published", "updated"):
-        text = it_elem.findtext(f"atom:{tag}", ns_atom)
+        text = it_elem.findtext(
+            f"atom:{tag}", default="", namespaces=ns_atom
+        )
         if text and text.strip():
             candidates.append(text.strip())
 
     ns_dc = {"dc": "http://purl.org/dc/elements/1.1/"}
-    text = it_elem.findtext("dc:date", ns_dc)
+    text = it_elem.findtext("dc:date", default="", namespaces=ns_dc)
     if text and text.strip():
         candidates.append(text.strip())
 
@@ -248,7 +252,7 @@ def main():
         if isinstance(p, dict) and p.get("slug")
     }
     if not FEEDS.exists():
-        print("ERROR: feeds.txt not found:", FEEDS)
+        print("ERROR: feeds file not found:", FEEDS)
         return
 
     added_total = 0
@@ -261,14 +265,27 @@ def main():
             continue
         if "|" not in raw:
             continue
-        cat, url = raw.split("|", 1)
-        category = (cat or "").strip().title()
-        feed_url = (url or "").strip()
+        parts = [part.strip() for part in raw.split("|")]
+        if len(parts) < 2:
+            continue
+
+        category_raw = parts[0]
+        subcategory = parts[1] if len(parts) > 2 else ""
+        feed_url = parts[-1]
+
+        category = (category_raw or "").strip().title()
+        subcategory = (subcategory or "").strip()
+        feed_url = (feed_url or "").strip()
         if not category or not feed_url:
             continue
+
+        display_category = category
+        if subcategory:
+            display_category = f"{category} / {subcategory}"
+
         if MAX_TOTAL > 0 and added_total >= MAX_TOTAL:
             break
-        if MAX_PER_CAT > 0 and per_cat.get(category, 0) >= MAX_PER_CAT:
+        if MAX_PER_CAT > 0 and per_cat.get(display_category, 0) >= MAX_PER_CAT:
             continue
 
         xml = fetch_bytes(feed_url)
@@ -281,7 +298,7 @@ def main():
             if MAX_TOTAL > 0 and added_total >= MAX_TOTAL:
                 break
 
-            if MAX_PER_CAT > 0 and per_cat.get(category, 0) >= MAX_PER_CAT:
+            if MAX_PER_CAT > 0 and per_cat.get(display_category, 0) >= MAX_PER_CAT:
                 break
 
             title = (it.get("title") or "").strip()
@@ -367,15 +384,26 @@ def main():
                 "excerpt": excerpt_text,
                 "body": content_text,
             }
+            if subcategory:
+                entry["subcategory"] = subcategory
             if cover:
                 entry["cover"] = cover
 
             new_entries.append(entry)
 
-            seen[key] = {"title": title, "url": link, "category": category, "created": date}
-            per_cat[category] = per_cat.get(category, 0) + 1
+            seen[key] = {
+                "title": title,
+                "url": link,
+                "category": category,
+                "subcategory": subcategory,
+                "created": date,
+            }
+            per_cat[display_category] = per_cat.get(display_category, 0) + 1
             added_total += 1
-            print(f"Added [{category}]: {title} (by {author})")
+            if subcategory:
+                print(f"Added [{category} / {subcategory}]: {title} (by {author})")
+            else:
+                print(f"Added [{category}]: {title} (by {author})")
 
         if MAX_TOTAL > 0 and added_total >= MAX_TOTAL:
             break
