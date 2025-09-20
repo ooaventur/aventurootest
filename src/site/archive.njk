@@ -1,0 +1,109 @@
+---
+layout: layouts/base.njk
+permalink: archive.html
+title: AventurOO Archive
+---
+<section class="archive-page">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 text-left">
+        <ol class="breadcrumb">
+          <li><a href="{{ '/' | url }}">Home</a></li>
+          <li class="active">Archive</li>
+        </ol>
+        <h3 class="page-title" data-archive-heading>Archive</h3>
+        <p class="page-subtitle" data-archive-summary>Browse past months of AventurOO coverage.</p>
+        <div class="line"></div>
+        <div class="archive-month-picker">
+          <p class="text-muted" data-archive-status>Loading archive…</p>
+          <ul class="archive-month-list list-inline" data-archive-months></ul>
+        </div>
+        <div class="line"></div>
+        <div class="row" data-archive-posts>
+          <div class="col-xs-12">
+            <p class="text-muted">Select a month to view archived stories.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 sidebar">
+        <aside id="sidebar-top-ad">
+          <div class="aside-body">
+            <figure class="ads">
+              <a href="{{ '/single.html' | url }}">
+                <img src="{{ '/images/ad.png' | url }}" alt="Advertisement">
+              </a>
+              <figcaption>Advertisement</figcaption>
+            </figure>
+          </div>
+        </aside>
+        <aside id="sidebar-recent">
+          <h1 class="aside-title">Recent Posts</h1>
+          <div class="aside-body" id="sidebar-recent-posts">
+            <p class="text-muted">Loading recent posts…</p>
+          </div>
+        </aside>
+        <aside id="sidebar-second-ad">
+          <div class="aside-body">
+            <figure class="ads">
+              <a href="{{ '/single.html' | url }}">
+                <img src="{{ '/images/ad.png' | url }}" alt="Advertisement">
+              </a>
+              <figcaption>Advertisement</figcaption>
+            </figure>
+          </div>
+        </aside>
+        <aside id="sidebar-mini">
+          <h1 class="aside-title">More Stories</h1>
+          <div class="aside-body" id="sidebar-mini-articles">
+            <p class="text-muted">Loading stories…</p>
+          </div>
+        </aside>
+        <aside id="sidebar-third-ad">
+          <div class="aside-body">
+            <figure class="ads">
+              <a href="{{ '/single.html' | url }}">
+                <img src="{{ '/images/ad.png' | url }}" alt="Advertisement">
+              </a>
+              <figcaption>Advertisement</figcaption>
+            </figure>
+          </div>
+        </aside>
+        <aside id="sidebar-subscribe">
+          <div class="aside-body">
+            <form class="newsletter">
+              <div class="icon">
+                <i class="ion-ios-email-outline"></i>
+                <h1>Newsletter</h1>
+              </div>
+              <div class="input-group">
+                <input type="email" class="form-control email" placeholder="Your mail">
+                <div class="input-group-btn">
+                  <button class="btn btn-primary"><i class="ion-paper-airplane"></i></button>
+                </div>
+              </div>
+              <p>By subscribing you will receive new articles in your email.</p>
+            </form>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="best-of-the-week">
+  <div class="container">
+    <h1>
+      <div class="text">Best Of The Week</div>
+      <div class="carousel-nav" id="best-of-the-week-nav">
+        <div class="prev">
+          <i class="ion-ios-arrow-left"></i>
+        </div>
+        <div class="next">
+          <i class="ion-ios-arrow-right"></i>
+        </div>
+      </div>
+    </h1>
+    <div class="owl-carousel owl-theme carousel-1"></div>
+  </div>
+</section>
