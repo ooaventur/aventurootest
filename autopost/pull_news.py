@@ -33,6 +33,7 @@ if __package__ in (None, ""):
     sys.path.append(str(pathlib.Path(__file__).resolve().parents[1]))
 
 from autopost import SEEN_DB_FILENAME
+from autopost.archive_utils import append_entries_to_archive
 from autopost.common import (
     absolutize,
     extract_body_html,
@@ -1093,8 +1094,17 @@ def run_pull_news(config: PullNewsConfig) -> PullNewsResult:
 
     posts_idx = new_entries + posts_idx
     posts_idx.sort(key=_entry_sort_key, reverse=True)
-    if max_posts_persist > 0:
+    dropped_entries = []
+    if max_posts_persist > 0 and len(posts_idx) > max_posts_persist:
+        dropped_entries = posts_idx[max_posts_persist:]
         posts_idx = posts_idx[:max_posts_persist]
+
+    append_entries_to_archive(
+        data_dir / "archive",
+        dropped_entries,
+        normalize_date=_normalize_date_string,
+        default_month=today_iso()[:7],
+    )
 
     posts_idx = [
         normalized for normalized in (
