@@ -1,3 +1,48 @@
+const fs = require("node:fs/promises");
+const path = require("node:path");
+const { promisify } = require("node:util");
+const zlib = require("node:zlib");
+const { minifyHtml, minifyCss } = require("@aventuroo/eleventy-minify");
+
+const gzip = promisify(zlib.gzip);
+const shouldPrecompress = process.env.NETLIFY === "true" || process.env.ENABLE_PRECOMPRESS === "true";
+
+async function optimizeCssFile(filePath) {
+  try {
+    const original = await fs.readFile(filePath, "utf8");
+    const minified = minifyCss(original);
+    await fs.writeFile(filePath, minified, "utf8");
+
+    if (shouldPrecompress) {
+      const compressed = await gzip(Buffer.from(minified, "utf8"), { level: 9 });
+      await fs.writeFile(filePath, compressed);
+    }
+  } catch (error) {
+    console.warn("CSS optimisation failed for", filePath, error);
+  }
+}
+
+async function optimizeCssDirectory(directory) {
+  try {
+    const entries = await fs.readdir(directory, { withFileTypes: true });
+
+    for (const entry of entries) {
+      const entryPath = path.join(directory, entry.name);
+      if (entry.isDirectory()) {
+        await optimizeCssDirectory(entryPath);
+      } else if (entry.isFile() && entry.name.endsWith(".css")) {
+        await optimizeCssFile(entryPath);
+      }
+    }
+  } catch (error) {
+    if (error && error.code === "ENOENT") {
+      return;
+    }
+
+    throw error;
+  }
+}
+
 function sanitizePathPrefix(raw) {
   if (!raw) {
     return "/";
@@ -94,11 +139,27 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("data");
   eleventyConfig.addPassthroughCopy("_redirects");
 
+  eleventyConfig.addTransform("html-minify", function(content, outputPath) {
+    if (outputPath && outputPath.endsWith(".html")) {
+      try {
+        return minifyHtml(content);
+      } catch (error) {
+        console.warn("HTML minification failed for", outputPath, error);
+      }
+    }
+
+    return content;
+  });
+
   var pathPrefix = resolvePathPrefix();
   var basePath = pathPrefix === "/" ? "" : pathPrefix.replace(/\/+$/, "");
 
   eleventyConfig.addGlobalData("pathPrefix", pathPrefix);
   eleventyConfig.addGlobalData("basePath", basePath);
+
+  eleventyConfig.on("afterBuild", async function() {
+    await optimizeCssDirectory(path.join("_site", "css"));
+  });
 
   return {
     dir: {
