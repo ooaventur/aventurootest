@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   autopost:
@@ -104,18 +105,34 @@ jobs:
       - name: Run ${{ matrix.category }} autoposter
         run: python3 ${{ matrix.script }}
 
-      - name: Commit & push
+      - name: Stage autopost changes
+        id: git_status
         shell: bash
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
           git add -A
           if git diff --cached --quiet; then
-            echo "No changes."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
           else
-            git commit -m "autopost(${matrix.slug}): body html + attribution"
-            git pull --rebase origin "${GITHUB_REF_NAME:-${GITHUB_HEAD_REF:-main}}" || true
-            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: No changes detected
+        if: steps.git_status.outputs.changed != 'true'
+        run: echo "No autopost updates for ${{ matrix.category }}."
+
+      - name: Open autopost PR
+        if: steps.git_status.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: autopost/${{ matrix.slug }}
+          base: main
+          commit-message: autopost(${{ matrix.slug }}): refresh content
+          title: "Autopost: ${{ matrix.category }} updates"
+          body: |
+            Automated content refresh for **${{ matrix.category }}**.
+
+            This PR was opened by the scheduled autopost workflow and will be updated on subsequent runs until merged.
+          delete-branch: true
+          draft: true
           fi
