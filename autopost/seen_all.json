@@ -243,5 +243,75 @@
     "category": "lifestyle",
     "subcategory": "",
     "created": "2024-09-15"
+  },
+  "4dae36c26449ff0514ba878d8827251dd56052d2": {
+    "title": "The Download: the CDC’s vaccine chaos",
+    "url": "https://www.technologyreview.com/2025/09/19/1123860/the-download-the-cdcs-vaccine-chaos/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-19"
+  },
+  "cd32a945393b7c8becec0a320098f55f975b3ed1": {
+    "title": "A pivotal meeting on vaccine guidance is underway—and former CDC leaders are alarmed",
+    "url": "https://www.technologyreview.com/2025/09/18/1123844/meeting-vaccine-guidance-former-cdc-leaders-alarmed/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-18"
+  },
+  "69e2258d4d58aeb85974f14dcc9e40d313d0e6ba": {
+    "title": "The Download: AI-designed viruses, and bad news for the hydrogen industry",
+    "url": "https://www.technologyreview.com/2025/09/18/1123830/the-download-ai-designed-viruses-and-bad-news-for-the-hydrogen-industry/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-18"
+  },
+  "d90b2d617fdd056881170c1bda33008383facde8": {
+    "title": "Clean hydrogen is facing a big reality check",
+    "url": "https://www.technologyreview.com/2025/09/18/1123818/hydrogen-reality-check-china/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-18"
+  },
+  "a3e3f40507cf57dd5e6d1d4947b6799aa35044b6": {
+    "title": "AI-designed viruses are here and already killing bacteria",
+    "url": "https://www.technologyreview.com/2025/09/17/1123801/ai-virus-bacteriophage-life/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-17"
+  },
+  "0fd16b63006644c2c9278c27e774d43fe34dd462": {
+    "title": "Multi-Agent Systems: The Next Frontier in AI-Driven Cyber Defense",
+    "url": "https://machinelearningmastery.com/multi-agent-systems-the-next-frontier-in-ai-driven-cyber-defense/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-09"
+  },
+  "2efa472b1f6adce581e90626d0c6159457f37cd0": {
+    "title": "ROC AUC vs Precision-Recall for Imbalanced Data",
+    "url": "https://machinelearningmastery.com/roc-auc-vs-precision-recall-for-imbalanced-data/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-09"
+  },
+  "d4b44ac0032f3acb0ff84ff29b2f22543add8917": {
+    "title": "7 Scikit-learn Tricks for Optimized Cross-Validation",
+    "url": "https://machinelearningmastery.com/7-scikit-learn-tricks-for-optimized-cross-validation/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-08"
+  },
+  "9f976eeb4d28d2ce72f2820a992b06d9a4a8c92f": {
+    "title": "A Gentle Introduction to Batch Normalization",
+    "url": "https://machinelearningmastery.com/a-gentle-introduction-to-batch-normalization/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-05"
+  },
+  "5a247db8bcf9192c7f836034aa0840b3475fcad0": {
+    "title": "Small Language Models are the Future of Agentic AI",
+    "url": "https://machinelearningmastery.com/small-language-models-are-the-future-of-agentic-ai/",
+    "category": "tech-ai/ai-news",
+    "subcategory": "AI News",
+    "created": "2025-09-04"
   }
 }
