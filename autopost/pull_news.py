@@ -401,7 +401,12 @@ def sanitize_img_url(u: str) -> str:
     if not u:
         return u
     if FORCE_PROXY == "1" and IMG_PROXY:
-        u2 = u.replace("https://", "").replace("http://", "")
+        if u.startswith("https://"):
+            u2 = u[len("https://") :]
+        elif u.startswith("http://"):
+            u2 = u[len("http://") :]
+        else:
+            u2 = u
         return f"{IMG_PROXY}{u2}"
     u = _to_https(u)
     # Rregullime specifike
