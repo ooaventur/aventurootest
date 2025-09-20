@@ -20,7 +20,6 @@ jobs:
   autopost:
     name: Autopost • ${{ matrix.category }}
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'schedule' || matrix.schedule == github.event.schedule }}
     strategy:
       fail-fast: false
       matrix:
@@ -83,31 +82,46 @@ jobs:
       MAX_PER_CAT: ${{ matrix.max_per_cat }}
 
     steps:
+      - name: Determine schedule execution
+        id: schedule_guard
+        run: |
+          if [[ "${{ github.event_name }}" != "schedule" || "${{ matrix.schedule }}" == "${{ github.event.schedule }}" ]]; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/checkout@v4
+        if: steps.schedule_guard.outputs.should_run == 'true'
         with:
           fetch-depth: 0
 
       - uses: actions/setup-python@v5
+        if: steps.schedule_guard.outputs.should_run == 'true'
         with:
           python-version: "3.11"
 
       - name: Install deps
+        if: steps.schedule_guard.outputs.should_run == 'true'
         run: |
           python -m pip install --upgrade pip
           pip install trafilatura readability-lxml lxml certifi
 
       - name: Ensure files
+        if: steps.schedule_guard.outputs.should_run == 'true'
         run: |
           mkdir -p autopost data
           [ -s autopost/seen_all.json ] || echo "{}" > autopost/seen_all.json
           [ -s data/posts.json ] || echo "[]" > data/posts.json
 
       - name: Run ${{ matrix.category }} autoposter
+        if: steps.schedule_guard.outputs.should_run == 'true'
         run: python3 ${{ matrix.script }}
 
       - name: Stage autopost changes
         id: git_status
         shell: bash
+        if: steps.schedule_guard.outputs.should_run == 'true'
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git add -A
@@ -118,11 +132,11 @@ jobs:
           fi
 
       - name: No changes detected
-        if: steps.git_status.outputs.changed != 'true'
+        if: steps.schedule_guard.outputs.should_run == 'true' && steps.git_status.outputs.changed != 'true'
         run: echo "No autopost updates for ${{ matrix.category }}."
 
       - name: Open autopost PR
-        if: steps.git_status.outputs.changed == 'true'
+        if: steps.schedule_guard.outputs.should_run == 'true' && steps.git_status.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
           branch: autopost/${{ matrix.slug }}
