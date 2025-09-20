@@ -12,6 +12,11 @@
   const POSTS_SOURCES = basePath.resolveAll
     ? basePath.resolveAll(['/data/posts.json', 'data/posts.json'])
     : ['/data/posts.json', 'data/posts.json'];
+    const ARCHIVE_MANIFEST_SOURCES = basePath.resolveAll
+    ? basePath.resolveAll(['/data/archive/index.json', 'data/archive/index.json'])
+    : ['/data/archive/index.json', 'data/archive/index.json'];
+  const ARCHIVE_MONTH_CACHE = Object.create(null);
+  let archiveManifestPromise = null;
   const articleContainer = document.querySelector('.main-article');
   const headElement = document.head || document.getElementsByTagName('head')[0] || null;
 
@@ -169,6 +174,119 @@
       return Promise.reject(new Error('Data loader is not available'));
     }
     return window.AventurOODataLoader.fetchSequential(urls);
+  }
+
+    function sanitizeMonthKey(value) {
+    if (value == null) return '';
+    const trimmed = String(value).trim();
+    if (!trimmed) return '';
+    const normalized = trimmed.replace(/[^0-9-]/g, '').slice(0, 7);
+    return /^\d{4}-\d{2}$/.test(normalized) ? normalized : '';
+  }
+
+  function parseManifestMonths(manifest) {
+    if (!manifest || typeof manifest !== 'object') return [];
+    const rawMonths = Array.isArray(manifest.months) ? manifest.months : [];
+    const seen = Object.create(null);
+    const months = [];
+
+    rawMonths.forEach((entry) => {
+      let key = '';
+      let count = 0;
+      if (typeof entry === 'string') {
+        key = sanitizeMonthKey(entry);
+      } else if (entry && typeof entry === 'object') {
+        key = sanitizeMonthKey(entry.key || entry.month || entry.id || entry.value);
+        const rawCount = entry.count != null
+          ? Number(entry.count)
+          : Number(entry.total_entries || entry.total || entry.length);
+        if (!Number.isNaN(rawCount) && Number.isFinite(rawCount)) {
+          count = Math.max(0, Math.floor(rawCount));
+        }
+      }
+      if (!key || seen[key]) return;
+      seen[key] = true;
+      months.push({ key, count });
+    });
+
+    months.sort((a, b) => (a.key < b.key ? 1 : (a.key > b.key ? -1 : 0)));
+    return months;
+  }
+
+  function buildArchiveMonthSources(monthKey) {
+    const sanitized = sanitizeMonthKey(monthKey);
+    if (!sanitized) return [];
+    const sources = [`/data/archive/${sanitized}.json`, `data/archive/${sanitized}.json`];
+    return basePath.resolveAll ? basePath.resolveAll(sources) : sources;
+  }
+
+  function getArchiveManifest() {
+    if (archiveManifestPromise) {
+      return archiveManifestPromise;
+    }
+    archiveManifestPromise = fetchSequential(ARCHIVE_MANIFEST_SOURCES)
+      .catch((err) => {
+        console.warn('archive manifest load error', err);
+        return null;
+      })
+      .then((manifest) => (manifest && typeof manifest === 'object' ? manifest : null));
+    return archiveManifestPromise;
+  }
+
+  function loadArchiveMonth(monthKey) {
+    const sanitized = sanitizeMonthKey(monthKey);
+    if (!sanitized) {
+      return Promise.resolve([]);
+    }
+    if (ARCHIVE_MONTH_CACHE[sanitized]) {
+      return ARCHIVE_MONTH_CACHE[sanitized];
+    }
+    const sources = buildArchiveMonthSources(sanitized);
+    if (!sources.length) {
+      const empty = Promise.resolve([]);
+      ARCHIVE_MONTH_CACHE[sanitized] = empty;
+      return empty;
+    }
+    const promise = fetchSequential(sources)
+      .then((items) => (Array.isArray(items) ? items : []))
+      .catch((err) => {
+        console.warn('archive month load error', sanitized, err);
+        return [];
+      });
+    ARCHIVE_MONTH_CACHE[sanitized] = promise;
+    return promise;
+  }
+
+  async function lookupArchivePost(primarySlug, candidates) {
+    try {
+      const manifest = await getArchiveManifest();
+      if (!manifest) return null;
+      const months = parseManifestMonths(manifest);
+      if (!months.length) return null;
+
+      const searchCandidates = [];
+      if (primarySlug) searchCandidates.push(primarySlug);
+      if (Array.isArray(candidates) && candidates.length) {
+        Array.prototype.push.apply(searchCandidates, candidates);
+      }
+
+      const finalCandidates = searchCandidates.length ? searchCandidates : candidates;
+
+      for (let i = 0; i < months.length; i += 1) {
+        const monthKey = months[i].key;
+        const monthPosts = await loadArchiveMonth(monthKey);
+        if (!Array.isArray(monthPosts) || !monthPosts.length) {
+          continue;
+        }
+        const match = findPostFromCandidates(monthPosts, finalCandidates);
+        if (match) {
+          return { post: match, posts: monthPosts, month: monthKey };
+        }
+      }
+    } catch (err) {
+      console.warn('archive lookup error', err);
+    }
+    return null;
   }
 
   function slugify(value) {
@@ -339,31 +457,54 @@
   }
 
   async function load() {
+    let posts = [];
+    let loadError = null;
+
     try {
       const data = await fetchSequential(POSTS_SOURCES);
-      const posts = Array.isArray(data) ? data : [];
-      let post = slug ? posts.find(p => p && p.slug === slug) : null;
+      posts = Array.isArray(data) ? data : [];
+    } catch (err) {
+      loadError = err;
+      console.warn('posts load error', err);
+    }
 
-      if (!post) {
-        const fallback = findPostFromCandidates(posts, slugCandidates);
-        if (fallback) {
-          post = fallback;
-          slug = fallback.slug || slug;
+    let post = slug ? posts.find((p) => p && p.slug === slug) : null;
+
+    if (!post) {
+      const fallback = findPostFromCandidates(posts, slugCandidates);
+      if (fallback) {
+        post = fallback;
+        slug = fallback.slug || slug;
+      }
+    }
+
+    let relatedSource = posts.slice();
+
+    if (!post) {
+      const archiveHit = await lookupArchivePost(slug, slugCandidates);
+      if (archiveHit && archiveHit.post) {
+        post = archiveHit.post;
+        if (!slug && post.slug) {
+          slug = post.slug;
+        }
+        if (Array.isArray(archiveHit.posts) && archiveHit.posts.length) {
+          relatedSource = archiveHit.posts.concat(relatedSource);
         }
       }
-
-      if (!post) {
-        showError(hasSlugHint ? 'Post not found.' : 'Post not specified.');
-        renderRelated(posts, null);
-        return;
-      }
-      renderPost(post);
-      renderRelated(posts, post);
-    } catch (err) {
-      console.error(err);
-      showError('Failed to load post.');
-      renderRelated([], null);
     }
+
+    if (!post) {
+      if (loadError) {
+        showError('Failed to load post.');
+      } else {
+        showError(hasSlugHint ? 'Post not found.' : 'Post not specified.');
+      }
+      renderRelated(relatedSource, null);
+      return;
+    }
+
+    renderPost(post);
+    renderRelated(relatedSource, post);
   }
 
   function escapeHtml(s){return (s||"").replace(/[&<>"']/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]));}
