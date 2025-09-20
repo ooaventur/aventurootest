@@ -849,18 +849,8 @@ def run_pull_news(config: PullNewsConfig) -> PullNewsResult:
         return PullNewsResult(added_count=0, new_entries=[], posts_index=posts_idx)
 
     added_total = 0
-    per_cat = {}
-    limit_slug_source = category_slug_value or cat_slug
-    top_level_limit_slug = split_category_slug(limit_slug_source)[0]
-    if not top_level_limit_slug:
-        top_level_limit_slug = cat_slug or slugify_taxonomy(category_label)
-        category_limit_key = (
-        top_level_limit_slug
-        or slugify_taxonomy(category_label)
-        or (category_label or "_")
-            )
-            if per_cat.get(category_limit_key, 0) >= max_per_cat:
-
+    per_cat: dict[str, int] = {}
+    per_feed_added: dict[str, int] = {}
     current_sub_label = ""
     current_sub_slug = ""
 
@@ -958,8 +948,12 @@ def run_pull_news(config: PullNewsConfig) -> PullNewsResult:
             if max_total > 0 and added_total >= max_total:
                 break
 
-            key_limit = category_slug_value or cat_slug or (category_label or "_")
-            if per_cat.get(key_limit, 0) >= max_per_cat:
+            category_limit_key = (
+                cat_slug
+                or slugify_taxonomy(category_label)
+                or (category_label or "_")
+            )
+            if per_cat.get(category_limit_key, 0) >= max_per_cat:
                 continue
 
             if max_per_feed > 0 and per_feed_added.get(feed_url, 0) >= max_per_feed:
@@ -1081,133 +1075,136 @@ def run_pull_news(config: PullNewsConfig) -> PullNewsResult:
             }
             limit_key_final = split_category_slug(normalized_category_slug)[0] or category_limit_key
             if not limit_key_final:
-            limit_key_final = slugify_taxonomy(normalized_category_label) or category_limit_key
+                limit_key_final = slugify_taxonomy(normalized_category_label) or category_limit_key
             per_cat[limit_key_final] = per_cat.get(limit_key_final, 0) + 1
             per_feed_added[feed_url] = per_feed_added.get(feed_url, 0) + 1
             added_total += 1
             print(f"[{normalized_category_label}/{normalized_subcategory_label or '-'}] + {title}")
 
-    if not new_entries:
-        print("New posts this run: 0")
-        seen_db_path.write_text(json.dumps(seen, ensure_ascii=False, indent=2), encoding="utf-8")
-        return PullNewsResult(added_count=0, new_entries=[], posts_index=posts_idx)
+    if new_entries:
+        posts_idx = new_entries + posts_idx
+        posts_idx.sort(key=_entry_sort_key, reverse=True)
+        dropped_entries: list[dict] = []
+        if max_posts_persist > 0 and len(posts_idx) > max_posts_persist:
+            dropped_entries = posts_idx[max_posts_persist:]
+            posts_idx = posts_idx[:max_posts_persist]
 
-    posts_idx = new_entries + posts_idx
-    posts_idx.sort(key=_entry_sort_key, reverse=True)
-    dropped_entries = []
-    if max_posts_persist > 0 and len(posts_idx) > max_posts_persist:
-        dropped_entries = posts_idx[max_posts_persist:]
-        posts_idx = posts_idx[:max_posts_persist]
-
-    append_entries_to_archive(
-        data_dir / "archive",
-        dropped_entries,
-        normalize_date=_normalize_date_string,
-        default_month=today_iso()[:7],
-    )
-
-    posts_idx = [
-        normalized for normalized in (
-            _normalize_post_entry(item) for item in posts_idx
+        append_entries_to_archive(
+            data_dir / "archive",
+            dropped_entries,
+            normalize_date=_normalize_date_string,
+            default_month=today_iso()[:7],
         )
-        if normalized is not None
-    ]
 
-    posts_json_path.write_text(json.dumps(posts_idx, ensure_ascii=False, indent=2), encoding="utf-8")
-    posts_root = data_dir / "posts"
-    posts_root.mkdir(exist_ok=True, parents=True)
+        posts_idx = [
+            normalized
+            for normalized in (_normalize_post_entry(item) for item in posts_idx)
+            if normalized is not None
+        ]
 
-    grouped_entries: dict[tuple[str, str], list[dict]] = defaultdict(list)
-    category_months: dict[str, set[str]] = {}
-    category_counts: dict[str, int] = {}
+        posts_json_path.write_text(
+            json.dumps(posts_idx, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+        posts_root = data_dir / "posts"
+        posts_root.mkdir(exist_ok=True, parents=True)
 
-    def _record_entry(category_slug: str, month_key: str, entry: dict) -> None:
-        if not category_slug or not month_key:
-            return
-        grouped_entries[(category_slug, month_key)].append(entry)
-        category_months.setdefault(category_slug, set()).add(month_key)
-        category_counts[category_slug] = category_counts.get(category_slug, 0) + 1
+        grouped_entries: dict[tuple[str, str], list[dict]] = defaultdict(list)
+        category_months: dict[str, set[str]] = {}
+        category_counts: dict[str, int] = {}
 
-    default_month = today_iso()[:7]
+        def _record_entry(category_slug: str, month_key: str, entry: dict) -> None:
+            if not category_slug or not month_key:
+                return
+            grouped_entries[(category_slug, month_key)].append(entry)
+            category_months.setdefault(category_slug, set()).add(month_key)
+            category_counts[category_slug] = category_counts.get(category_slug, 0) + 1
 
-    for entry in posts_idx:
-        if not isinstance(entry, dict):
-            continue
-        raw_date = str(entry.get("date") or "").strip()
-        normalized_date = _normalize_date_string(raw_date) or today_iso()
-        month_key = normalized_date[:7]
-        if not re.match(r"^\d{4}-\d{2}$", month_key):
-            month_key = default_month
+        default_month = today_iso()[:7]
 
-        raw_category_slug = (entry.get("category_slug") or "").strip()
-        cat_slug, _ = split_category_slug(raw_category_slug)
-        if not cat_slug:
-            cat_slug = slugify_taxonomy(entry.get("category") or "")
-        cat_slug = slugify_taxonomy(cat_slug)
-        if not cat_slug:
-            cat_slug = "uncategorized"
+        for entry in posts_idx:
+            if not isinstance(entry, dict):
+                continue
+            raw_date = str(entry.get("date") or "").strip()
+            normalized_date = _normalize_date_string(raw_date) or today_iso()
+            month_key = normalized_date[:7]
+            if not re.match(r"^\d{4}-\d{2}$", month_key):
+                month_key = default_month
 
-        _record_entry(cat_slug, month_key, entry)
-        _record_entry("all", month_key, entry)
+            raw_category_slug = (entry.get("category_slug") or "").strip()
+            cat_slug, _ = split_category_slug(raw_category_slug)
+            if not cat_slug:
+                cat_slug = slugify_taxonomy(entry.get("category") or "")
+            cat_slug = slugify_taxonomy(cat_slug)
+            if not cat_slug:
+                cat_slug = "uncategorized"
 
-    expected_files = set()
+            _record_entry(cat_slug, month_key, entry)
+            _record_entry("all", month_key, entry)
 
-    for category_slug in sorted(category_months):
-        months_sorted = sorted(category_months[category_slug], reverse=True)
-        category_dir = posts_root / category_slug
-        category_dir.mkdir(exist_ok=True, parents=True)
-        for month_key in months_sorted:
-            entries = grouped_entries.get((category_slug, month_key), [])
-            category_file = category_dir / f"{month_key}.json"
-            category_file.write_text(
-                json.dumps(entries, ensure_ascii=False, indent=2),
-                encoding="utf-8",
-            )
-            expected_files.add(category_file.resolve())
+        expected_files = set()
 
-    manifest_categories = {}
-    for category_slug in sorted(category_months):
-        months_sorted = sorted(category_months[category_slug], reverse=True)
-        manifest_categories[category_slug] = {
-            "months": months_sorted,
-            "count": category_counts.get(category_slug, 0),
+        for category_slug in sorted(category_months):
+            months_sorted = sorted(category_months[category_slug], reverse=True)
+            category_dir = posts_root / category_slug
+            category_dir.mkdir(exist_ok=True, parents=True)
+            for month_key in months_sorted:
+                entries = grouped_entries.get((category_slug, month_key), [])
+                category_file = category_dir / f"{month_key}.json"
+                category_file.write_text(
+                    json.dumps(entries, ensure_ascii=False, indent=2),
+                    encoding="utf-8",
+                )
+                expected_files.add(category_file.resolve())
+
+        manifest_categories = {}
+        for category_slug in sorted(category_months):
+            months_sorted = sorted(category_months[category_slug], reverse=True)
+            manifest_categories[category_slug] = {
+                "months": months_sorted,
+                "count": category_counts.get(category_slug, 0),
+            }
+
+        manifest_path = posts_root / "manifest.json"
+        manifest_payload = {
+            "generated_at": datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "Z",
+            "categories": manifest_categories,
         }
+        manifest_path.write_text(
+            json.dumps(manifest_payload, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+        expected_files.add(manifest_path.resolve())
 
-    manifest_path = posts_root / "manifest.json"
-    manifest_payload = {
-        "generated_at": datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "Z",
-        "categories": manifest_categories,
-    }
-    manifest_path.write_text(
-        json.dumps(manifest_payload, ensure_ascii=False, indent=2),
+        existing_files = [
+            path.resolve()
+            for path in posts_root.rglob("*.json")
+            if path.is_file()
+        ]
+        for path in existing_files:
+            if path not in expected_files:
+                try:
+                    path.unlink()
+                except OSError:
+                    pass
+
+        for directory in sorted(
+            posts_root.glob("**"), key=lambda p: len(p.parts), reverse=True
+        ):
+            if directory == posts_root or not directory.is_dir():
+                continue
+            try:
+                next(directory.iterdir())
+            except StopIteration:
+                try:
+                    directory.rmdir()
+                except OSError:
+                    pass
+
+    seen_db_path.write_text(
+        json.dumps(seen, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
-    expected_files.add(manifest_path.resolve())
-
-    existing_files = [
-        path.resolve()
-        for path in posts_root.rglob("*.json")
-        if path.is_file()
-    ]
-    for path in existing_files:
-        if path not in expected_files:
-            try:
-                path.unlink()
-            except OSError:
-                pass
-
-    for directory in sorted(posts_root.glob("**"), key=lambda p: len(p.parts), reverse=True):
-        if directory == posts_root or not directory.is_dir():
-            continue
-        try:
-            next(directory.iterdir())
-        except StopIteration:
-            try:
-                directory.rmdir()
-            except OSError:
-                pass
-
-    seen_db_path.write_text(json.dumps(seen, ensure_ascii=False, indent=2), encoding="utf-8")
     print("New posts this run:", len(new_entries))
 
     return PullNewsResult(
@@ -1222,5 +1219,4 @@ def main():
 
     return run_pull_news(PullNewsConfig())
 
-if __name__ == "__main__":
-    main()
+if __name__ == "__main__": main()
