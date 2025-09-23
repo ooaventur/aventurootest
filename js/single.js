@@ -184,6 +184,32 @@
     return /^\d{4}-\d{2}$/.test(normalized) ? normalized : '';
   }
 
+  function extractMonthHints(values) {
+    const input = Array.isArray(values) ? values : (values != null ? [values] : []);
+    const seen = Object.create(null);
+    const months = [];
+
+    input.forEach((entry) => {
+      if (!entry) return;
+      const str = String(entry);
+      const regex = /(\d{4})[-_/](\d{2})(?:[-_/]\d{2})?/g;
+      let match = regex.exec(str);
+      while (match) {
+        const year = match[1];
+        const month = match[2];
+        const key = `${year}-${month}`;
+        const sanitized = sanitizeMonthKey(key);
+        if (sanitized && !seen[sanitized]) {
+          seen[sanitized] = true;
+          months.push(sanitized);
+        }
+        match = regex.exec(str);
+      }
+    });
+
+    return months;
+  }
+
   function parseManifestMonths(manifest) {
     if (!manifest || typeof manifest !== 'object') return [];
     const rawMonths = Array.isArray(manifest.months) ? manifest.months : [];
@@ -258,19 +284,35 @@
   }
 
   async function lookupArchivePost(primarySlug, candidates) {
+    const candidateList = Array.isArray(candidates) ? candidates.slice() : [];
+    const searchCandidates = [];
+    if (primarySlug) {
+      searchCandidates.push(primarySlug);
+    }
+    if (candidateList.length) {
+      Array.prototype.push.apply(searchCandidates, candidateList);
+    }
+
+    const finalCandidates = searchCandidates.length ? searchCandidates : candidateList;
+
     try {
+      const monthHints = extractMonthHints(searchCandidates.length ? searchCandidates : candidateList);
+      for (let i = 0; i < monthHints.length; i += 1) {
+        const monthKey = monthHints[i];
+        const monthPosts = await loadArchiveMonth(monthKey);
+        if (!Array.isArray(monthPosts) || !monthPosts.length) {
+          continue;
+        }
+        const match = findPostFromCandidates(monthPosts, finalCandidates);
+        if (match) {
+          return { post: match, posts: monthPosts, month: monthKey };
+        }
+      }
+
       const manifest = await getArchiveManifest();
       if (!manifest) return null;
       const months = parseManifestMonths(manifest);
       if (!months.length) return null;
-
-      const searchCandidates = [];
-      if (primarySlug) searchCandidates.push(primarySlug);
-      if (Array.isArray(candidates) && candidates.length) {
-        Array.prototype.push.apply(searchCandidates, candidates);
-      }
-
-      const finalCandidates = searchCandidates.length ? searchCandidates : candidates;
 
       for (let i = 0; i < months.length; i += 1) {
         const monthKey = months[i].key;
