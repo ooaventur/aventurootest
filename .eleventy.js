@@ -129,8 +129,7 @@ module.exports = function (eleventyConfig) {
 
   return {
     dir: {
-      // NDËRROJE NË "src/site" nëse dosjet janë aty:
-      input: ".",
+      input: "src/site",
       includes: "_includes",
       data: "_data",
       output: "_site"
