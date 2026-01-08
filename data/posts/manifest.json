@@ -1,12 +1,12 @@
 {
-  "generated_at": "2025-09-20T09:35:28Z",
+  "generated_at": "2025-09-20T13:04:30Z",
   "categories": {
     "all": {
       "months": [
         "2025-09",
         "2024-09"
       ],
-      "count": 35
+      "count": 45
     },
     "crypto": {
       "months": [
@@ -18,6 +18,12 @@
       "months": [
         "2025-09",
         "2024-09"
+      ],
+      "count": 10
+    },
+    "news": {
+      "months": [
+        "2025-09"
       ],
       "count": 10
     }
